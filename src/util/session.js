@@ -2,7 +2,7 @@ import axios from "axios"
 
 export const login = async (user) => {
   try {
-    const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/member/login`, {...user}, {headers: {"Content-Type":"application/json"}})
+    const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/auth/login`, {...user}, {headers: {"Content-Type":"application/json"}})
     console.log(response.data)
     return response;
   } catch (error){
@@ -12,7 +12,7 @@ export const login = async (user) => {
 
 export const logout = async () => {
   try {
-    const resp = await axios.get(`${process.env.REACT_APP_BASE_URL}/member/logout`)
+    const resp = await axios.get(`${process.env.REACT_APP_BASE_URL}/auth/logout`)
     // const resp2 = await axios.get(`${process.env.REACT_APP_BASE_URL}/user/logout`)
     return resp;
   } catch (error){
