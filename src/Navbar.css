@@ -76,6 +76,11 @@
   height: auto;
 }
 
+.active {
+  /* background-color: purple; */
+  border-left: 5px solid #0f3c69;
+}
+
 .navbar__li-box:hover .tooltip {
   visibility: visible;
 }
