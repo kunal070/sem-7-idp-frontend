@@ -21,6 +21,7 @@ import CompanyLogin from "./components/CompanyLogin";
 import CompanyForm3 from "./components/CompanyForm3";
 import MembershipStatus from "./components/MembershipStatus";
 import Chat from "./components/Chat";
+import CreateUser from "./components/CreateUser";
 
 const mapStateToProps = ({ session }) => ({
   session
@@ -53,6 +54,7 @@ function App({ session }) {
         <Navbar/>
         <Routes>
           <Route path="/profile" element={<Home/>} />
+          <Route path="/create user" element={<CreateUser/>} />
         </Routes>
         <ToastContainer />
       </>

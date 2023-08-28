@@ -45,7 +45,9 @@ const Navbar = ({session, logout}) => {
   ["Control Panel", "images/member.svg"],
   ["Log Out", "images/btn2.png"]];
 
-      const [loader, setLoader] = useState(false)
+    const [loader, setLoader] = useState(false)
+    
+    const [activeClass, setActiveClass] = useState("Dashboard") 
 
   useEffect(() => {
     if(session.typeOfUser === "member"){
@@ -57,14 +59,20 @@ const Navbar = ({session, logout}) => {
     }
   }, [])
 
+  useEffect(() => {
+    console.log(activeClass)
+  }, [activeClass])
+
   const windoww = true;
   const [showTooltip, setShowTooltip] = useState(null);
 
   const handleMouseEnter = (index) => {
     setShowTooltip(index);
+
   };
 
   const openPage = async(index) => {
+    setActiveClass(li[index][0])
     if(li[index][0].toLowerCase() == "log out"){
       const userConfirmed = window.confirm("Are you sure you want to log out?");
       if (userConfirmed) {
@@ -95,8 +103,9 @@ const Navbar = ({session, logout}) => {
       </div>
       <ul className="navbar__list">
         {li.map((item, i) => (
+          <>
           <div
-            className="navbar__li-box"
+          className={activeClass == item[0] ?  "navbar__li-box active" : "navbar__li-box"}
             key={i}
             onMouseEnter={() => handleMouseEnter(i)}
             onMouseLeave={handleMouseLeave}
@@ -124,6 +133,7 @@ const Navbar = ({session, logout}) => {
               </div>
             )}
           </div>
+            </>
         ))}
       </ul>
     </nav>

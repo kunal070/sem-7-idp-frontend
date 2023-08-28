@@ -14,11 +14,13 @@ export const loginSchema = Yup.object({
 })
 
 // create user form validation schema
-export const createUserSchema = Yup.object({
-    id:emailValidation,
-    password:passwordValidation,
-    username:Yup.string().min(3).max(30).required("Username cannot be empty"),
-    typeOfUser:Yup.string().oneOf(["creator","finance","legal"])
+export const createEmployeeValidationSchema = Yup.object({
+    email:emailValidation,
+    phone: Yup.string().min(10).max(10).required(),
+    name:Yup.string().min(3).max(30).required("Username cannot be empty"),
+    typeOfUser:Yup.string().oneOf(["approver","magazine-manager"]).required(),
+    department:Yup.string().oneOf(["hey","by"]).required(),
+    designation: Yup.string().oneOf(["manager","employee"]).required()
 })
 
 export const updateUserValidationSchema = Yup.object({

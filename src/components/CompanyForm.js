@@ -80,8 +80,8 @@ const CompanyForm = ({ session }) => {
         if (!formData.companyName.trim()) {
             str = 'Company Name is required';
         }
-        else if (formData.companyName.trim().length < 5) {
-            str = 'companyName must be at least 5 characters long';
+        else if (formData.companyName.trim().length < 2) {
+            str = 'companyName must be at least 2 characters long';
         }
 
         if(str == ''){
@@ -126,8 +126,8 @@ const CompanyForm = ({ session }) => {
         if (!formData.ownerName.trim()) {
             str = 'Owner Name is required';
         }
-        else if (formData.ownerName.trim().length < 5) {
-            str = 'ownerName must be at least 5 characters long';
+        else if (formData.ownerName.trim().length < 2) {
+            str = 'ownerName must be at least 2 characters long';
         }
 
 
@@ -361,7 +361,7 @@ const CompanyForm = ({ session }) => {
             <div style={{ display: 'flex', flexDirection: 'row' ,paddingLeft:'10px', paddingRight:'50px'}}>
                 <div className="form-group flex width-50">
                     <div className='width-50' style={{marginLeft:'50px'}}>
-                        <p className='label' style={{textAlign:'start'}}>Company Branch:</p>
+                        <p className='label' style={{textAlign:'start'}}>Company Branch: <span style={{color : 'black'}}>(optional) </span> </p>
                     </div>
                     <div className='width-50' style={{marginLeft:'10px'}}>
                         <input type="text" name="companyBranch" value={formData.companyBranch} onChange={handleChange} style={{backgroundColor:'#eee'}}/>   
@@ -370,7 +370,7 @@ const CompanyForm = ({ session }) => {
                 </div>
                 <div className="form-group flex width-50">
                     <div className='width-50' style={{marginLeft:'45px'}}>
-                        <p className='label' style={{textAlign:'start'}}>Company Factory:</p>
+                        <p className='label' style={{textAlign:'start'}}>Company Factory:<span style={{color : 'black'}}>(optional) </span></p>
                     </div>
                     <div className='width-50' style={{marginLeft:'10px'}}>
                         <input type="text" name="companyFactory" value={formData.companyFactory} onChange={handleChange} style={{backgroundColor:'#eee'}}/>
