@@ -17,7 +17,6 @@ import { Header } from "./Header";
 import { Link } from "react-router-dom";
 import Loader from "./Loader";
 
-
 const mapStateToProps = ({ session }) => ({
   session
 });
