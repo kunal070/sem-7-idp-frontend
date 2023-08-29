@@ -42,7 +42,7 @@ const Navbar = ({session, logout}) => {
   const approverLi = [
   ["Dashboard", "images/dashboard.svg"],
   ["Membership Zone", "images/Magazine.svg"],
-  ["Control Panel", "images/member.svg"],
+  ["Pending-Memberships", "images/member.svg"],
   ["Log Out", "images/btn2.png"]];
 
     const [loader, setLoader] = useState(false)
@@ -50,8 +50,8 @@ const Navbar = ({session, logout}) => {
     const [activeClass, setActiveClass] = useState("Dashboard") 
 
   useEffect(() => {
-    if(session.typeOfUser === "member"){
-      setLi(memberLi)
+    if(session.typeOfUser === "approver"){
+      setLi(approverLi)
     } else if(session.typeOfUser === "admin"){
       setLi(adminLi)
     }else{

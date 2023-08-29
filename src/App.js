@@ -22,6 +22,7 @@ import CompanyForm3 from "./components/CompanyForm3";
 import MembershipStatus from "./components/MembershipStatus";
 import Chat from "./components/Chat";
 import CreateUser from "./components/CreateUser";
+import MembershipTable from "./components/MembershipTable";
 
 const mapStateToProps = ({ session }) => ({
   session
@@ -55,6 +56,18 @@ function App({ session }) {
         <Routes>
           <Route path="/profile" element={<Home/>} />
           <Route path="/create user" element={<CreateUser/>} />
+        </Routes>
+        <ToastContainer />
+      </>
+    )
+  } else if(session.typeOfUser == "approver"){
+    return(
+      <>
+        {/* <Header/> */}
+        <Navbar/>
+        <Routes>
+          <Route path="/pending-memberships" element={<MembershipTable/>} />
+          <Route path="/*" element={<Home/>} />
         </Routes>
         <ToastContainer />
       </>

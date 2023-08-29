@@ -56,7 +56,7 @@ function Login({ login, session }) {
   const checkEmailAvailability = async () => {
     try {
 
-      const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/member/check-email/${email}`);
+      const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/auth/check-email/${email}`);
       console.log(response.data)
       setEmailExists(response.data.exists);
     } catch (error) {
@@ -66,7 +66,7 @@ function Login({ login, session }) {
 
   const checkNumberAvailability = async () => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/member/check-phone/${number}`);
+      const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/auth/check-phone/${number}`);
       console.log(response.data)
       setNumberExists(response.data.exists);
     } catch (error) {
@@ -123,7 +123,7 @@ function Login({ login, session }) {
     e.preventDefault()
     setLoader(true)
     try {
-      const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/member/send-otp`, {phone}, { headers: {"Content-Type":"application/json"}})
+      const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/auth/send-otp`, {phone}, { headers: {"Content-Type":"application/json"}})
       console.log(response.data)
       if(response.data.success){
         setShowOTP(true)
@@ -141,7 +141,7 @@ function Login({ login, session }) {
     e.preventDefault()
     setLoader(true)
     try {
-      const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/member/send-email`, { email, firstName, lastName }, { headers: {"Content-Type":"application/json"}})
+      const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/auth/send-email`, { email, firstName, lastName }, { headers: {"Content-Type":"application/json"}})
       console.log(response.data)
       if(response.data.success){
         setSignUpOTP(true)

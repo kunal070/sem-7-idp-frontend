@@ -46,7 +46,7 @@ const CreateUser = () => {
     const checkEmailAvailability = async () => {
         try {
     
-          const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/admin/check-email/${values.email}`);
+          const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/auth/check-email/${values.email}`);
         //   console.log(response.data)
           setEmailExists(response.data.exists);
         } catch (error) {
@@ -56,7 +56,7 @@ const CreateUser = () => {
     
       const checkNumberAvailability = async () => {
         try {
-          const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/admin/check-phone/${values.phone}`);
+          const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/auth/check-phone/${values.phone}`);
         //   console.log(response.data)
           setNumberExists(response.data.exists);
         } catch (error) {
