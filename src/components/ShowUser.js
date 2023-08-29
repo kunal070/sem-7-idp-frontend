@@ -40,60 +40,83 @@ const ShowUser = ({ session }) => {
     }, [])
 
     return (
-        <div className='' style={{paddingLeft:"100px", height:'100vh', overflow:'scroll'}}>
-            <p className='text-black'>Form 1</p>
-            <p className='text-black'>Company Name: {data.companyName}</p>
-            <p className='text-black'>Company Address: {data.companyAddress}</p>
-            <p className='text-black'>owner Name: {data.ownerName}</p>
-            <p className='text-black'>Company Telephone: {data.companyTelephone}</p>
-            <p className='text-black'>Company Phone: {data.companyPhone}</p>
-            <p className='text-black'>Company Email: {data.companyEmail}</p>
-            <p className='text-black'>Company Factory: {data.companyBranch}</p>
-            <p className='text-black'>Company Branch: {data.companyFactory}</p>
-            <p>.</p>
-            <p className='text-black'>Membership form Status: {data.membershipFormStatus}</p>
-            <p className='text-black'>Payment Status: {data.paymentStatus ? "TRUE" : "FALSE"}</p>
-            <p>.</p>
-            <p className='text-black'>Form 2</p>
-            <p className='text-black'>Payment Status: {data.companyType}</p>
-            <p className='text-black'>Payment Status: {data.companyRegistrationYear}</p>
-            <p className='text-black'>Payment Status: {data.panNumber}</p>
-            <p className='text-black'>Payment Status: {data.gstNumber}</p>
-            <p className='text-black'>Payment Status: {data.cinNumber}</p>
-            <p className='text-black'>Payment Status: {data?.companyRegistrationProofAttachment?.documentName}</p>
-            <div style={{display:'flex', justifyContent:'center'}}>
-                {data.companyRegistrationProofAttachment && <embed src={data.companyRegistrationProofAttachment.file} width="1000px" height="1000px" />}
-            </div>
-            <p>.</p>
-            <p className='text-black'>Form 3</p>
-            <p className='text-black'>Payment Status: {data.companyType}</p>
-            <p className='text-black'>Payment Status: {data.typeOfMembership}</p>
-            <p className='text-black'>Payment Status: {data.companyTurnOverRange}</p>
-
-            <p className='text-black'>Company Required ERDA Services: {
-                data.companyERDARequiredServices?.map((val, index) => <span key={index}>{val}</span>)
-            }</p>
-            
-            <p className='text-black'>Company Products: 
-                {
-                    data.companyProducts?.map((product, index) => {
-                        return (
-                            <div key={index}>
-                                <p className='text-black'>No: {index + 1}</p>
-                                <p className='text-black'>Name: {product.productName}</p>
-                                <p className='text-black'>Capacity: {product.produtCapacity}</p>
-                                <p className='text-black'>Unit: {product.productUnit}</p>
-                            </div>
-                        )
-                    })
-                }
-            </p>
-
-            <p className='text-black'>Payment Status: {data.cinNumber}</p>
-            <div style={{display:'flex', justifyContent:'center'}}>
-                {data.turnOverBalanceSheet && <embed src={data.turnOverBalanceSheet} width="1000px" height="1000px" />}
-            </div>
-        </div>
+       
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+                <th scope="col" class="px-6 py-3">
+                    Product name
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Color
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Category
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    Price
+                </th>
+                <th scope="col" class="px-6 py-3">
+                    <span class="sr-only">Edit</span>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    Apple MacBook Pro 17"
+                </th>
+                <td class="px-6 py-4">
+                    Silver
+                </td>
+                <td class="px-6 py-4">
+                    Laptop
+                </td>
+                <td class="px-6 py-4">
+                    $2999
+                </td>
+                <td class="px-6 py-4 text-right">
+                    <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+                </td>
+            </tr>
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    Microsoft Surface Pro
+                </th>
+                <td class="px-6 py-4">
+                    White
+                </td>
+                <td class="px-6 py-4">
+                    Laptop PC
+                </td>
+                <td class="px-6 py-4">
+                    $1999
+                </td>
+                <td class="px-6 py-4 text-right">
+                    <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+                </td>
+            </tr>
+            <tr class="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600">
+                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    Magic Mouse 2
+                </th>
+                <td class="px-6 py-4">
+                    Black
+                </td>
+                <td class="px-6 py-4">
+                    Accessories
+                </td>
+                <td class="px-6 py-4">
+                    $99
+                </td>
+                <td class="px-6 py-4 text-right">
+                    <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
     )
 }
 
