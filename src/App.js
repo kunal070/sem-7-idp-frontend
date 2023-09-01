@@ -33,7 +33,6 @@ function App({ session }) {
       return(
       <>
       {/* <Header/> */}
-
       <Navbar/>
       <div className="backImage">
         <Routes>

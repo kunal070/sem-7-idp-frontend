@@ -55,13 +55,9 @@ const Navbar = ({session, logout}) => {
     } else if(session.typeOfUser === "admin"){
       setLi(adminLi)
     }else{
-      setLi(approverLi)
+      setLi(memberLi)
     }
   }, [])
-
-  useEffect(() => {
-    console.log(activeClass)
-  }, [activeClass])
 
   const windoww = true;
   const [showTooltip, setShowTooltip] = useState(null);

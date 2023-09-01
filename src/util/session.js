@@ -24,9 +24,15 @@ export const checkLoggedIn = async preloadedState => {
     axios.defaults.withCredentials = true;
     try {
       const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/member/show-member-info`);
-      // const response2 = await axios.get(`${process.env.REACT_APP_BASE_URL}/admin/show-admin-info`);
-      // const user = response.data.success ? response.data.data : response2.data.data
-      const user = response.data.data
+      const response_two = await axios.get(`${process.env.REACT_APP_BASE_URL}/employee/show-employee-info`);
+      
+      let user;
+      if(response.data.success){
+        user = response.data.data
+      } else if(response_two.data.success){
+        user = response_two.data.data
+      }
+
       preloadedState = {};
       if (user) {
         preloadedState = {
