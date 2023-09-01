@@ -41,6 +41,7 @@ const MembershipStatus = ({ session }) => {
         }
     }
 
+
     useEffect(() => {
         fetchData();
     }, [])
