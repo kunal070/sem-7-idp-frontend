@@ -96,10 +96,10 @@ const MembershipTable = () => {
                     <th className='px-6 py-3'>EQTR No</th>
                     <th className='px-6 py-3'>Title</th>
                     <th className='px-6 py-3'>Customer Name</th>
-                    <th className='px-6 py-3'>Customer Type</th>
+                    <th className='px-6 py-3'>Customer Id</th>
+                    <th className='px-6 py-3'>Status</th>
                     <th className='px-6 py-3'>Creator Name</th>
-                    {/* <th className='px-6 py-3'>Status</th> */}
-                    <th className='px-6 py-3'>View Details</th>
+                    {/* <th className='px-6 py-3'>View Details</th> */}
                   </tr>
               </thead>
               <tbody>
@@ -159,7 +159,7 @@ const MembershipTable = () => {
         )}
         </div>
       </div>
-    </>
+    </>    
   )
 }
 

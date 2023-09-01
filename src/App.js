@@ -55,6 +55,8 @@ function App({ session }) {
         <Routes>
           <Route path="/profile" element={<Home/>} />
           <Route path="/create user" element={<CreateUser/>} />
+          <Route path="/pending-memberships" element={<MembershipTable/>} />
+
         </Routes>
         <ToastContainer />
       </>

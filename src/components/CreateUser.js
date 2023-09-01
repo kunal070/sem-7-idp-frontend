@@ -74,27 +74,27 @@ const CreateUser = () => {
 
 
   return (
-    <div className="flex" style={{justifyContent:'center', alignItems:'center', paddingTop:"100px"}}>
+    <div className="flex" style={{overflow:'scroll',height : '100vh',justifyContent:'center', alignItems:'center', paddingTop:"85px"}}>
     <center>
         <form onSubmit={handleSubmit} autoComplete='off' className="company-form" style={{color:'black', backgroundColor:'white'}} >
-        <h1 style={{margin:10, padding:30}} className='form-heading' >Add User</h1>
+        <h1 style={{margin:'10',marginLeft : 30, padding:20,fontSize : 22}} className='form-heading' >Add User</h1>
                 <div className="form-group flex width-50" >
                     <div className='width-10' style={{marginLeft:'50px'}}>
                         <p className='label' style={{textAlign:'start'}}>Name :</p>
                     </div>
-                    <div className='width-50' style={{marginLeft:'0'}}>
-                        <input type="text" id="name" name="name" onBlur={handleBlur} onChange={handleChange} value={values.name}  required style={{backgroundColor:'#eee'}} />
-                        {(errors.name) ? <p style={{color:"red"}}>{errors.name}</p>  : null}
+                    <div className='width-50' style={{margin:'8px 0px 8px'}}>
+                        <input type="text" id="name" name="name" onBlur={handleBlur} onChange={handleChange} value={values.name}  required style={{backgroundColor:'#eee',width: '207px'}} />
+                        {(errors.name) ? <p style={{color:"red",fontSize:'12px'}}>{errors.name}</p>  : null}
                     </div>
                 </div>
                 <div className="form-group flex width-50" >
                     <div className='width-10' style={{marginLeft:'50px'}}>
                         <p className='label' style={{textAlign:'start'}}>Phone :</p>
                     </div>
-                    <div className='width-50' style={{marginLeft:'0'}}>
-                        <input type="text" name="phone" value={values.phone} onChange={handleChange} required style={{backgroundColor:'#eee'}} />
-                        {( errors.phone) ? <p style={{color:"red"}}>{errors.phone}</p>  : null}
-                        {numberExists ? <p style={{color:"red"}}>Phone Number is already taken</p>  : null}
+                    <div className='width-50' style={{margin:'8px 0px 8px '}}>
+                        <input type="text" name="phone" value={values.phone} onChange={handleChange} required style={{backgroundColor:'#eee',width: '207px'}} />
+                        {( errors.phone) ? <p style={{color:"red",fontSize:'12px'}}>{errors.phone}</p>  : <p> </p>}
+                        {numberExists ? <p style={{color:"red",fontSize:'12px'}}>Phone Number is already taken</p>  : null}
 
                     </div>
                 </div>
@@ -102,10 +102,10 @@ const CreateUser = () => {
                     <div className='width-10' style={{marginLeft:'50px'}}>
                         <p className='label' style={{textAlign:'start'}}>Email :</p>
                     </div>
-                    <div className='width-50' style={{marginLeft:'0'}}>
-                        <input type="text" name="email" id="email" onChange={handleChange} value={values.email}  required style={{backgroundColor:'#eee'}} />
-                        {(errors.email) ? <p style={{color:"red"}}>{errors.email}</p>  : null}
-                        {emailExists ? <p style={{color:"red"}}>Mail Id is already taken</p>  : null}
+                    <div className='width-50' style={{margin:'8px 0px 9px'}}>
+                        <input type="text" name="email" id="email" onChange={handleChange} value={values.email}  required style={{backgroundColor:'#eee',width: '207px'}} />
+                        {(errors.email) ? <p style={{color:"red",fontSize:'12px'}}>{errors.email}</p>  : null}
+                        {emailExists ? <p style={{color:"red",fontSize:'12px'}}>Mail Id is already taken</p>  : null}
                     </div>
                 </div>
                 <div className="form-group flex width-50" style={{marginBottom : '13px',marginTop : '5px'}}>
@@ -125,7 +125,7 @@ const CreateUser = () => {
                         <option value="hey">hey</option>
                         <option value="by">by</option>
                     </select>
-                    {(errors.department) ? <p style={{color:"red"}}>{errors.department}</p>  : null}              
+                    {(errors.department) ? <p style={{color:"red",fontSize:'12px'}}>{errors.department}</p>  : null}              
                      </div>
                 </div>
                 <div className="form-group flex width-50" style={{marginTop : '5px'}} >
@@ -145,8 +145,8 @@ const CreateUser = () => {
                         <option value="approver">Approver</option>
                         <option value="magazine-manager">Mangazine Manager</option>
                     </select> 
+                    {(errors.typeOfUser) ? <p style={{color:"red",fontSize:'12px'}}>{errors.typeOfUser}</p>  : null}
                     </div>
-                    {(errors.typeOfUser) ? <p style={{color:"red"}}>{errors.typeOfUser}</p>  : null}
                 </div>
                 <div className="form-group flex width-50" style={{marginTop : '13px'}}>
                     <div className='width-10' style={{marginLeft:'50px'}}>
@@ -165,11 +165,11 @@ const CreateUser = () => {
                         <option value="manager">Manager</option>
                         <option value="employee">Employee</option>
                     </select>
-                    {(errors.designation) ? <p style={{color:"red"}}>{errors.designation}</p>  : null}              
+                    {(errors.designation) ? <p style={{color:"red",fontSize:'12px'}}>{errors.designation}</p>  : null}              
                       </div>
                 </div>
             <center>
-            <div style={{paddingBottom:20, paddingTop:30,marginTop : 5}}>
+            <div style={{paddingBottom:20, paddingTop:30,marginTop : 5,marginLeft : 50}}>
             <button type="submit"  style={{borderColor:'#0f3c69', backgroundColor:'#0f3c69', color:'white' , borderRadius:20 , marginInline:5}}  className='savebtn'>Create USER</button>
             <div class="spacer"></div>
             </div>

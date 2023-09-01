@@ -12,7 +12,7 @@ import { logOutUser } from '../actions/session';
 const mapStateToProps = ({ session }) => ({
   session
 })
-
+  
 const mapDispatchToProps = dispatch => ({
   logout: () => dispatch(logOutUser())
 });
