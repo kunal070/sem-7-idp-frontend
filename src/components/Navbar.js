@@ -12,7 +12,7 @@ import { logOutUser } from '../actions/session';
 const mapStateToProps = ({ session }) => ({
   session
 })
-
+  
 const mapDispatchToProps = dispatch => ({
   logout: () => dispatch(logOutUser())
 });
@@ -55,7 +55,7 @@ const Navbar = ({session, logout}) => {
     } else if(session.typeOfUser === "admin"){
       setLi(adminLi)
     }else{
-      setLi(approverLi)
+      setLi(memberLi)
     }
   }, [])
 

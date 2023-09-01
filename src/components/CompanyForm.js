@@ -313,7 +313,8 @@ const CompanyForm = ({ session }) => {
                         <p className='label' style={{textAlign:'start'}}>Company Address:</p>
                     </div>
                     <div className='width-50' style={{marginLeft:'10px'}}>
-                        <input type="text" name="companyAddress" value={formData.companyAddress} onChange={handleChange} required style={{backgroundColor:'#eee'}} />
+                    <textarea name="companyAddress" value={formData.companyAddress} onChange={handleChange} required style={{ backgroundColor: '#eee', width: '100%', minHeight: '0px',borderRadius : 4  }}
+/>
                         {errors.companyAddress && <p className="error-message"style={{color: 'red', fontSize: '12px'}}>{errors.companyAddress}</p>}
                     </div>
                 </div>

@@ -348,11 +348,6 @@ const CompanyForm3 = ({session}) => {
     
         if (isValid & formData.productName != "") {
             // Show a confirmation alert before submitting
-            const confirmSubmission = window.confirm(
-                "Are you sure you want to submit? You won't be able to edit this information later."
-            );
-    
-            if (confirmSubmission) {
                 setLoader(true)
 
                 let { productName, productCapacity, productUnit, companyERDARequiredServices, ...other } = formData;
@@ -380,7 +375,7 @@ const CompanyForm3 = ({session}) => {
                 if (response.data.success) {
                     navigate("/membership-status");
                 }
-            }
+            
         } else {
             toast("Enter Valid Data")
         }
@@ -434,7 +429,8 @@ const CompanyForm3 = ({session}) => {
                         <p className='label' style={{textAlign:'start'}}>Objective For Membership:</p>
                     </div>
                     <div className='width-50' style={{marginLeft:'10px'}}>
-                        <input type="text" name="companyERDAObjective" style={{backgroundColor:'#eee'}} value={formData.companyERDAObjective} onChange={handleChange} required />
+                    <textarea name="companyERDAObjective" value={formData.companyERDAObjective} onChange={handleChange} required style={{ backgroundColor: '#eee', width: '100%', minHeight: '10px',borderRadius : 4 }}
+/>
                         {errors.companyERDAObjective && <span className="error"style={{color: 'red', fontSize: '12px'}}>{errors.companyERDAObjective}</span>}
                     </div>
                 </div>
