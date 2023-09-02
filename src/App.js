@@ -32,7 +32,6 @@ function App({ session }) {
   if(session.typeOfUser == "member"){
       return(
       <>
-      {/* <Header/> */}
       <Navbar/>
       <div className="backImage">
         <Routes>
@@ -50,13 +49,11 @@ function App({ session }) {
   } else if(session.typeOfUser == "admin"){
     return(
       <>
-        {/* <Header/> */}
         <Navbar/>
         <Routes>
           <Route path="/profile" element={<Home/>} />
           <Route path="/create user" element={<CreateUser/>} />
           <Route path="/pending-memberships" element={<MembershipTable/>} />
-
         </Routes>
         <ToastContainer />
       </>
@@ -64,10 +61,10 @@ function App({ session }) {
   } else if(session.typeOfUser == "approver"){
     return(
       <>
-        {/* <Header/> */}
         <Navbar/>
         <Routes>
           <Route path="/pending-memberships" element={<MembershipTable/>} />
+          <Route path="/membership-status" element={<MembershipStatus/>} />
           <Route path="/*" element={<Home/>} />
         </Routes>
         <ToastContainer />
@@ -76,15 +73,11 @@ function App({ session }) {
   } else {
     return(
       <>
-      {/* <div className="backImage"> */}
-{/* <Header/> */}
-{/* <Navbar/> */}
       <Routes>
         <Route path="/login" element={<CompanyLogin/>} />
         <Route path="/*" element={<Login/>} />
       </Routes>
       <ToastContainer />
-      {/* </div> */}
       
     </>
    )
