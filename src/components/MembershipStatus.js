@@ -20,7 +20,7 @@ const MembershipStatus = ({ session }) => {
         if (!isChecked) {
             alert("Please check the checkbox before submitting.");
             return;
-          }
+        }
     }
     const fetchData = async () => {
         try {
