@@ -24,30 +24,30 @@ const Navbar = ({session, logout}) => {
   const navigate = useNavigate()
   
   const memberLi = [
-    ["Dashboard", "images/dashboard.svg"],
-    ["Profile", "images/profile.svg"],
-    ["Member", "images/Magazine.svg"],
-    ["Membership-Form", "images/member.svg"],
-    ["Log Out", "images/btn2.png"]
+    ["Home", "images/dashboard.svg"],
+    ["Profile", "images/profile.svg"],    
+    ["Membership-Form", "images/addmem.svg"],
+    ["Chats", "images/chat.svg"],
+    ["Log Out", "images/signout.svg"]
   ];
   
   const adminLi = [
-    ["Dashboard", "images/dashboard.svg"],
+    ["Home", "images/dashboard.svg"],
     ["Create User", "images/Magazine.svg"],
     ["Show Users", "images/profile.svg"],
     ["Memberships", "images/member.svg"],
-    ["Log Out", "images/btn2.png"]
+    ["Log Out", "images/signout.svg"]
   ];
 
   const approverLi = [
-  ["Dashboard", "images/dashboard.svg"],
-  ["Membership Zone", "images/Magazine.svg"],
+  ["Home", "images/dashboard.svg"],
   ["Pending-Memberships", "images/member.svg"],
-  ["Log Out", "images/btn2.png"]];
+  ["Approved Memberships", "images/Magazine.svg"],  
+  ["Log Out", "images/signout.svg"]];
 
     const [loader, setLoader] = useState(false)
     
-    const [activeClass, setActiveClass] = useState("Dashboard") 
+    const [activeClass, setActiveClass] = useState("Home") 
 
   useEffect(() => {
     if(session.typeOfUser === "approver"){
@@ -86,6 +86,7 @@ const Navbar = ({session, logout}) => {
 
   const openHome = () => {
     navigate("/")
+    setActiveClass('Home')
   }
   if(loader){
     return (
@@ -93,7 +94,7 @@ const Navbar = ({session, logout}) => {
     )
   }else{
   return (
-    <nav className="navbar-menu" style={{ width: windoww ? 60 : 250 }}>
+    <nav className="navbar-menu" style={{ width: windoww ? 53: 250 }}>
       <div className="burger">
         <img src="images/title_logo.png" onClick={openHome} alt="burger" />
       </div>
@@ -129,6 +130,7 @@ const Navbar = ({session, logout}) => {
               </div>
             )}
           </div>
+
             </>
         ))}
       </ul>

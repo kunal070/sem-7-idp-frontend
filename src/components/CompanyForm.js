@@ -36,6 +36,7 @@ const CompanyForm = ({ session }) => {
     const preLoadData = async () => {
         try {
             const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/membership/membership/${session.phone}`)
+            console.log(response.data)
             if(response.data.success){
                 let temp = response.data.data
                 setFormData({
@@ -312,7 +313,7 @@ const CompanyForm = ({ session }) => {
                         <p className='label' style={{textAlign:'start'}}>Company Address:</p>
                     </div>
                     <div className='width-50' style={{marginLeft:'10px'}}>
-                    <textarea name="companyAddress" value={formData.companyAddress} onChange={handleChange} required style={{ backgroundColor: '#eee', width: '100%', minHeight: '0px',borderRadius : 4  }}
+                    <textarea name="companyAddress" value={formData.companyAddress} onChange={handleChange} required style={{ backgroundColor: '#eee', width: '100%', minHeight: '0px',borderRadius : 4 }}
 />
                         {errors.companyAddress && <p className="error-message"style={{color: 'red', fontSize: '12px'}}>{errors.companyAddress}</p>}
                     </div>
