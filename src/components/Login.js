@@ -143,6 +143,10 @@ function Login({ login, session }) {
     e.preventDefault()
     setLoader(true)
     try {
+      if(emailExists || numberExists) {
+        toast("Enter unique emailId & phone number")
+        return;
+      }
       const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/member/send-email`, { email, firstName, lastName }, { headers: {"Content-Type":"application/json"}})
       console.log(response.data)
       if(response.data.success){
