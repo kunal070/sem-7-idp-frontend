@@ -27,3 +27,8 @@ export const updateUserValidationSchema = Yup.object({
     name: Yup.string().min(3).max(30).required("Username cannot be empty"),
     password: passwordValidation
 })
+
+export const membershipApprovalValidationSchema = Yup.object({
+    message:  Yup.string().min(5).max(1000).required("message cannot be empty"), 
+    membershipStatus: Yup.string().oneOf(["reverted","approved", "rejected"]).required(),
+})

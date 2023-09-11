@@ -35,8 +35,7 @@ const CompanyForm = ({ session }) => {
     
     const preLoadData = async () => {
         try {
-            const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/membership/membership/${session.memberId}`)
-
+            const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/membership/membership/${session.phone}`)
             if(response.data.success){
                 let temp = response.data.data
                 setFormData({

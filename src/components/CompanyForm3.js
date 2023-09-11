@@ -41,7 +41,7 @@ const CompanyForm3 = ({session}) => {
 
     const preLoadData = async () => {
         try {
-            const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/membership/membership/${session.memberId}`)
+            const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/membership/membership/${session.phone}`)
 
             console.log(response.data)
 
@@ -342,7 +342,9 @@ const CompanyForm3 = ({session}) => {
     
         if (!isDataUpdated && isValid && formData.productName != "") {
             // Go to the show data page as no data is updated, and previous inserted data is correct
-            navigate("/membership-status");
+            navigate("/membership-status", {
+                state: {phone: session.phone}
+            });
             return;
         }
     

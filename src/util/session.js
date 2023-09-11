@@ -13,7 +13,7 @@ export const login = async (user) => {
 export const logout = async () => {
   try {
     const resp = await axios.get(`${process.env.REACT_APP_BASE_URL}/auth/logout`)
-    // const resp2 = await axios.get(`${process.env.REACT_APP_BASE_URL}/user/logout`)
+    console.log(resp)
     return resp;
   } catch (error){
     return { success:false, message:error.message }
@@ -23,10 +23,13 @@ export const logout = async () => {
 export const checkLoggedIn = async preloadedState => {
     axios.defaults.withCredentials = true;
     try {
-      const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/member/show-member-info`);
-      // const response2 = await axios.get(`${process.env.REACT_APP_BASE_URL}/admin/show-admin-info`);
-      // const user = response.data.success ? response.data.data : response2.data.data
-      const user = response.data.data
+      const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/auth/show-current-user`);
+      
+      let user;
+      if(response.data.success){
+        user = response.data.data
+      }
+
       preloadedState = {};
       if (user) {
         preloadedState = {

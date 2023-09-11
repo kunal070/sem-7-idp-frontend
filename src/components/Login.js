@@ -89,6 +89,8 @@ function Login({ login, session }) {
       console.log(response.data)
       if(response.data.success){
         toast(response.data.message)
+        toggle(!signIn)
+        setSignUpOTP(false)
       } else {
         toast(response.data.message)
       }
@@ -141,7 +143,7 @@ function Login({ login, session }) {
     e.preventDefault()
     setLoader(true)
     try {
-      const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/auth/send-email`, { email, firstName, lastName }, { headers: {"Content-Type":"application/json"}})
+      const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/member/send-email`, { email, firstName, lastName }, { headers: {"Content-Type":"application/json"}})
       console.log(response.data)
       if(response.data.success){
         setSignUpOTP(true)

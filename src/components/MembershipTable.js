@@ -77,10 +77,10 @@ const MembershipTable = () => {
     setLoader(false)
   }
 
-  // function for navigation for perticular deligence and send id of the deligance via request
-  const openDeligence = (id) => {
-    navigate("/diligence-info", {
-      state: {id}
+  // function for navigation for perticular membershio and send phone number of member of membership via request
+  const openMembership = (phone) => {
+    navigate("/membership-status", {
+      state: {phone}
     })
   }
   
@@ -119,7 +119,7 @@ const MembershipTable = () => {
                       <td className='px-6 py-3'>{item.member.memberId}</td>
                       <td className='px-6 py-3'>{item.membershipStatus}</td>
                       <td className='px-6 py-3'>
-                        <button className='mt-1 text-white bg-gradient-to-br from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-teal-300 font-medium rounded-lg text-sm text-center px-5 py-2.5 mr-2 mb-2' type="button" onClick={() => openDeligence(item._id)}><b>Open</b></button>
+                        <button className='mt-1 text-white bg-gradient-to-br from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-teal-300 font-medium rounded-lg text-sm text-center px-5 py-2.5 mr-2 mb-2' type="button" onClick={() => openMembership(item.member.phone)}><b>Open</b></button>
                       </td>
                     </tr>
                   ))
