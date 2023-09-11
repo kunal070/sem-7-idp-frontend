@@ -87,10 +87,10 @@ const MembershipTable = () => {
   return (
     <>
       <div className="pt-4 flex items-center flex-col">
-      <h2 className='py-4 text-transparent font-bold text-3xl bg-gradient-to-br bg-clip-text bg-gradient-to-br bg-clip-text from-teal-200 to-lime-200'>Completed Diligence Data</h2>
+      <h2 className='py-4 font-bold text-3xl' style={{color:"#0f3c69"}}>All Membership Data</h2>
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
           <table className="w-full text-sm text-left text-gray-400">
-              <thead className="text-xs uppercase bg-gray-900 text-gray-400">
+              <thead className="text-xs uppercase" style={{backgroundColor: '#0f3c69', color:"white"}}>
                   <tr>
                     <th className='px-6 py-3'>No</th>
                     <th className='px-6 py-3'>EQTR No</th>
@@ -111,7 +111,7 @@ const MembershipTable = () => {
                         </td>
                       </tr> :
                     data.map((item, index) => (
-                    <tr key={item._id} className='font-semibold bg-gray-700 hover:bg-gray-50 hover:bg-gray-800'>
+                    <tr key={item._id} className='font-semibold bg-[#e5e5e5] hover:bg-[#a8ccef]'>
                       <td className='px-6 py-3'>{(currentPage-1)*5 + (index + 1)}</td>
                       <td className='px-6 py-3'>{item.companyName}</td>
                       <td className='px-6 py-3'>{item.companyType}</td>

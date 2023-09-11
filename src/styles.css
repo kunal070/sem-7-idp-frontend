@@ -1,7 +1,4 @@
-@import url("https://fonts.googleapis.com/css?family=Montserrat:400,800");
-/* @import './components/CustomNav'; */
-@import url('https://fonts.googleapis.com/css?family=Lato&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Fira+Sans&family=Gotu&family=Inter&family=Montserrat&family=Roboto+Slab&display=swap');
 
 :root {
   --backgroundColor: white;
@@ -13,6 +10,11 @@
   margin:0;
   padding:0;
   box-sizing: border-box;
+  /* font-family: 'Gotu', sans-serif; */
+  /* font-family: 'Inter', sans-serif; */
+  /* font-family: 'Roboto Slab', serif; */
+  font-family: 'Fira Sans', sans-serif;
+  font-family: 'Montserrat', sans-serif;
 }
 
 .font-blue{
