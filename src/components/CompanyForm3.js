@@ -375,7 +375,7 @@ const CompanyForm3 = ({session}) => {
 
     
                 if (response.data.success) {
-                    navigate("/membership-status");
+                    navigate("/membership-status", {state: {phone:session.phone}});
                 }
             
         } else {
