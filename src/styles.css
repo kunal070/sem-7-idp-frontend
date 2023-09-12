@@ -135,3 +135,17 @@ input {
   background-repeat: no-repeat;
   background-size: cover;
 }
+
+.imageBefore{
+  height: 150px;
+  width: 150px;
+  margin-left: 23%;
+  border-radius: 100%;
+}
+
+.imageAfter{
+  height: 140px;
+  width: 140px;
+  border-radius: 100%;
+  margin-left: 25%;
+}
