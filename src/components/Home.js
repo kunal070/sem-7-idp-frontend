@@ -77,41 +77,27 @@ const Home = ({session, logout}) => {
       <div onClick={handleImageClick}>
         {image ? (<img src={URL.createObjectURL(image)} alt="" className="imageAfter"/>) : (<img src="images/dp.jpg" alt="" className="imageBefore"/>) }
         <input type="file" ref={inputRef} onChange={handleImageChange} style={{display: "none"}}/>
+        <p className="notify">*click on profile photo to change it</p>
       </div>
 
-        {/* <div>
-          <img style={{width: "80px", height: "80px", borderRadius: "50", objectFit: "cover"}} src="./dp.png" alt=""/>
-          <Button onClick={() => setdialogs (true)}>dialog</Button>
-          <Dialog visible={dialogs} header={() => (<p htmlFor="" className="text-2xl font-semibold textColor">Update Profile Photo </p>)}
-            onHide={() => setdialogs (false)}>
-            <div className="confirmation-content flex flex-column align-items-center">
-              <div className=" flex flex-column align-items-center mt-5 W-125">
-                <div className= "flex justify-content-around w-12 mt-4 ">
-                  <Button label="Save" icon="pi pi-check"/>
-                </div> 
-              </div> 
-            </div>
-          </Dialog>
-        </div> */}
-
         <div className='flex '>
-          <p style={{color:'#0f3c69',padding:'1rem'}}><b>Name :</b> </p>
-          <p style={{color:'#0f3c69',paddingRight:'1rem', paddingTop: '1rem', paddingBottom: '1rem', paddingLeft: '2.55rem'}}>{(session.firstName + " "  + session.lastName) || session.name} </p>
+          <p style={{color:'#0f3c69',paddingRight:'0.5rem', paddingTop: '1rem', paddingBottom: '0.5rem', paddingLeft: '1rem'}}><b>Name :</b> </p>
+          <p style={{color:'#0f3c69',paddingRight:'1rem', paddingTop: '1rem', paddingBottom: '0.5rem'}}>{(session.firstName + " "  + session.lastName) || session.name} </p>
         </div>
 
         <div className='flex '>
-          <p style={{color:'#0f3c69',padding:'1rem'}}><b>Phone :</b> </p>
-          <p style={{color:'#0f3c69',paddingRight:'1rem', paddingTop: '1rem', paddingBottom: '1rem', paddingLeft: '1.9rem'}}>{session.phone}</p>
+          <p style={{color:'#0f3c69',paddingRight:'0.5rem', paddingLeft: '1rem', paddingBottom: '0.5rem',}}><b>Phone :</b> </p>
+          <p style={{color:'#0f3c69',paddingRight:'1rem', paddingBottom: '0.5rem',}}>{session.phone}</p>
         </div>
 
         <div className='flex '>
-          <p style={{color:'#0f3c69',padding:'1rem'}}><b>Email :</b></p>
-          <p style={{color:'#0f3c69',paddingRight:'1rem', paddingTop: '1rem', paddingBottom: '1rem', paddingLeft: '2.5em'}}>{session.email || session.emailId}</p>
+          <p style={{color:'#0f3c69',paddingRight:'0.5rem', paddingBottom: '0.5rem', paddingLeft: '1rem'}}><b>Email :</b></p>
+          <p style={{color:'#0f3c69',paddingRight:'1rem', paddingBottom: '0.5rem',}}>{session.email || session.emailId}</p>
         </div>
 
         <div className='flex '>
-          <p style={{color:'#0f3c69',padding:'1rem'}}><b>User Type :</b> </p>
-          <p style={{color:'#0f3c69',paddingRight:'1rem', paddingTop: '1rem', paddingBottom: '1rem'}}>{session.typeOfUser}</p>
+          <p style={{color:'#0f3c69',paddingRight:'0.5rem', paddingBottom: '1rem', paddingLeft: '1rem'}}><b>User Type :</b> </p>
+          <p style={{color:'#0f3c69',paddingRight:'1rem', paddingBottom: '1rem'}}>{session.typeOfUser}</p>
         </div>
       <center>
         <button onClick={logout} style={{color:'white', backgroundColor:'#0f3c69', borderRadius:'5px', padding:'10px 10px'}} > <b> Log Out </b> </button>

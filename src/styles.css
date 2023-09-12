@@ -55,9 +55,9 @@
   background-color: white;
   border-radius: 2rem;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-  font-weight: bold;
+  /* font-weight: bold; */
   font-size: 15px;
-  text-transform: uppercase;
+  /* text-transform: uppercase; */
   color: #0f3c69;
   width: auto;
 }
@@ -139,13 +139,25 @@ input {
 .imageBefore{
   height: 150px;
   width: 150px;
-  margin-left: 23%;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
   border-radius: 100%;
 }
 
 .imageAfter{
-  height: 140px;
-  width: 140px;
+  height: 120px;
+  width: 120px;
   border-radius: 100%;
-  margin-left: 25%;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
+
+.notify{
+  font-size: 9px;
+  color: red;
+  margin-top: 10px;
+  font-weight: bold;
+  text-align: center; 
 }
