@@ -150,6 +150,8 @@ input {
   color: white;
   cursor: pointer;
   border: 2px solid black;
+}
+
 .imageBefore{
   height: 150px;
   width: 150px;

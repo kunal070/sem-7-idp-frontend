@@ -27,7 +27,7 @@ const Navbar = ({session, logout}) => {
     ["Home", "images/dashboard.svg"],
     ["Profile", "images/profile.svg"],    
     ["Membership-Form", "images/addmem.svg"],
-    ["Chats", "images/chat.svg"],
+    ["Chat", "images/chat.svg"],
     ["Log Out", "images/signout.svg"]
   ];
   
