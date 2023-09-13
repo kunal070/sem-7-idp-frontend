@@ -375,7 +375,7 @@ const CompanyForm3 = ({session}) => {
 
     
                 if (response.data.success) {
-                    navigate("/membership-status");
+                    navigate("/membership-status", {state: {phone:session.phone}});
                 }
             
         } else {
@@ -444,20 +444,20 @@ const CompanyForm3 = ({session}) => {
                         <p className='label'style={{marginLeft:'50px', paddingTop:'10px'}}>ERDA Services:</p>                    
                     
                         <p className='label' style={{marginLeft:'45px', paddingTop:'5px'}}>
-                            <input type="checkbox" name="companyERDARequiredServices" value="Option 1" checked={formData.companyERDARequiredServices?.includes("Option 1")} onChange={handleChange} style={{marginRight:'5px' }}/>Option 1
+                            <input type="checkbox" name="companyERDARequiredServices" value="Option 1" checked={formData.companyERDARequiredServices?.includes("Option 1")} onChange={handleChange} style={{marginRight:'5px' }}/>R&D AND EXPERT SERVICES
                         </p>
 
                         <p className='label' style={{marginLeft:'45px', paddingTop:'5px'}}>
-                            <input type="checkbox" name="companyERDARequiredServices" value="Option 2" checked={formData.companyERDARequiredServices?.includes("Option 2")} onChange={handleChange} style={{marginRight:'5px'}}/>Option 2
+                            <input type="checkbox" name="companyERDARequiredServices" value="Option 2" checked={formData.companyERDARequiredServices?.includes("Option 2")} onChange={handleChange} style={{marginRight:'5px'}}/>TESTING AND EVALUATION
                         </p>
 
                         <p className='label'style={{marginLeft:'45px', paddingTop:'5px'}}>
-                            <input type="checkbox" name="companyERDARequiredServices" value="Option 3" checked={formData.companyERDARequiredServices?.includes("Option 3")} onChange={handleChange} style={{marginRight:'5px'}}/>Option 3
+                            <input type="checkbox" name="companyERDARequiredServices" value="Option 3" checked={formData.companyERDARequiredServices?.includes("Option 3")} onChange={handleChange} style={{marginRight:'5px'}}/>FEILD SERVICES
                         </p>
 
-                        <p className='label'style={{marginLeft:'45px', paddingTop:'5px'}}>
-                            <input type="checkbox" name="companyERDARequiredServices" value="Option 4" checked={formData.companyERDARequiredServices?.includes("Option 4")} onChange={handleChange} style={{marginRight:'5px'}}/>Option 4
-                        </p>
+                        {/* <p className='label'style={{marginLeft:'45px', paddingTop:'5px'}}>
+                            <input type="checkbox" name="companyERDARequiredServices" value="Option 4" checked={formData.companyERDARequiredServices?.includes("Option 4")} onChange={handleChange} style={{marginRight:'5px'}}/>
+                        </p> */}
                     
                     </div>
                         {errors.companyERDARequiredServices && <span className="error"style={{color: 'red', fontSize: '12px'}}>{errors.companyERDARequiredServices}</span>}

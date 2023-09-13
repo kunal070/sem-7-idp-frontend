@@ -33,7 +33,7 @@ const MembershipStatus = ({ session }) => {
      const location = useLocation();
     
      // membership phone number
-     const membershipPhoneNumber = location.state.phone;
+     const membershipPhoneNumber = location.state?.phone;
 
     const [data, setData] = useState({})
     const [isChecked, setIsChecked] = useState(false);
@@ -60,8 +60,6 @@ const MembershipStatus = ({ session }) => {
         try {
             setLoader(true)
             axios.defaults.withCredentials = true
-
-            // const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/membership/membership/${session.memberId}`)
             const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/membership/membership/${membershipPhoneNumber}`)
             console.log(response.data)
             setLoader(false)
