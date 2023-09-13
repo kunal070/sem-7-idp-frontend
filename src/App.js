@@ -40,7 +40,8 @@ function App({ session }) {
           <Route path="/company-info-2" element={<CompanyForm2/>} />
           <Route path="/company-info-3" element={<CompanyForm3/>} />
           <Route path="/membership-status" element={<MembershipStatus/>} />
-          <Route path="/chat" element={<Chat/>} />
+          <Route path="/chat" element={<Chat/>}/>
+          <Route path="/membership-table" element={<MembershipTable/>}/>
         </Routes>
       </div>
       <ToastContainer />
@@ -50,23 +51,28 @@ function App({ session }) {
     return(
       <>
         <Navbar/>
+        <div className="backImage">
         <Routes>
           <Route path="/profile" element={<Home/>} />
           <Route path="/create user" element={<CreateUser/>} />
           <Route path="/pending-memberships" element={<MembershipTable/>} />
         </Routes>
+        </div>
         <ToastContainer />
       </>
+      
     )
   } else if(session.typeOfUser == "approver"){
     return(
       <>
         <Navbar/>
+        <div className="backImage">
         <Routes>
           <Route path="/pending-memberships" element={<MembershipTable/>} />
           <Route path="/membership-status" element={<MembershipStatus/>} />
           <Route path="/*" element={<Home/>} />
         </Routes>
+        </div>
         <ToastContainer />
       </>
     )

@@ -87,19 +87,18 @@ const MembershipTable = () => {
   return (
     <>
       <div className="pt-4 flex items-center flex-col">
-      <h2 className='py-4 font-bold text-3xl' style={{color:"#0f3c69"}}>All Membership Data</h2>
+      <h2 className='py-4 font-bold text-3xl' style={{color:"#0f3c69"}}>Pending Membership</h2>
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-          <table className="w-full text-sm text-left text-gray-400">
+          <table className="w-full text-sm text-left text-black">
               <thead className="text-xs uppercase" style={{backgroundColor: '#0f3c69', color:"white"}}>
                   <tr>
-                    <th className='px-6 py-3'>No</th>
-                    <th className='px-6 py-3'>EQTR No</th>
-                    <th className='px-6 py-3'>Title</th>
-                    <th className='px-6 py-3'>Customer Name</th>
+                    <th className='px-6 py-3'>SR No</th>
+                    <th className='px-6 py-3'>Company Name</th>
+                    <th className='px-6 py-3'>Company Type</th>
+                    <th className='px-6 py-3'>Membership Type</th>
                     <th className='px-6 py-3'>Customer Id</th>
                     <th className='px-6 py-3'>Status</th>
-                    <th className='px-6 py-3'>Creator Name</th>
-                    {/* <th className='px-6 py-3'>View Details</th> */}
+                    <th className='px-6 py-3'>More Details</th>
                   </tr>
               </thead>
               <tbody>
@@ -111,7 +110,7 @@ const MembershipTable = () => {
                         </td>
                       </tr> :
                     data.map((item, index) => (
-                    <tr key={item._id} className='font-semibold bg-[#e5e5e5] hover:bg-[#a8ccef]'>
+                    <tr key={item._id} className='font-semibold bg-[#e5e5e5] hover:bg-[#A9A9A9]'>
                       <td className='px-6 py-3'>{(currentPage-1)*5 + (index + 1)}</td>
                       <td className='px-6 py-3'>{item.companyName}</td>
                       <td className='px-6 py-3'>{item.companyType}</td>
@@ -119,7 +118,7 @@ const MembershipTable = () => {
                       <td className='px-6 py-3'>{item.member.memberId}</td>
                       <td className='px-6 py-3'>{item.membershipStatus}</td>
                       <td className='px-6 py-3'>
-                        <button className='mt-1 text-white bg-gradient-to-br from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-teal-300 font-medium rounded-lg text-sm text-center px-5 py-2.5 mr-2 mb-2' type="button" onClick={() => openMembership(item.member.phone)}><b>Open</b></button>
+                        <button className='mt-1 text-white bg-[#0F3C69] focus:ring-4 focus:outline-none focus:ring-teal-300 font-medium rounded-lg text-sm text-center px-5 py-2.5 mr-2 mb-2' type="button" onClick={() => openMembership(item.member.phone)}><b>Open</b></button>
                       </td>
                     </tr>
                   ))
@@ -131,7 +130,7 @@ const MembershipTable = () => {
 
     {/* pagination */}
     <div className="pagination-div">
-        <div className='rounded py-2 bg-gray-900'>
+        <div className='rounded py-2 bg-[#eee] text-black'>
         {currentPage !== 1 && (
           <span className="page cursor-pointer" onClick={() => prevPage()}>
             {" "}
@@ -142,7 +141,7 @@ const MembershipTable = () => {
           return (
             <span
               className={
-                currentPage === index + 1 ? "page rounded cursor-pointer bg-gradient-to-br from-teal-200 to-lime-200 text-gray-900 font-medium" : "page cursor-pointer"
+                currentPage === index + 1 ? "page rounded cursor-pointer bg-[#0F3C69] text-white font-medium" : "page cursor-pointer"
               }
               onClick={() => selectPageHandler(index + 1)}
               key={index}

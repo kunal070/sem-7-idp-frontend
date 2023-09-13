@@ -1,15 +1,20 @@
 import React, { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
+import { Link } from 'react-router-dom';
 
 import { connect } from 'react-redux'
 
 import axios from 'axios'
+import Loader from "./Loader";
+
 
 // used for get id of the deligence
 import { useLocation } from 'react-router-dom';
 
 import { useFormik } from 'formik'
 import { membershipApprovalValidationSchema } from '../validation/employee.validation';
+
+import '../MembershipStatus.css'; // Import your CSS file for component-specific styles
 
 const mapStateToProps = ({ session }) => ({
     session
@@ -32,6 +37,8 @@ const MembershipStatus = ({ session }) => {
 
     const [data, setData] = useState({})
     const [isChecked, setIsChecked] = useState(false);
+    const [loader, setLoader] = useState(false)
+
     const handleCheckboxChange = (e) => {
         setIsChecked(e.target.checked);
     };
@@ -51,18 +58,18 @@ const MembershipStatus = ({ session }) => {
 
     const fetchData = async () => {
         try {
+            setLoader(true)
             axios.defaults.withCredentials = true
 
             // const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/membership/membership/${session.memberId}`)
             const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/membership/membership/${membershipPhoneNumber}`)
             console.log(response.data)
+            setLoader(false)
             if(response.data.success){
                 setData(response.data.data)
             } else {
                 toast(response.data.message)
             }
-
-
         } catch (error){
             console.log(error)
             toast("Internal Server Error while fetching data")
@@ -88,62 +95,189 @@ const MembershipStatus = ({ session }) => {
         fetchData();
     }, [])
 
+    if(loader){
+        return (
+        <div style={{width : '100%', height:'100%'}}>
+            <Loader/>
+        </div>
+        )
+      }
+      else{
     return (
         <div className='' style={{paddingLeft:"100px", height:'100vh', overflow:'scroll'}}>
-            <p className='text-black'>Form 1</p>
-            <p className='text-black'>Company Name: {data.companyName}</p>
-            <p className='text-black'>Company Address: {data.companyAddress}</p>
-            <p className='text-black'>owner Name: {data.ownerName}</p>
-            <p className='text-black'>Company Telephone: {data.companyTelephone}</p>
-            <p className='text-black'>Company Phone: {data.companyPhone}</p>
-            <p className='text-black'>Company Email: {data.companyEmail}</p>
-            <p className='text-black'>Company Factory: {data.companyBranch}</p>
-            <p className='text-black'>Company Branch: {data.companyFactory}</p>
-            <p>.</p>
-            <p className='text-black'>Membership form Status: {data.membershipFormStatus}</p>
-            <p className='text-black'>Payment Status: {data.paymentStatus ? "TRUE" : "FALSE"}</p>
-            <p>.</p>
-            <p className='text-black'>Form 2</p>
-            <p className='text-black'>Company Type: {data.companyType}</p>
-            <p className='text-black'>Company Registration Year: {data.companyRegistrationYear}</p>
-            <p className='text-black'>PAN Number: {data.panNumber}</p>
-            <p className='text-black'>GST Number: {data.gstNumber}</p>
-            <p className='text-black'>CIN Number: {data.cinNumber}</p>
-            <p className='text-black'>Company Registration proof document name: {data?.companyRegistrationProofAttachment?.documentName}</p>
-            <div style={{display:'flex', justifyContent:'center'}}>
-                {data.companyRegistrationProofAttachment && <embed src={data.companyRegistrationProofAttachment.file} width="1000px" height="1000px" />}
-            </div>
-            <p>.</p>
-            <p className='text-black'>Form 3</p>
-            <p className='text-black'>Type Of Membership: {data.typeOfMembership}</p>
-            <p className='text-black'>Company Turnover range: {data.companyTurnOverRange}</p>
+            <div style={{ display: 'flex', flexDirection: 'row' ,paddingLeft:'10px', paddingRight:'10px'}}>
+                <div className="form-group width-50" >
+                <div className='section2' style={{marginLeft : '15px'}}>
+                    <p className='text-black bold'>Form 1</p>
+                    <div style={{display : 'flex', flexDirection : 'row'}}>
+                        <p className='text-black b'>Company Name :  </p>
+                        <p className='text-black' style ={{marginLeft : '5px',paddingLeft : '4rem' }}> {data.companyName}</p>
+                    </div>
 
-            <p className='text-black'>Company Required ERDA Services: {
-                data.companyERDARequiredServices?.map((val, index) => <span key={index}>{val}</span>)
-            }</p>
+                    <div style={{display : 'flex', flexDirection : 'row'}}>
+                         <p className='text-black b'>Company Address:  </p>
+                        <p className='text-black'style ={{marginLeft : '5px',paddingLeft : '3rem'}}> {data.companyAddress}</p>
+                    </div>
+
+                    <div style={{display : 'flex', flexDirection : 'row'}}>
+                        <p className='text-black b'>Owner Name:  </p>
+                        <p className='text-black'style ={{marginLeft : '5px',paddingLeft : '5.7rem'}}> {data.ownerName}</p>
+                    </div>
+
+            <div style={{display : 'flex', flexDirection : 'row'}}>
+            <p className='text-black b'>Company Telephone:  </p>
+            <p className='text-black'style ={{marginLeft : '5px',paddingLeft : '1.7rem'}}> {data.companyTelephone}</p>
+            </div>
+
+            <div style={{display : 'flex', flexDirection : 'row'}}>
+            <p className='text-black b'>Company Phone: </p>
+            <p className='text-black'style ={{marginLeft : '5px',paddingLeft : '3.9rem'}}> {data.companyPhone}</p>
+            </div>
+
+
+            <div style={{display : 'flex', flexDirection : 'row'}}>
+            <p className='text-black b'>Company Email: </p>
+            <p className='text-black'style ={{marginLeft : '5px',paddingLeft : '4.45rem'}}> {data.companyEmail}</p>
+            </div>
+            <div style={{display : 'flex', flexDirection : 'row'}}>
+            <p className='text-black b'>Company Factory: </p>
+            <p className='text-black'style ={{marginLeft : '5px',paddingLeft : '3.4rem'}}> {data.companyBranch}</p>
+            </div>
+            <div style={{display : 'flex', flexDirection : 'row'}}>
+            <p className='text-black b'>Company Branch: </p>
+            <p className='text-black'style ={{marginLeft : '5px',paddingLeft : '3.6rem'}}> {data.companyFactory}</p>
+            </div>
+
+            {/* <p>.</p> */}
+            {/* <p className='text-black'>Membership form Status: {data.membershipFormStatus}</p>
+            <p className='text-black'>Payment Status: {data.paymentStatus ? "TRUE" : "FALSE"}</p> */}
+            {/* <p>.</p>                 */}
+            </div>
+            </div>
+
+            <div className="form-group width-50" >
+            <div className='section' style={{marginLeft : '15px'}}>
+            <p className='text-black bold'>Form 2</p>
+
+            <div style={{display : 'flex', flexDirection : 'row'}}>
+            <p className='text-black b'>Company Type : </p>
+            <p className='text-black'style ={{marginLeft : '5px',paddingLeft : '11rem'}}> {data.companyType}</p>
+            </div>
+
+            <div style={{display : 'flex', flexDirection : 'row'}}>
+            <p className='text-black b'>Company Registration Year : </p>
+            <p className='text-black'style ={{marginLeft : '5px',paddingLeft : '4.35rem'}}> {data.companyRegistrationYear}</p>
+            </div>
+
+            <div style={{display : 'flex', flexDirection : 'row'}}>
+            <p className='text-black b'>PAN Number : </p>
+            <p className='text-black'style ={{marginLeft : '5px',paddingLeft : '11.9rem'}}> {data.panNumber}</p>
+            </div>
+            <div style={{display : 'flex', flexDirection : 'row'}}>
+            <p className='text-black b'>GST Number : </p>
+            <p className='text-black'style ={{marginLeft : '5px',paddingLeft : '12.1rem'}}> {data.gstNumber}</p>
+            </div>
+            <div style={{display : 'flex', flexDirection : 'row'}}>
+            <p className='text-black b'>CIN Number : </p>
+            <p className='text-black'style ={{marginLeft : '5px',paddingLeft : '12.3rem'}}> {data.cinNumber}</p>
+            </div>
+            <div style={{display : 'flex', flexDirection : 'row'}}>
+            <p className='text-black b'>Company Registration Type : </p>
+            <p className='text-black'style ={{marginLeft : '5px',paddingLeft : '4rem'}}>{data?.companyRegistrationProofAttachment?.documentName}</p>
+            </div>
+            <div style={{display : 'flex', flexDirection : 'row'}}>
+            <p className='text-black b'>Company Registration Document:</p>
+            <p className='text-black'>
+            <div style={{paddingLeft:20, paddingBottom:28.3}}>
+            <Link to={data.companyRegistrationProofAttachment?.file} target="_blank" rel="noopener noreferrer"> <button type="button" className='view' style={{ borderColor: '#0f3c69', backgroundColor: '#0f3c69', color: 'white'}} >View PDf</button> </Link>
+                </div>
+            </p>
+            </div>
             
-            <p className='text-black'>Company Products: 
-                {
+            {/* <div style={{display:'flex', justifyContent:'center'}}>
+                {data.companyRegistrationProofAttachment && <embed src={data.companyRegistrationProofAttachment.file} width="1000px" height="1000px" />}
+            </div> */}
+            </div>
+            </div>
+            </div>
+
+            <div className='section1'> 
+            <p className='text-black bold'>Form 3</p>
+
+            {
                     data.companyProducts?.map((product, index) => {
                         return (
                             <div key={index}>
-                                <p className='text-black'>No: {index + 1}</p>
-                                <p className='text-black'>Name: {product.productName}</p>
-                                <p className='text-black'>Capacity: {product.produtCapacity}</p>
-                                <p className='text-black'>Unit: {product.productUnit}</p>
+                                {/* <p className='text-black' >No: {index + 1}</p> */}
+                                <div style={{display : 'flex', flexDirection : 'row'}}>
+                                <p className='text-black b'>Product Name : </p>
+                                <p className='text-black'style ={{marginLeft : '5px',paddingLeft : '12.25rem'}}> {product.productName}</p>
+                                </div>
+                                <div style={{display : 'flex', flexDirection : 'row'}}>
+                                <p className='text-black b'>Manufacturing Capacity : </p>
+                                <p className='text-black'style ={{marginLeft : '5px',paddingLeft : '7.1rem'}}> {product.productCapacity}</p>
+                                </div>
+                                <div style={{display : 'flex', flexDirection : 'row'}}>
+                                <p className='text-black b'>Units Manufacturing : </p>
+                                <p className='text-black'style ={{marginLeft : '5px',paddingLeft : '9.0rem'}}>  {product.productUnit}</p>
+                                </div>
+                                {/* <p className='text-black'>Capacity: {product.produtCapacity}</p> */}
+                                {/* <p className='text-black'>Name: {product.productName}</p>
+                                <p className='text-black'>Unit: {product.productUnit}</p> */}
                             </div>
                         )
                     })
                 }
-            </p>
+
+
+            <div style={{display : 'flex', flexDirection : 'row'}}>
+            <p className='text-black b'>Objective for Membership : </p>
+            <p className='text-black' style ={{marginLeft : '5px',paddingLeft : '6.1rem'}}> {data.companyERDAObjective}</p>
+            </div>
+
+            <div style={{display : 'flex', flexDirection : 'row'}}>
+            <p className='text-black b'>Company Required ERDA Services :</p>
+            <p className='text-black 'style ={{marginLeft : '5px',paddingLeft : '1.69rem'}}> {
+                data.companyERDARequiredServices?.map((val, index) => <span key={index}>{val}</span>)
+            }</p>
+            </div>
+
+            <div style={{display : 'flex', flexDirection : 'row'}}>
+            <p className='text-black b'>Type Of Membership : </p>
+            <p className='text-black' style ={{marginLeft : '5px',paddingLeft : '9rem'}}> {data.typeOfMembership}</p>
+            </div>
+
+            <div style={{display : 'flex', flexDirection : 'row'}}>
+            <p className='text-black b'>Company Turnover range : </p>
+            <p className='text-black'style ={{marginLeft : '5px',paddingLeft : '6.49rem'}}> {data.companyTurnOverRange}</p>
+            </div>
+
+           
+               
+            
+
+            <div style={{display : 'flex', flexDirection : 'row'}}>
+            <p className='text-black b'>Turnover Sheet : </p>
+            <div style={{paddingBottom:4,marginTop : 3,paddingLeft : '12.05rem'}}>
+            <Link to={data.companyRegistrationProofAttachment?.file} target="_blank" rel="noopener noreferrer"> <button type="button" className='view' style={{ borderColor: '#0f3c69', backgroundColor: '#0f3c69', color: 'white'}} >View PDf</button> </Link>
+            </div>
+            </div>
+
+            <div style={{display : 'flex', flexDirection : 'row'}}>
+            <p className='text-black b'>Membership status : </p>
+            <p className='text-black'style ={{marginLeft : '5px',paddingLeft : '9.68rem'}}>{data.membershipStatus}</p>
+            </div>
+
+            <div style={{display : 'flex', flexDirection : 'row'}}>
+            <p className='text-black b'>Payment Status : </p>
+            <p className='text-black'style ={{marginLeft : '5px',paddingLeft : '11.5rem'}}>{data.paymentStatus  ? "Successfull" : "Pending"}</p> 
+            </div>
 
             
-            <p className='text-black'>Membership status: {data.membershipStatus}</p>
-            <p className='text-black'>Payment Status: {data.paymentStatus}</p>
-            <div style={{display:'flex', justifyContent:'center'}}>
+            {/* <div style={{display:'flex', justifyContent:'center'}}>
                 {data.turnOverBalanceSheet && <embed src={data.turnOverBalanceSheet} width="1000px" height="1000px" />}
+            </div> */}
             </div>
-            
 
             {/* show this when application is under draft stage or reverted stage && member with their membership logged in */}
             {((data?.membershipStatus == "draft" || data?.membershipStatus == "reverted") && data?.member?.phone == session.phone ) ? 
@@ -223,7 +357,7 @@ const MembershipStatus = ({ session }) => {
             : null
             }
         </div>
-    )
+    )}
 }
 
 
