@@ -56,10 +56,15 @@
     height: 100%;
 }
 .temp{
-  padding: 4rem;
+  padding: 2rem;
   background-color: white;
   border-radius: 2rem;
-  border: 2px solid #0f3c69;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  /* font-weight: bold; */
+  font-size: 15px;
+  /* text-transform: uppercase; */
+  color: #0f3c69;
+  width: auto;
 }
 
 .width-10{
@@ -113,7 +118,7 @@ input {
 }
 .navbar__li-box:first-child {
   margin-top:53px;
-  
+    
 }
 .navbar__li-box {
   height: 43px;
@@ -131,7 +136,7 @@ input {
 .backImage{
   width: 100vw;
   height: 100vh;
-  background-image: url('/public/images/formbk4.jpg');
+  background-image: url('/public/images/tpbk.png');
   background-repeat: no-repeat;
   background-size: cover;
 }
@@ -145,4 +150,28 @@ input {
   color: white;
   cursor: pointer;
   border: 2px solid black;
+.imageBefore{
+  height: 150px;
+  width: 150px;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  border-radius: 100%;
+}
+
+.imageAfter{
+  height: 120px;
+  width: 120px;
+  border-radius: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
+
+.notify{
+  font-size: 9px;
+  color: red;
+  margin-top: 10px;
+  font-weight: bold;
+  text-align: center; 
 }
