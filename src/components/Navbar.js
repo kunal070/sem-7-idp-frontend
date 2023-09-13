@@ -35,13 +35,15 @@ const Navbar = ({session, logout}) => {
     ["Home", "images/dashboard.svg"],
     ["Create User", "images/Magazine.svg"],
     ["Show Users", "images/profile.svg"],
-    ["Memberships", "images/member.svg"],
+    ["Pending Memberships", "images/member.svg"],
+    ["Completed Memberships", "images/Magazine.svg"],  
+    ["All Memberships", "images/member.svg"],
     ["Log Out", "images/signout.svg"]
   ];
 
   const approverLi = [
   ["Home", "images/dashboard.svg"],
-  ["Pending-Memberships", "images/member.svg"],
+  ["Pending Memberships", "images/member.svg"],
   ["Approved Memberships", "images/Magazine.svg"],  
   ["Log Out", "images/signout.svg"]];
 
@@ -76,7 +78,7 @@ const Navbar = ({session, logout}) => {
         await logout();
         setLoader(false)
       }} else {
-      navigate(li[index][0].toLowerCase())
+      navigate(li[index][0].toLowerCase().split(' ').join('-'))
     }
   }
 

@@ -68,9 +68,6 @@ const Home = ({session, logout}) => {
     };
   };
 
-  
-  //const [dialogs, setdialogs] = useState (false);
-  console.log("home: " , session)
   return (
     <div className='main-container flex'>
       <div className='temp' style={{ display: 'flex', flexDirection: 'column'}}>
@@ -82,7 +79,7 @@ const Home = ({session, logout}) => {
 
         <div className='flex '>
           <p style={{color:'#0f3c69',paddingRight:'0.5rem', paddingTop: '1rem', paddingBottom: '0.5rem', paddingLeft: '1rem'}}><b>Name :</b> </p>
-          <p style={{color:'#0f3c69',paddingRight:'1rem', paddingTop: '1rem', paddingBottom: '0.5rem'}}>{(session.firstName + " "  + session.lastName) || session.name} </p>
+          <p style={{color:'#0f3c69',paddingRight:'1rem', paddingTop: '1rem', paddingBottom: '0.5rem'}}>{ session.firstName ? (session.firstName + " "  + session.lastName) : session.name} </p>
         </div>
 
         <div className='flex '>

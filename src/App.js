@@ -26,6 +26,7 @@ import Chat from "./components/Chat";
 import CreateUser from "./components/CreateUser";
 import MembershipTable from "./components/MembershipTable";
 import ChatHome from "./components/ChatHome";
+import ShowUser from "./components/ShowUser";
 
 
 const mapStateToProps = ({ session }) => ({
@@ -59,7 +60,7 @@ function App({ session }) {
           <Route path="/company-info-2" element={<CompanyForm2/>} />
           <Route path="/company-info-3" element={<CompanyForm3/>} />
           <Route path="/membership-status" element={<MembershipStatus/>} />
-          <Route path="/chat" element={<Chat/>}/>
+          <Route path="/chat" element={<ChatHome socket={socket} />}/>
           <Route path="/membership-table" element={<MembershipTable/>}/>
         </Routes>
       </div>
@@ -73,13 +74,16 @@ function App({ session }) {
         <div className="backImage">
         <Routes>
           <Route path="/profile" element={<Home/>} />
-          <Route path="/create user" element={<CreateUser/>} />
-          <Route path="/pending-memberships" element={<MembershipTable/>} />
+          <Route path="/create-user" element={<CreateUser/>} />
+          <Route path="/show-users" element={<ShowUser/>} />
+          <Route path="/pending-memberships" element={<MembershipTable type="pending" />} />
+          <Route path="/completed-memberships" element={<MembershipTable type="completed" />} />
+          <Route path="/all-memberships" element={<MembershipTable type="all" />} />
+          <Route path="/membership-status" element={<MembershipStatus/>} />
         </Routes>
         </div>
         <ToastContainer />
       </>
-      
     )
   } else if(session.typeOfUser == "approver"){
     return(
@@ -87,7 +91,9 @@ function App({ session }) {
         <Navbar/>
         <div className="backImage">
         <Routes>
-          <Route path="/pending-memberships" element={<MembershipTable/>} />
+          <Route path="/pending-memberships" element={<MembershipTable type="pending" />} />
+          <Route path="/completed-memberships" element={<MembershipTable type="completed" />} />
+          <Route path="/all-memberships" element={<MembershipTable type="all" />} />
           <Route path="/membership-status" element={<MembershipStatus/>} />
           <Route path="/*" element={<Home/>} />
         </Routes>
