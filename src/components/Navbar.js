@@ -33,21 +33,24 @@ const Navbar = ({session, logout}) => {
   
   const adminLi = [
     ["Home", "images/dashboard.svg"],
-    ["Create User", "images/Magazine.svg"],
-    ["Show Users", "images/profile.svg"],
-    ["Memberships", "images/member.svg"],
+    ["Create User", "images/create-user.svg"],
+    ["Show Users", "images/show-users.svg"],
+    ["Pending Memberships", "images/member.svg"],
+    ["Completed Memberships", "images/Magazine.svg"],  
+    ["All Memberships", "images/member.svg"],
     ["Log Out", "images/signout.svg"]
   ];
 
   const approverLi = [
   ["Home", "images/dashboard.svg"],
-  ["Pending-Memberships", "images/member.svg"],
-  ["Approved Memberships", "images/Magazine.svg"],  
+  ["Profile", "images/profile.svg"],
+  ["Pending Memberships", "images/member.svg"],
+  ["Completed Memberships", "images/Magazine.svg"],
   ["Log Out", "images/signout.svg"]];
 
     const [loader, setLoader] = useState(false)
     
-    const [activeClass, setActiveClass] = useState("Home") 
+    const [activeClass, setActiveClass] = useState("Home")
 
   useEffect(() => {
     if(session.typeOfUser === "approver"){
@@ -64,7 +67,6 @@ const Navbar = ({session, logout}) => {
 
   const handleMouseEnter = (index) => {
     setShowTooltip(index);
-
   };
 
   const openPage = async(index) => {
@@ -76,7 +78,7 @@ const Navbar = ({session, logout}) => {
         await logout();
         setLoader(false)
       }} else {
-      navigate(li[index][0].toLowerCase())
+      navigate(li[index][0].toLowerCase().split(' ').join('-'))
     }
   }
 
@@ -88,6 +90,20 @@ const Navbar = ({session, logout}) => {
     navigate("/")
     setActiveClass('Home')
   }
+
+  useEffect(() => {
+    li.forEach(element => {
+      if(`/${element[0].toLowerCase().split(' ').join('-')}` == window.location.pathname) {
+        setActiveClass(element[0])
+      }
+    });
+    
+    // if(window.location.pathname == "/"){
+    //   setActiveClass("Home")
+    // }
+
+  }, [li])
+
   if(loader){
     return (
       <Loader/>

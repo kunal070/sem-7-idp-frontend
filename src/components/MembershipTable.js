@@ -11,7 +11,7 @@ import { useNavigate } from "react-router-dom";
 
 import CircleLoader from './CircleLoader';
 
-const MembershipTable = () => {
+const MembershipTable = ({ type }) => {
   // actual data of deligences are stored in data state (array)
   const [data, setData] = useState([])
 
@@ -48,7 +48,7 @@ const MembershipTable = () => {
   // fetch documents from backend
   useEffect(() => {
     fetchData();
-  }, [currentPage]);
+  }, [currentPage, type]);
 
   // function to fetch data from backend
   const fetchData = async () => {
@@ -57,20 +57,19 @@ const MembershipTable = () => {
 
     // withCredentials for sending httpOnly cookie with request
     axios.defaults.withCredentials = true;
-
     // we will call diffrent api depending on type of user and user
-    const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/membership/all-memberships?page=${currentPage}&limit=${limit}`);
+    const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/membership/get-memberships?page=${currentPage}&limit=${limit}&type=${type}`);
 
-    console.log(response.data)
+    console.log("memberships: ", response.data)
 
     // successful api call response
     if(response.data.success){
       setData(response.data.data.memberships)
       setTotalPages(response.data.data.totalPages)
-    }
-    else {
-      // error response
+    } else {
       toast(response.data.message)
+      setData(response.data?.data?.memberships)
+      setTotalPages(response.data?.data?.totalPages)
     }
 
     // stop showcasing loader
@@ -83,13 +82,17 @@ const MembershipTable = () => {
       state: {phone}
     })
   }
+
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [type])
   
   return (
     <>
       <div className="pt-4 flex items-center flex-col">
-      <h2 className='py-4 font-bold text-3xl' style={{color:"#0f3c69"}}>Pending Membership</h2>
+      <h2 className='py-4 font-bold text-3xl my-4' style={{color:"#0f3c69"}}>{type.charAt(0).toUpperCase() + type.slice(1)} Memberships</h2>
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-          <table className="w-full text-sm text-left text-black">
+          <table className="w-full text-sm text-left text-black" style={{margin:'0 0'}}>
               <thead className="text-xs uppercase" style={{backgroundColor: '#0f3c69', color:"white"}}>
                   <tr>
                     <th className='px-6 py-3'>SR No</th>
