@@ -94,7 +94,7 @@ const Home = ({session, logout}) => {
 
         <div className='flex '>
           <p style={{color:'#0f3c69',paddingRight:'0.5rem', paddingBottom: '1rem', paddingLeft: '1rem'}}><b>User Type :</b> </p>
-          <p style={{color:'#0f3c69',paddingRight:'1rem', paddingBottom: '1rem'}}>{session.typeOfUser}</p>
+          <p style={{color:'#0f3c69',paddingRight:'1rem', paddingBottom: '1rem'}}>{session.typeOfUser.charAt(0).toUpperCase() + session.typeOfUser.slice(1)}</p>
         </div>
       <center>
         <button onClick={logout} style={{color:'white', backgroundColor:'#0f3c69', borderRadius:'5px', padding:'10px 10px'}} > <b> Log Out </b> </button>

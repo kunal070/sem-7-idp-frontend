@@ -57,7 +57,6 @@ const MembershipTable = ({ type }) => {
 
     // withCredentials for sending httpOnly cookie with request
     axios.defaults.withCredentials = true;
-    console.log("Type: ", type)
     // we will call diffrent api depending on type of user and user
     const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/membership/get-memberships?page=${currentPage}&limit=${limit}&type=${type}`);
 
@@ -67,10 +66,10 @@ const MembershipTable = ({ type }) => {
     if(response.data.success){
       setData(response.data.data.memberships)
       setTotalPages(response.data.data.totalPages)
-    }
-    else {
-      // error response
+    } else {
       toast(response.data.message)
+      setData(response.data?.data?.memberships)
+      setTotalPages(response.data?.data?.totalPages)
     }
 
     // stop showcasing loader
@@ -83,6 +82,10 @@ const MembershipTable = ({ type }) => {
       state: {phone}
     })
   }
+
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [type])
   
   return (
     <>

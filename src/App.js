@@ -91,11 +91,10 @@ function App({ session }) {
         <Navbar/>
         <div className="backImage">
         <Routes>
+          <Route path="/profile" element={<Home/>} />
           <Route path="/pending-memberships" element={<MembershipTable type="pending" />} />
           <Route path="/completed-memberships" element={<MembershipTable type="completed" />} />
-          <Route path="/all-memberships" element={<MembershipTable type="all" />} />
           <Route path="/membership-status" element={<MembershipStatus/>} />
-          <Route path="/*" element={<Home/>} />
         </Routes>
         </div>
         <ToastContainer />
