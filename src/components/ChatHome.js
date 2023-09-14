@@ -375,6 +375,8 @@ const ChatHome = ({ session, socket }) => {
     return chat?.participants.find((participant) => participant._id != session._id)
   }
 
+  console.log("socket: ", socket)
+
   if(!socket) {
     return (
       <div style={{width:'100vw', height:'100vh', display:'flex', justifyContent:'center', alignItems:'center', color:'black' }}>

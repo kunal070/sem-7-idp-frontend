@@ -59,7 +59,7 @@ function App({ session }) {
           <Route path="/company-info-2" element={<CompanyForm2/>} />
           <Route path="/company-info-3" element={<CompanyForm3/>} />
           <Route path="/membership-status" element={<MembershipStatus/>} />
-          <Route path="/chat" element={<Chat/>}/>
+          <Route path="/chat" element={<ChatHome socket={socket} />}/>
           <Route path="/membership-table" element={<MembershipTable/>}/>
         </Routes>
       </div>
