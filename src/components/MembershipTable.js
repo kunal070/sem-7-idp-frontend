@@ -68,8 +68,8 @@ const MembershipTable = ({ type }) => {
       setTotalPages(response.data.data.totalPages)
     } else {
       toast(response.data.message)
-      setData(response.data?.data?.memberships)
-      setTotalPages(response.data?.data?.totalPages)
+      setData([])
+      setTotalPages(0)
     }
 
     // stop showcasing loader

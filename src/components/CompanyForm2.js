@@ -44,7 +44,6 @@ const CompanyForm = ({session}) => {
             if(response.data.success){
                 let temp = response.data.data
                 let date = new Date(temp.companyRegistrationYear).toISOString().split('T', 1)[0]
-                
                 setFormData({
                     companyType: temp.companyType,
                     registrationYear: date,

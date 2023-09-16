@@ -99,6 +99,7 @@ const ChatHome = ({ session, socket }) => {
   };
 
   const getChats = async () => {
+    console.log("get chats")
     axios.defaults.withCredentials = true
     const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/chat/all-chats`, {headers: {"Content-Type":"application/json"}})
     console.log("get chats: ", response.data)
@@ -227,6 +228,7 @@ const ChatHome = ({ session, socket }) => {
     // Set a timeout to stop the typing indication after the timerLength has passed
     typingTimeoutRef.current = setTimeout(() => {
       // Emit a stop typing event to the server for the current chat
+      console.log("stop typing event call")
       socket.emit(STOP_TYPING_EVENT, currentChat?._id);
 
       // Reset the user's typing state
@@ -235,10 +237,12 @@ const ChatHome = ({ session, socket }) => {
   };
 
   const onConnect = () => {
+    console.log("socket connected...")
     setIsConnected(true);
   };
-
+  
   const onDisconnect = () => {
+    console.log("socket disconnected...")
     setIsConnected(false);
   };
 
@@ -246,17 +250,19 @@ const ChatHome = ({ session, socket }) => {
    * Handles the "typing" event on the socket.
    */
   const handleOnSocketTyping = (chatId) => {
+    console.log("Socket typing started...")
     // Check if the typing event is for the currently active chat.
     if (chatId !== currentChat?._id) return;
-
+    
     // Set the typing state to true for the current chat.
     setIsTyping(true);
   };
 
   /**
    * Handles the "stop typing" event on the socket.
-   */
-  const handleOnSocketStopTyping = (chatId) => {
+  */
+ const handleOnSocketStopTyping = (chatId) => {
+    console.log("Socket typing stopped...")
     // Check if the stop typing event is for the currently active chat.
     if (chatId !== currentChat?._id) return;
 
@@ -268,6 +274,7 @@ const ChatHome = ({ session, socket }) => {
    * Handles the event when a new message is received.
    */
   const onMessageReceived = (message) => {
+    console.log("message received...")
     // Check if the received message belongs to the currently active chat
     if (message?.chat !== currentChat?._id) {
       // If not, update the list of unread messages
@@ -282,6 +289,7 @@ const ChatHome = ({ session, socket }) => {
   };
 
   const onNewChat = (chat) => {
+    console.log("New chat arrived")
     setChats((prev) => [chat, ...prev]);
   };
 
@@ -325,7 +333,7 @@ const ChatHome = ({ session, socket }) => {
   useEffect(() => {
     // If the socket isn't initialized, we don't set up listeners.
     if (!socket) return;
-
+    console.log("socket called: ", socket)
     // Set up event listeners for various socket events:
     // Listener for when the socket connects.
     socket.on(CONNECTED_EVENT, onConnect);
@@ -359,8 +367,8 @@ const ChatHome = ({ session, socket }) => {
 
     // Note:
     // The `chats` array is used in the `onMessageReceived` function.
-    // We need the latest state value of `chats`. If we don't pass `chats` in the dependency array,
-    // the `onMessageReceived` will consider the initial value of the `chats` array, which is empty.
+    // We need the latest state value of `chats`. 
+    // If we don't pass `chats` in the dependency array, the `onMessageReceived` will consider the initial value of the `chats` array, which is empty.
     // This will not cause infinite renders because the functions in the socket are getting mounted and not executed.
     // So, even if some socket callbacks are updating the `chats` state, it's not
     // updating on each `useEffect` call but on each socket call.
@@ -375,7 +383,7 @@ const ChatHome = ({ session, socket }) => {
     return chat?.participants.find((participant) => participant._id != session._id)
   }
 
-  if(!socket) {
+  if(!socket || session.isApproved == false) {
     return (
       <div style={{width:'100vw', height:'100vh', display:'flex', justifyContent:'center', alignItems:'center', color:'black' }}>
         <p> Only Approved Members can acccess chat </p>
