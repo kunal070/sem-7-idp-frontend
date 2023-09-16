@@ -5,6 +5,8 @@ import { toast } from 'react-toastify';
 
 import { connect } from 'react-redux';
 
+import '../companyform.css'
+import Modal from './Modal';
 const mapStateToProps = ({ session }) => ({
   session
 })
@@ -30,6 +32,11 @@ const ChatHome = ({ session, socket }) => {
 
     // To keep track of the setTimeout function
     const typingTimeoutRef = useRef(null);
+
+    const [showModal, setShowModal] = useState(false) 
+
+    
+    const ref = useRef(null);
   
     // Define state variables and their initial values using 'useState'
     const [isConnected, setIsConnected] = useState(false); // For tracking socket connection
@@ -37,7 +44,7 @@ const ChatHome = ({ session, socket }) => {
     const [openAddChat, setOpenAddChat] = useState(false); // To control the 'Add Chat' modal
     const [loadingChats, setLoadingChats] = useState(false); // To indicate loading of chats
     const [loadingMessages, setLoadingMessages] = useState(false); // To indicate loading of messages
-  
+
     const [chats, setChats] = useState([]); // To store user's chats
     const [messages, setMessages] = useState([]); // To store chat messages
     const [unreadMessages, setUnreadMessages] = useState(
@@ -57,10 +64,15 @@ const ChatHome = ({ session, socket }) => {
         const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/chat/search-users`, {}, {"headers": {"Content-Type":"application/json"}})
         console.log(response.data)
         if(response.data.success){
+          setShowModal(true)        
           setAvailableUsers(response.data.users)
         } else {
           toast(response.data.message)
         }
+    }
+
+    const toggleModal = () => {
+      setShowModal(!showModal)
     }
 
     const createChatWithUser = async (receiverPhone) => {
@@ -68,10 +80,11 @@ const ChatHome = ({ session, socket }) => {
         const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/chat/get-one-to-one-chat/${receiverPhone}`)
         console.log("chat with user: ", response.data)
         if(response.data.success) {
-            getChats()
+          getChats()
         } else {
-            toast(response.data.message)
+          toast(response.data.message)
         }
+        toggleModal()
         setAvailableUsers([])
     }
 
@@ -141,6 +154,7 @@ const ChatHome = ({ session, socket }) => {
     console.log("get Messages: ", response.data)
     if(response.data.success) {
       setMessages(response.data.messages || [])
+      scrollToLastChat()
     } else {  
       toast(response.data.message)
     }
@@ -377,7 +391,7 @@ const ChatHome = ({ session, socket }) => {
 
   console.log("socket: ", socket)
 
-  if(!socket) {
+  if(!socket || session.isApproved == false) {
     return (
       <div style={{width:'100vw', height:'100vh', display:'flex', justifyContent:'center', alignItems:'center', color:'black' }}>
         <p> Only Approved Members can acccess chat </p>
@@ -385,16 +399,77 @@ const ChatHome = ({ session, socket }) => {
     )
   }
 
-  return (
-    <div style={{ margin:"20px 100px" }}>
 
-    <div className="flex">
+  const scrollToLastChat = () => {
+    const lastChildElement = ref.current?.lastElementChild;
+    lastChildElement?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  return (
+    <div style={{ margin:"0px 100px", maxHeight:'100vh' }}>
+      {showModal && (
+        <div className="fixed inset-0 flex items-center justify-center z-50 overflow-x-hidden overflow-y-auto outline-none focus:outline-none">
+          <div className="relative w-auto my-6 mx-auto " style={{width:"30%"}}>
+            {/* Modal content */}
+            <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+              {/* Header */}
+              <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
+                <h3 className="text-3xl font-semibold text-black">User List</h3>
+                <button
+                  className="p-1 ml-auto bg-transparent border-0 text-black float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
+                  onClick={toggleModal}
+                >
+                  <span className="text-black h-6 w-6 text-2xl block outline-none focus:outline-none">
+                    ×
+                  </span>
+                </button>
+              </div>
+              {/* Body */}
+              <div className="relative p-6 flex-auto">
+                {availableUsers?.map((user, index) => (
+                  <div
+                    key={user.phone}
+                    className="mb-4 flex justify-between items-center"
+                  >
+                    <div>
+                      <p style={{color :'black'}}>
+                        {index + 1}. {user.firstName} {user.lastName}
+                      </p>
+                    </div>
+                    <div>
+                      <button
+                        name="add"
+                        className="bg-[#0F3C69] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                        onClick={() => createChatWithUser(user.phone)}
+                        >
+                        Add
+                      </button>
+                      </div>
+                  </div>
+                ))}
+              </div>
+              {/* Footer */}
+              <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
+                <button
+                  className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                  type="button"
+                  onClick={toggleModal}
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+    <div className={showModal ?  `opacity flex` : 'flex'}>
       <div style={{width:"30%"}}>
-        <div>
-          <button name="fine-member" className='plus-button' style={{ width: "100px", height:"50px" , background:"purple" }} onClick={findMember}> + </button>
+        <div style={{padding:'20px 0px',position : "absolute",bottom : '10px'}}>
+          <button name="fine-member" className='plus-button' style={{ width: "50px", height:"50px" , background:"#0F3C69" }} onClick={findMember}> + </button>
         </div>
       
-        {
+        {/* {
           availableUsers?.map((user, index) => {
             return (
               <div style={{ color:'purple', padding:"20px", display:'flex', margin:'10px 0px', alignItems:'center' }}>
@@ -403,34 +478,49 @@ const ChatHome = ({ session, socket }) => {
               </div>
             )
           })
-        }
+        } */}
         
+
         {chats?.map((chat, index) => {
           const participant = getParticipant(chat)
           return (
           <div className='chat-block' onClick={() => setCurrentChat(chat)}>
-            <p style={{fontWeight:"bold"}}>{participant.firstName}</p>
-            <p style={{fontSize:'10px'}}>{participant.email}</p>
+            <p style={{fontWeight:"bold",fontSize : '20px'}}>{participant.firstName + " " + participant.lastName} </p>
+            <p style={{fontSize:'15px'}}>{participant.phone}</p>
           </div>
           )
         })}
       </div>
 
-      <div style={{width:"70%"}}>
+      <div style={{width:"70%",padding : '0px 10px'}}>
         {currentChat && currentChat?._id ? 
           <div style={{color:"black"}}>
-            <p style={{fontWeight:"bold"}}>{currentParticipant?.firstName}</p>
-            <p style={{fontSize:'10px'}}>{currentParticipant?.email}</p>
-            <div style={{display:'flex', width:'100%', color: 'black', flexDirection:'column', padding:"20px", height:'80vh', overflowY:"scroll"}}>
+            <p style={{fontWeight:"bold"}}>{currentParticipant?.firstName + " " + currentParticipant?.lastName}</p>
+            <p style={{fontSize:'10px'}}>{currentParticipant?.phone}</p>
+            <div ref={ref} style={{display:'flex', width:'100%', color: 'black', flexDirection:'column', padding:"20px 0px", height:'80vh', overflowY:"scroll"}}>
             {messages?.map((msg) => {
-              return (
-                <>
-                  <p style={{color:"black", margin:"10px"}} className={msg.sender._id === session._id ? "text-left" : ""} >{msg.content}</p>
+              if(msg.sender._id === session._id) {
+                return (
+                  <>
+
+                  <div style={{maxWidth : "50%",overflowWrap : 'break-word' , background : 'gray' ,margin : "10px 0px", padding : 7,alignSelf : 'end',borderRadius : '10px'}}>
+                    <p style={{color:"white", margin:"10px"}} className={msg.sender._id === session._id ? "text-left" : ""} >{msg.content}</p>
+                  </div>
                 </>
               )
+            } else {
+              return (
+                <>
+
+                <div style={{maxWidth : "50%" ,overflowWrap : 'break-word',lineHeight:'1.58', background : '#0F3C69' ,margin : "10px 0px", padding : 7,alignSelf : "start",borderRadius : '10px'}}>      
+                  <p style={{color:"white", margin:"10px"}} className={msg.sender._id === session._id ? "text-left" : ""} >{msg.content}</p>
+                </div>
+              </>
+            )
+            }
             })}
           </div>
-          <div style={{width:'100%', display:'flex', justifyContent:'flex-end',  padding:"20px"}}>
+          <div style={{width:'100%', display:'flex', justifyContent:'flex-end',  padding:"20px" }}>
               <input
                 placeholder="Message"
                 value={message}

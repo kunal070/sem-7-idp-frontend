@@ -8,6 +8,7 @@ import {useFormik} from 'formik';
 import { createEmployeeValidationSchema } from '../validation/employee.validation';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import Loader from './Loader';
 
 const CreateUser = () => {
     const [isDataUpdated, setIsDataUpdated] = useState(false)
@@ -31,11 +32,12 @@ const CreateUser = () => {
         validationSchema:createEmployeeValidationSchema,
         onSubmit : async (values, action) => {
             console.log({values})
-
+            setLoader(true)
             axios.defaults.withCredentials = true
 
             const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/admin/create-user`, {...values }, {headers:{"Content-Type":"application/json"}})
             console.log(response.data)
+            setLoader(false)
             toast(response.data.message)
             if(response.data.success){
                 action.resetForm()
@@ -72,7 +74,14 @@ const CreateUser = () => {
         checkNumberAvailability()
       }, [values.phone])
 
-
+      if(loader){
+        return (
+        <div style={{width : '100%', height:'100%'}}>
+            <Loader/>
+        </div>
+        )
+      }
+      else{
   return (
     <div className="flex" style={{overflow:'scroll',height : '100vh',justifyContent:'center', alignItems:'center', paddingTop:"85px"}}>
     <center>
@@ -82,7 +91,7 @@ const CreateUser = () => {
                     <div className='width-10' style={{marginLeft:'50px'}}>
                         <p className='label' style={{textAlign:'start'}}>Name :</p>
                     </div>
-                    <div className='width-50' style={{margin:'8px 0px 8px'}}>
+                    <div className='width-50' style={{margin:'8px 0px 0px'}}>
                         <input type="text" id="name" name="name" onBlur={handleBlur} onChange={handleChange} value={values.name}  required style={{backgroundColor:'#eee',width: '207px'}} />
                         {(errors.name) ? <p style={{color:"red",fontSize:'12px'}}>{errors.name}</p>  : null}
                     </div>
@@ -91,7 +100,7 @@ const CreateUser = () => {
                     <div className='width-10' style={{marginLeft:'50px'}}>
                         <p className='label' style={{textAlign:'start'}}>Phone :</p>
                     </div>
-                    <div className='width-50' style={{margin:'8px 0px 8px '}}>
+                    <div className='width-50' style={{margin:'0px 0px 0px '}}>
                         <input type="text" name="phone" value={values.phone} onChange={handleChange} required style={{backgroundColor:'#eee',width: '207px'}} />
                         {( errors.phone) ? <p style={{color:"red",fontSize:'12px'}}>{errors.phone}</p>  : <p> </p>}
                         {numberExists ? <p style={{color:"red",fontSize:'12px'}}>Phone Number is already taken</p>  : null}
@@ -102,7 +111,7 @@ const CreateUser = () => {
                     <div className='width-10' style={{marginLeft:'50px'}}>
                         <p className='label' style={{textAlign:'start'}}>Email :</p>
                     </div>
-                    <div className='width-50' style={{margin:'8px 0px 9px'}}>
+                    <div className='width-50' style={{margin:'0px 0px 0px'}}>
                         <input type="text" name="email" id="email" onChange={handleChange} value={values.email}  required style={{backgroundColor:'#eee',width: '207px'}} />
                         {(errors.email) ? <p style={{color:"red",fontSize:'12px'}}>{errors.email}</p>  : null}
                         {emailExists ? <p style={{color:"red",fontSize:'12px'}}>Mail Id is already taken</p>  : null}
@@ -125,7 +134,7 @@ const CreateUser = () => {
                         <option value="hey">hey</option>
                         <option value="by">by</option>
                     </select>
-                    {(errors.department) ? <p style={{color:"red",fontSize:'12px'}}>{errors.department}</p>  : null}              
+                    {(errors.department) ? <p style={{color:"red",fontSize:'11px'}}>{errors.department}</p>  : null}              
                      </div>
                 </div>
                 <div className="form-group flex width-50" style={{marginTop : '5px'}} >
@@ -178,6 +187,7 @@ const CreateUser = () => {
     </center>
     </div> 
      )
+  }
 }
 
 export default CreateUser;

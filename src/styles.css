@@ -133,6 +133,12 @@ input {
   color: black;
   background-color: blue;
 }
+
+.opacity {
+  opacity: 0.4;
+}
+
+
 .backImage{
   width: 100vw;
   height: 100vh;
@@ -142,8 +148,8 @@ input {
 }
 
 .chat-block {
-  background: purple;
-  width: 100%;
+  background: #0F3C69;
+  width: 68%;
   padding: 30px 20px;
   margin: 10px 0px;
   border-radius: 5%;
