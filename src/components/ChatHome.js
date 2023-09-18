@@ -529,7 +529,7 @@ const ChatHome = ({ session, socket }) => {
             })}
           </div>
         }
-          <div style={{width:'100%', display:'flex', justifyContent:'flex-end',alignItems:'center',  paddingTop:"100px" }}>
+          <div style={{width:'100%', display:'flex', justifyContent:'flex-end',alignItems:'center', paddingTop:"100px" }}>
         
             <div>
             <input
