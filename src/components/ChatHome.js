@@ -41,6 +41,7 @@ const ChatHome = ({ session, socket }) => {
 
     
     const ref = useRef(null);
+    const attachmentRef = useRef(null)
   
     // Define state variables and their initial values using 'useState'
     const [isConnected, setIsConnected] = useState(false); // For tracking socket connection
@@ -184,7 +185,7 @@ const ChatHome = ({ session, socket }) => {
 
   const handleOnMessageChange = (e) => {
     // Update the message state with the current input value
-    setMessage(e.target.value);
+    setMessage(e.target.value.trimStart());
 
     // If socket doesn't exist or isn't connected, exit the function
     if (!socket || !isConnected) return;
@@ -407,6 +408,10 @@ const ChatHome = ({ session, socket }) => {
     }
   }, [attachment])
 
+  const clickFileInput = () => {
+    attachmentRef.current.click();
+  }
+
 
   if(!socket || session.isApproved == false) {
     return (
@@ -425,20 +430,20 @@ const ChatHome = ({ session, socket }) => {
   }
   else{
   return (
-    <div style={{ margin:"0 65px", maxHeight:'100vh' }}>
+    <div style={{ padding:"0 65px", maxHeight:'100vh', overflow:'hidden', background:'white' }}>
       {showModal && (
-        <div className="fixed inset-0 flex items-center justify-center z-50 overflow-x-hidden overflow-y-auto outline-none focus:outline-none">
-          <div className="relative w-auto my-6 mx-auto " style={{width:"30%"}}>
+        <div className=" fixed inset-0 flex items-center justify-center z-50 overflow-x-hidden overflow-y-auto outline-none focus:outline-none">
+          <div className="addMember relative w-auto my-6 mx-auto " style={{width:"30%"}}>
             {/* Modal content */}
             <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
               {/* Header */}
               <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
-                <h3 className="text-3xl font-semibold text-black">Member's List</h3>
+                <h3 className='' style={{paddingTop:'20px',fontWeight:"bold", fontSize: '15px', letterSpacing:'0.5px',textTransform:"uppercase", color:'#0f3c69'}}>Member's List</h3>
                 <button
                   className="p-1 ml-auto bg-transparent border-0 text-black float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
                   onClick={toggleModal}
                 >
-                  <span className="text-black h-6 w-6 text-2xl block outline-none focus:outline-none">
+                  <span className="text-black h-6 w-6 text-2xl block outline-none focus:outline-none" style={{color:'red', fontSize:'35px'}}>
                     ×
                   </span>
                 </button>
@@ -451,7 +456,7 @@ const ChatHome = ({ session, socket }) => {
                     className="mb-4 flex justify-between items-center"
                   >
                     <div>
-                      <p style={{color :'black'}}>
+                      <p style={{color :'black',fontWeight:"bold", fontSize: '15px', letterSpacing:'0.5px',textTransform:"uppercase", color:'#0f3c69'}}>
                         {index + 1}. {user.firstName} {user.lastName}
                       </p>
                     </div>
@@ -460,6 +465,7 @@ const ChatHome = ({ session, socket }) => {
                         name="add"
                         className="bg-[#0F3C69] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                         onClick={() => createChatWithUser(user.phone)}
+                        style={{textTransform:"uppercase"}}
                         >
                         Add
                       </button>
@@ -470,9 +476,10 @@ const ChatHome = ({ session, socket }) => {
               {/* Footer */}
               <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
                 <button
-                  className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                  // className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                   type="button"
                   onClick={toggleModal}
+                  style={{color:'red', fontWeight:'bold',textTransform:'uppercase', marginRight:'10px'}}
                 >
                   Close
                 </button>
@@ -487,16 +494,14 @@ const ChatHome = ({ session, socket }) => {
         <div style={{position : "absolute",bottom : '10px'}}>
           <button name="fine-member" className='plus-button' style={{ width: "50px", height:"50px" , background:"#0F3C69", borderRadius:'100%', fontSize:'30px', fontWeight:'600' }} onClick={findMember}> + </button>
         </div>
-        { chats.length == 0 ? 
-              <div style={{display:'flex', justifyContent:'center', alignItems:'center', color:'#0f3c69', height:'70vh'}}> Add Members you would like to chat with. </div>
-        :
+        { 
         chats?.map((chat, index) => {
           const participant = getParticipant(chat)
           const unreadChats = unreadMessages?.filter((n) => n.chat === chat._id).length
           return (
             <div>
             <div key={index} className={chat._id == currentChat?._id ? 'current-chat chat-block flex' : 'chat-block flex'} onClick={() => setCurrentChat(chat)}>
-            <div style={{width:'50px', height:'40px' }}>
+            <div className='chatProfilePhoto'>
             <img src={participant?.profileImage} style={{borderRadius:'50%', margin:'0 5px'}} />
               
             </div>
@@ -510,12 +515,12 @@ const ChatHome = ({ session, socket }) => {
         )}
       </div>
 
-      <div className='chatBorder'style={{width:"70%", height: '100vh'}}>
+      <div className='chatBorder chatBack'style={{width:"70%", height: '100vh'}}>
         {currentChat && currentChat?._id ? 
           <div style={{color:"black"}}>
             <div className="chat-header flex">
-            <div style={{width:'50px', height:'70px' }}>
-              <img src={currentParticipant?.profileImage} style={{borderRadius:'50%', margin:'0 5px'}} />
+            <div className='chatProfilePhoto'>
+              <img src={currentParticipant?.profileImage} style={{borderRadius:'50%'}} />
             </div>
             <div>
               <p style={{fontWeight:"bold", fontSize: '12px', letterSpacing:'0.5px',textTransform:"uppercase"}}>{currentParticipant?.firstName + " " + currentParticipant?.lastName}</p>
@@ -525,15 +530,15 @@ const ChatHome = ({ session, socket }) => {
 
             
             {
-              circleLoaderState ? <div style={{display:'flex', width:'95%', color: 'black', flexDirection:'column', height:'65vh', justifyContent:"center",allignItems : 'center', overflow:'hidden'}}> <ChatLoader/> </div>: 
+              circleLoaderState ? <div style={{paddingLeft:"100px" ,display:'flex', width:'95%', color: 'black', flexDirection:'column', height:'79vh', justifyContent:"center",allignItems : 'center', overflow:'hidden'}}> <ChatLoader/> </div>: 
             
          
-            <div ref={ref} style={{display:'flex', width:'100%', color: 'black', flexDirection:'column', padding:"20px 20px", height:'65vh', overflowY:"auto"}}>
+            <div ref={ref} style={{display:'flex', width:'107.5%', color: 'black', flexDirection:'column', padding:"20px 20px", height:'79vh', overflowY:"auto"}}>
             {messages?.map((msg, index) => {
               if(msg.sender._id === session._id) {
                 return (
                   <>
-                  <div key={index} style={{maxWidth : "50%",overflowWrap : 'break-word' , background : 'gray' ,margin : "2px 0px", alignSelf : 'end',borderRadius : '10px', fontSize:"13px", letterSpacing:"0.5px"}}>
+                  <div key={index} style={{maxWidth : "49%",overflowWrap : 'break-word' , background : 'gray' ,margin : "2px 0px", alignSelf : 'end',borderRadius : '10px', fontSize:"13px", letterSpacing:"0.5px"}}>
                       {msg.content && <p style={{color:"white", margin:"10px"}} >{msg.content}</p>}
                   {msg.attachment &&  (msg.attachment.type == "pdf" ? <iframe src={msg.attachment.url} width="100%" height="100%" /> : <img style={{ width:'300px', height:'300px' }} src={msg.attachment.url} />)}
                   </div>
@@ -542,7 +547,7 @@ const ChatHome = ({ session, socket }) => {
             } else {
               return (
                 <>
-                <div key={index} style={{maxWidth : "50%" ,overflowWrap : 'break-word',lineHeight:'1.58', background : '#0F3C69' ,margin : "2px 0px", alignSelf : "start",borderRadius : '10px', fontSize:"13px", letterSpacing:"0.5px"}}>      
+                <div key={index} style={{maxWidth : "49%" ,overflowWrap : 'break-word',lineHeight:'1.58', background : '#0F3C69' ,margin : "2px 0px", alignSelf : "start",borderRadius : '10px', fontSize:"13px", letterSpacing:"0.5px"}}>      
                   {msg.content && <p style={{color:"white", margin:"10px"}} className={msg.sender._id === session._id ? "text-left" : ""} >{msg?.content}</p>}
                   {msg.attachment &&  (msg.attachment.type == "pdf" ? <iframe src={msg.attachment.url} width="100%" height="100%" /> : <img style={{ width:'300px', height:'300px' }} src={msg.attachment.url} />)}
                 </div>
@@ -552,34 +557,44 @@ const ChatHome = ({ session, socket }) => {
             })}
           </div>
         }
-          <div style={{width:'100%', display:'flex', justifyContent:'flex-end',alignItems:'center',  paddingTop:"100px" }}>
-        
+          <div className='inputMsg' style={{width:'105.8%', display:'flex', justifyContent:'space-evenly',  alignItems:'center'}}>
+            <div style={{width:'60px', height:"60px", marginBottom:'8px'}}>
+              <img
+                src='/images/attach.svg'
+                alt='Send'
+                style={{ width: '65%', cursor: 'pointer', margin:"15px 5px 15px 15px"}}
+                className='chat-pointer'
+                onClick={clickFileInput}
+                />
+                <input 
+                  ref={attachmentRef}
+                  type="file"
+                  onChange={onAttchmentChange}
+                  style={{display:'none'}}
+                />
+              </div>
             <div>
-            <input
-              placeholder="Message"
-              className='chat-input'
-              value={message}
-              onChange={handleOnMessageChange}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  sendChatMessage();
-                }
-              }}
-              style={{ flex: 1, marginRight: '10px' }}
-              />
-              <input 
-                type="file"
-                onChange={onAttchmentChange}
-              />
+              <input
+                className='chat-input'
+                placeholder="Type a message"
+                value={message}
+                onChange={handleOnMessageChange}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    sendChatMessage();
+                  }
+                }}
+                style={{width:'800px',  marginLeft: '5px', alignItems:'center' }}
+                />
             </div>
-            <div style={{width:'47px', height:"49px", backgroundColor:'blue', borderRadius:'3px '}}>
-            <img
-              src='/images/sendMsg.svg'
-              alt='Send'
-              style={{ width: '75%', cursor: 'pointer', margin:"5px auto"}}
-              className='chat-pointer'
-              onClick={sendChatMessage}
-              />
+            <div style={{width:'60px', height:"60px", marginBottom:'8px'}}>
+              <img
+                src='/images/sendMsg.svg'
+                alt='Send'
+                style={{ width: '65%', cursor: 'pointer', margin:"15px 15px 15px 5px"}}
+                className='chat-pointer'
+                onClick={sendChatMessage}
+                />
             </div>
        </div>
             
