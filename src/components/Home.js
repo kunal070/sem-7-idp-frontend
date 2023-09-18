@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 
 import { logOutUser } from '../actions/session';
 import axios from 'axios';
+import CircleLoader from './CircleLoader'
 
 //import { Dialog } from "primereact/dialog";
 
@@ -30,6 +31,7 @@ const Home = ({session, logout}) => {
 
   const [showImage, setShowImage] = useState(session.profileImage)
   const [image, setImage] = useState("");
+  const[loader,setLoader] = useState(false)
 
   const handleImageClick = () =>{
     inputRef.current.click();
@@ -37,11 +39,13 @@ const Home = ({session, logout}) => {
 
   const fetchCurrentImage = async () => {
     try {
+      setLoader(true)
       const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/auth/get-profile-image`, {url:session.profileImage} , {headers: {"Content-Type":"application/json"}})
       console.log("fetching image: ", response.data)
       if(response.data.success) {
         setShowImage(response.data.url)
       }
+      setLoader(false)
     } catch (error) {
       console.log(error)
     }
@@ -104,12 +108,20 @@ const Home = ({session, logout}) => {
   return (
     <div className='main-container flex'>
       <div className='temp' style={{ display: 'flex', flexDirection: 'column'}}>
-      <div>
+        {   
+        loader ? 
+        <div className="imageAfter">
+          <CircleLoader/>  
+        </div>
+         :  <div>
         <img src={showImage}  onClick={handleImageClick} style={{cursor:'pointer'}} alt="" className="imageAfter"/>
         <input type="file" ref={inputRef} onChange={handleImageChange} style={{display: "none"}}/>
         {image ? <button style={{color:'white', backgroundColor:'#0f3c69', borderRadius:'5px', padding:'10px 10px'}} onClick={uploadProfile}>Change Profile</button> : null }
         <p className="notify">*click on profile photo to change it</p>
       </div>
+        }
+
+      <p className="notify">*click on profile photo to change it</p>
 
         <div className='flex '>
           <p style={{color:'#0f3c69',paddingRight:'0.5rem', paddingTop: '1rem', paddingBottom: '0.5rem', paddingLeft: '1rem'}}><b>Name :</b> </p>

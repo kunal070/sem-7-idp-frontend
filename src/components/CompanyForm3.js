@@ -430,8 +430,8 @@ const CompanyForm3 = ({session}) => {
                     <div className='width-50' style={{marginLeft:'45px'}}>
                         <p className='label' style={{textAlign:'start'}}>Objective For Membership:</p>
                     </div>
-                    <div className='width-50' style={{marginLeft:'10px'}}>
-                    <textarea name="companyERDAObjective" value={formData.companyERDAObjective} onChange={handleChange} required style={{ backgroundColor: '#eee', width: '100%', minHeight: '10px',borderRadius : 4 }}
+                    <div className='width-50' style={{marginRight:'24px'}}>
+                    <textarea name="companyERDAObjective" value={formData.companyERDAObjective} onChange={handleChange} required style={{ backgroundColor: '#eee', width: '112%', minHeight: '10px',borderRadius : 4, color:"#0f3c69" }}
 />
                         {errors.companyERDAObjective && <span className="error"style={{color: 'red', fontSize: '12px'}}>{errors.companyERDAObjective}</span>}
                     </div>
@@ -518,10 +518,10 @@ const CompanyForm3 = ({session}) => {
             </div>
             <center>
                 <div style={{ display: 'flex', flexDirection: 'row' }}>
-                    <div style={{ paddingLeft:30, paddingBottom:20, paddingTop:30}}>
-                        <button type="submit" onClick={navigatepreviouspage} className='savebtn' style={{ borderColor: '#0f3c69', backgroundColor: '#0f3c69', color: 'white', borderRadius: 20, marginInline: 5 }} >Previous Page</button>
+                    <div style={{ paddingLeft:20, paddingBottom:20, paddingTop:30}}>
+                        <button type="submit" onClick={navigatepreviouspage} className='savebtn' style={{ borderColor: '#0f3c69', backgroundColor: '#0f3c69', color: 'white', borderRadius: 20}} >Previous Page</button>
                     </div>
-                    <div style={{ paddingLeft:45, paddingBottom:20, paddingTop:33, marginInlineStart: '40em'}}>
+                    <div style={{ paddingLeft:45, paddingBottom:20, paddingTop:30, marginInlineStart: '40em'}}>
                         <button type="submit" className='savebtn' onClick={handleSubmit} style={{ borderColor: '#0f3c69', backgroundColor: '#0f3c69', color: 'white', borderRadius: 30, marginInline: 40 }} >Submit</button>
                     </div>
                 </div>
