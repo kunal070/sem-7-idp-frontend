@@ -150,9 +150,13 @@ input {
 .chat-block {
   background: gray;
   /* width: 68%; */
-  padding: 30px 20px;
-  margin: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  /* margin: 10px; */
   border-radius: 15px;
+  margin-right:5px;
   color: white;
   cursor: pointer;
   border: 2px solid white;
@@ -167,10 +171,15 @@ input {
   background-color: #0F3C69;
   box-sizing: border-box;
   width: 100%;
-  padding: 20px;
-  margin: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  margin-left: 5px;
+  margin-top: 10px;
   border-radius: 10px;
   color:white;
+  
 }
 
 .imageBefore{
@@ -201,17 +210,25 @@ input {
 
 /* styles for scroll bar */
 ::-webkit-scrollbar {
-  width: 1em;
+  width: .5em;
 }
 
 ::-webkit-scrollbar-track {
-  background: #0F3C69;
+  background: lightgray;
   border-radius: 100vw;
-  margin-block: .5em;
+  /* margin-block: .5em; */
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: lightgray;
-  border: 0.25em solid #0F3C69;
+  background-color: #0F3C69;
+  /* border: 0.25em solid lightgray; */
   border-radius: 100vw;
+}
+
+.chatBorder{
+  border-color: #0F3C69;
+  border-width: 3px;
+  border-right: #0F3C69;
+  border-top:  #0F3C69;
+  border-bottom:  #0F3C69;
 }
