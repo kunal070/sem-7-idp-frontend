@@ -2,7 +2,9 @@ import React, { useEffect, useState, useRef } from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router'
 import { toast } from 'react-toastify';
-
+import CircleLoader from './CircleLoader';
+import ChatLoader from './ChatLoader'
+import Loader from './Loader';
 import { connect } from 'react-redux';
 
 import '../companyform.css'
@@ -42,7 +44,8 @@ const ChatHome = ({ session, socket }) => {
   
     // Define state variables and their initial values using 'useState'
     const [isConnected, setIsConnected] = useState(false); // For tracking socket connection
-  
+    const [circleLoaderState,setCircleLoader] = useState(false)
+    const [loader,setLoader] = useState(false)
     const [openAddChat, setOpenAddChat] = useState(false); // To control the 'Add Chat' modal
     const [loadingChats, setLoadingChats] = useState(false); // To indicate loading of chats
     const [loadingMessages, setLoadingMessages] = useState(false); // To indicate loading of messages
@@ -114,10 +117,12 @@ const ChatHome = ({ session, socket }) => {
   };
 
   const getChats = async () => {
+    setLoader(true)
     console.log("get chats")
     axios.defaults.withCredentials = true
     const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/chat/all-chats`, {headers: {"Content-Type":"application/json"}})
     console.log("get chats: ", response.data)
+    setLoader(false)
     if(response.data.success) {
       setChats(response.data.chats || [])
     } else {  
@@ -128,28 +133,32 @@ const ChatHome = ({ session, socket }) => {
   const getMessages = async () => {
     // Check if a chat is selected, if not, show an alert
     if (!currentChat?._id) return;
+    
     //  alert("No chat is selected");
-
+    
     // Check if socket is available, if not, show an alert
     if (!socket) return alert("Socket not available");
-
+    
+    setCircleLoader(true)
+    setMessages([])
     // Emit an event to join the current chat
     socket.emit(JOIN_CHAT_EVENT, currentChat?._id);
-
+    
     // Filter out unread messages from the current chat as those will be read
     setUnreadMessages(
       unreadMessages.filter((msg) => msg.chat !== currentChat?._id)
-    );
-
-
-    axios.defaults.withCredentials = true
-    const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/chat/get-chat-messages/${currentChat?._id || ""}`, {headers: {"Content-Type":"application/json"}})
-    console.log("get Messages: ", response.data)
-    if(response.data.success) {
-      setMessages(response.data.messages || [])
-    } else {  
-      toast(response.data.message)
-    }
+      );
+      
+      
+      axios.defaults.withCredentials = true
+      const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/chat/get-chat-messages/${currentChat?._id || ""}`, {headers: {"Content-Type":"application/json"}})
+      console.log("get Messages: ", response.data)
+      if(response.data.success) {
+        setMessages(response.data.messages || [])
+      } else {  
+        toast(response.data.message)
+      }
+      setCircleLoader(false)
   };
 
   // Function to send a chat message
@@ -378,7 +387,6 @@ const ChatHome = ({ session, socket }) => {
 
   const scrollToLastChat = () => {
     const lastChildElement = ref.current?.lastElementChild;
-    console.log("Last Element Child: ", lastChildElement)
     lastChildElement?.scrollIntoView({ behavior: 'smooth' });
   };
 
@@ -398,7 +406,14 @@ const ChatHome = ({ session, socket }) => {
     )
   }
 
-
+  if(loader){
+    return (
+    <div style={{width : '100%', height:'100%'}}>
+        <Loader/>
+    </div>
+    )
+  }
+  else{
   return (
     <div style={{ margin:"0 65px", maxHeight:'100vh' }}>
       {showModal && (
@@ -486,6 +501,12 @@ const ChatHome = ({ session, socket }) => {
               <p style={{fontWeight:"bold", fontSize: '12px', letterSpacing:'0.5px',textTransform:"uppercase"}}>{currentParticipant?.firstName + " " + currentParticipant?.lastName}</p>
               <p style={{fontSize:'10px', letterSpacing:'0.5px'}}>{currentParticipant?.phone}</p>
             </div>
+
+            
+            {
+              circleLoaderState ? <div style={{display:'flex', width:'95%', color: 'black', flexDirection:'column', height:'65vh', justifyContent:"center",allignItems : 'center', overflow:'hidden'}}> <ChatLoader/> </div>: 
+            
+         
             <div ref={ref} style={{display:'flex', width:'100%', color: 'black', flexDirection:'column', padding:"20px 20px", height:'65vh', overflowY:"auto"}}>
             {messages?.map((msg, index) => {
               if(msg.sender._id === session._id) {
@@ -507,18 +528,33 @@ const ChatHome = ({ session, socket }) => {
             }
             })}
           </div>
-          <div style={{width:'100%', display:'flex', justifyContent:'flex-end', paddingTop:'100px' }}>
-              <input
-                placeholder="Message"
-                value={message}
-                onChange={handleOnMessageChange}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    sendChatMessage();
-                  }
-                }}
+        }
+          <div style={{width:'100%', display:'flex', justifyContent:'flex-end',alignItems:'center',  paddingTop:"100px" }}>
+        
+            <div>
+            <input
+              placeholder="Message"
+              value={message}
+              onChange={handleOnMessageChange}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  sendChatMessage();
+                }
+              }}
+              style={{ flex: 1, marginRight: '10px' }}
               />
-          </div>
+            </div>
+            <div style={{width:'47px', height:"49px", backgroundColor:'blue', borderRadius:'3px '}}>
+            <img
+              src='/images/sendMsg.svg'
+              alt='Send'
+              style={{ width: '75%', cursor: 'pointer', margin:"5px auto"}}
+              className='chat-pointer'
+              onClick={sendChatMessage}
+              />
+            </div>
+       </div>
+            
           </div>
         : <div style={{display:'flex', justifyContent:'center', alignItems:'center', color:'#0f3c69', height:'70vh'}}> No Chat Selected. </div> }
       </div>
@@ -527,6 +563,7 @@ const ChatHome = ({ session, socket }) => {
     </div>
 
   )
+  }
 }
 
 export default connect(
