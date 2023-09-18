@@ -25,7 +25,7 @@ const mapDispatchToProps = dispatch => ({
   logout: () => dispatch(logOutUser())
 });
 
-const Home = ({session, logout}) => {
+const Profile = ({session, logout}) => {
 
   const inputRef = useRef(null);
 
@@ -57,19 +57,25 @@ const Home = ({session, logout}) => {
     }
   }, [session.profileImage])
 
-  const uploadProfile = async () => {
-    const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/auth/update-profile-image`, {image}, {headers: {"Content-Type":"multipart/form-data"}})
-    console.log("UPLOAD IMAGE RESPONSE: ", response.data)
-    toast(response.data.message)
-    if(response.data.success){
-      setImage("")
-    }
+
+  const uploadImage = async () => {
+    console.log("UPLOADING IMAGE")
+    if(image == "") return;
+      const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/auth/update-profile-image`, {image}, {headers: {"Content-Type":"multipart/form-data"}})
+      console.log("UPLOAD IMAGE RESPONSE: ", response.data)
+      toast(response.data.message)
+      if(response.data.success){
+        setImage("")
+      }
   }
 
-  const handleImageChange = (event) =>{
+  useEffect(()=> {
+    uploadImage()
+  }, [image])
+
+  const handleImageChange = async (event) =>{
     setImage(event.target?.files[0]);
     setShowImage(URL.createObjectURL(event.target?.files[0]))
-
     // const file = event.target.files[0];
     // const imgname = event. target. files [0].name;
     // const reader = new FileReader();
@@ -115,13 +121,11 @@ const Home = ({session, logout}) => {
         </div>
          :  <div>
         <img src={showImage}  onClick={handleImageClick} style={{cursor:'pointer'}} alt="" className="imageAfter"/>
-        <input type="file" ref={inputRef} onChange={handleImageChange} style={{display: "none"}}/>
-        {image ? <button style={{color:'white', backgroundColor:'#0f3c69', borderRadius:'5px', padding:'10px 10px'}} onClick={uploadProfile}>Change Profile</button> : null }
+        <input type="file" name="image" ref={inputRef} onChange={handleImageChange} style={{display: "none"}}/>
+        {/* {image ? <button style={{color:'white', backgroundColor:'#0f3c69', borderRadius:'5px', padding:'10px 10px'}} onClick={uploadProfile}>Change Profile</button> : null } */}
         <p className="notify">*click on profile photo to change it</p>
       </div>
         }
-
-      <p className="notify">*click on profile photo to change it</p>
 
         <div className='flex '>
           <p style={{color:'#0f3c69',paddingRight:'0.5rem', paddingTop: '1rem', paddingBottom: '0.5rem', paddingLeft: '1rem'}}><b>Name :</b> </p>
@@ -153,4 +157,4 @@ const Home = ({session, logout}) => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Home)
+)(Profile)
