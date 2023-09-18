@@ -133,6 +133,12 @@ input {
   color: black;
   background-color: blue;
 }
+
+.opacity {
+  opacity: 0.4;
+}
+
+
 .backImage{
   width: 100vw;
   height: 100vh;
@@ -142,14 +148,28 @@ input {
 }
 
 .chat-block {
-  background: purple;
-  width: 100%;
+  background: gray;
+  /* width: 68%; */
   padding: 30px 20px;
-  margin: 10px 0px;
-  border-radius: 5%;
+  margin: 10px;
+  border-radius: 15px;
   color: white;
   cursor: pointer;
-  border: 2px solid black;
+  border: 2px solid white;
+}
+
+.current-chat {
+  background: #0F3C69 !important;
+}
+
+.chat-header{
+  background-color: #0F3C69;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 20px;
+  margin: 10px;
+  border-radius: 10px;
+  color:white;
 }
 
 .imageBefore{
@@ -176,4 +196,21 @@ input {
   margin-top: 10px;
   font-weight: bold;
   text-align: center; 
+}
+
+/* styles for scroll bar */
+::-webkit-scrollbar {
+  width: 1em;
+}
+
+::-webkit-scrollbar-track {
+  background: #0F3C69;
+  border-radius: 100vw;
+  margin-block: .5em;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: lightgray;
+  border: 0.25em solid #0F3C69;
+  border-radius: 100vw;
 }

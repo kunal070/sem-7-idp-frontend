@@ -1,8 +1,9 @@
-import React, {useState, useRef} from 'react'
+import React, {useState, useRef, useEffect} from 'react'
 
 import { connect } from 'react-redux'
 
 import { logOutUser } from '../actions/session';
+import axios from 'axios';
 
 //import { Dialog } from "primereact/dialog";
 
@@ -12,7 +13,8 @@ import { logOutUser } from '../actions/session';
 
 //import { ReactComponent as YourSvg } from './profile.svg';
 
- 
+import { toast } from 'react-toastify' 
+
 const mapStateToProps = ({ session }) => ({
   session
 })
@@ -26,54 +28,86 @@ const Home = ({session, logout}) => {
 
   const inputRef = useRef(null);
 
+  const [showImage, setShowImage] = useState(session.profileImage)
   const [image, setImage] = useState("");
 
   const handleImageClick = () =>{
     inputRef.current.click();
   }
 
-  const handleImageChange = (event) =>{
-    const file = event.target.files[0];
-    const imgname = event. target. files [0].name;
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onloadend = () => {
-      const img = new Image();
-      img.src = reader.result;
-      img.onload = () => {
-        const canvas = document.createElement ("canvas");
-        const maxSize = Math.max(img.width, img.height);
-        canvas.width = maxSize;
-        canvas.height= maxSize;
-        const ctx = canvas.getContext ("2d");
-        ctx.drawImage ( 
-          img, 
-          (maxSize - img.width) / 2,
-          (maxSize - img.height) / 2
-        );
-        canvas.toBlob( 
-          (blob) => {
-            const file = new File([blob], imgname, {
-               type:"image/png",
-               lastModified: Date.now(),
-            });
+  const fetchCurrentImage = async () => {
+    try {
+      const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/auth/get-profile-image`, {url:session.profileImage} , {headers: {"Content-Type":"application/json"}})
+      console.log("fetching image: ", response.data)
+      if(response.data.success) {
+        setShowImage(response.data.url)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
-            console.log(file);
-            setImage(event.target.files[0]);
-          },
-          "image/jpeg",
-          0.8
-        );
-      };
-    };
+  useEffect(() => {
+    if(session.profileImage != "images/dp.jpg") {
+      fetchCurrentImage()
+    }
+  }, [session.profileImage])
+
+  const uploadProfile = async () => {
+    const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/auth/update-profile-image`, {image}, {headers: {"Content-Type":"multipart/form-data"}})
+    console.log("UPLOAD IMAGE RESPONSE: ", response.data)
+    toast(response.data.message)
+    if(response.data.success){
+      setImage("")
+    }
+  }
+
+  const handleImageChange = (event) =>{
+    setImage(event.target?.files[0]);
+    setShowImage(URL.createObjectURL(event.target?.files[0]))
+
+    // const file = event.target.files[0];
+    // const imgname = event. target. files [0].name;
+    // const reader = new FileReader();
+    // reader.readAsDataURL(file);
+    // reader.onloadend = () => {
+    //   const img = new Image();
+    //   img.src = reader.result;
+    //   img.onload = () => {
+    //     const canvas = document.createElement ("canvas");
+    //     const maxSize = Math.max(img.width, img.height);
+    //     canvas.width = maxSize;
+    //     canvas.height= maxSize;
+    //     const ctx = canvas.getContext ("2d");
+    //     ctx.drawImage ( 
+    //       img, 
+    //       (maxSize - img.width) / 2,
+    //       (maxSize - img.height) / 2
+    //     );
+    //     canvas.toBlob( 
+    //       (blob) => {
+    //         const file = new File([blob], imgname, {
+    //            type:"image/png",
+    //            lastModified: Date.now(),
+    //         });
+
+    //         console.log(file);
+    //         setImage(event.target.files[0]);
+    //       },
+    //       "image/jpeg",
+    //       0.8
+    //     );
+    //   };
+    // };
   };
 
   return (
     <div className='main-container flex'>
       <div className='temp' style={{ display: 'flex', flexDirection: 'column'}}>
-      <div onClick={handleImageClick}>
-        {image ? (<img src={URL.createObjectURL(image)} alt="" className="imageAfter"/>) : (<img src="images/dp.jpg" alt="" className="imageBefore"/>) }
+      <div>
+        <img src={showImage}  onClick={handleImageClick} style={{cursor:'pointer'}} alt="" className="imageAfter"/>
         <input type="file" ref={inputRef} onChange={handleImageChange} style={{display: "none"}}/>
+        {image ? <button style={{color:'white', backgroundColor:'#0f3c69', borderRadius:'5px', padding:'10px 10px'}} onClick={uploadProfile}>Change Profile</button> : null }
         <p className="notify">*click on profile photo to change it</p>
       </div>
 

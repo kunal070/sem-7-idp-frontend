@@ -380,7 +380,7 @@ const CompanyForm = ({session}) => {
                     <div className='width-50' style={{marginLeft:'50px'}}>
                         <p className='label' style={{textAlign:'start'}}>PAN Number:</p>
                     </div>
-                    <div className='width-50' style={{marginLeft:'10px'}}>
+                    <div className='width-50' style={{marginInline : 7}}>
                         <input type="text" name="panNumber" value={formData.panNumber} onChange={handleChange} required style={{ backgroundColor: '#eee' }} />   
                         {errors.panNumber && <p className="error-message" style={{color: 'red', fontSize: '12px'}}>{errors.panNumber}</p>}
                     </div>
@@ -400,7 +400,7 @@ const CompanyForm = ({session}) => {
                     <div className='width-50' style={{marginLeft:'50px'}}>
                         <p className='label' style={{textAlign:'start'}}>Registration Proof Name:</p>
                     </div>
-                    <div className='width-50' style={{marginLeft:'10px'}}>
+                    <div className='width-50' style={{marginLeft:'11px'}}>
                     <select
                         name="registrationProofName"
                         value={formData.registrationProofName}
