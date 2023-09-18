@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 
 import { connect } from 'react-redux';
 
+import '../companyform.css'
 const mapStateToProps = ({ session }) => ({
   session
 })
@@ -26,10 +27,18 @@ const ChatHome = ({ session, socket }) => {
 
     const [currentParticipant, setCurrentParticipant] = useState({})
 
+    const [ currentUserImage , setCurrentUserImage ] = useState("images/dp.jpg")
+ 
+
     const [availableUsers ,setAvailableUsers] = useState([])
 
     // To keep track of the setTimeout function
     const typingTimeoutRef = useRef(null);
+
+    const [showModal, setShowModal] = useState(false) 
+
+    
+    const ref = useRef(null);
   
     // Define state variables and their initial values using 'useState'
     const [isConnected, setIsConnected] = useState(false); // For tracking socket connection
@@ -37,7 +46,7 @@ const ChatHome = ({ session, socket }) => {
     const [openAddChat, setOpenAddChat] = useState(false); // To control the 'Add Chat' modal
     const [loadingChats, setLoadingChats] = useState(false); // To indicate loading of chats
     const [loadingMessages, setLoadingMessages] = useState(false); // To indicate loading of messages
-  
+
     const [chats, setChats] = useState([]); // To store user's chats
     const [messages, setMessages] = useState([]); // To store chat messages
     const [unreadMessages, setUnreadMessages] = useState(
@@ -48,19 +57,22 @@ const ChatHome = ({ session, socket }) => {
     const [selfTyping, setSelfTyping] = useState(false); // To track if the current user is typing
   
     const [message, setMessage] = useState(""); // To store the currently typed message
-    const [localSearchQuery, setLocalSearchQuery] = useState(""); // For local search functionality
 
-    const navigate = useNavigate()
 
     const findMember = async () => {
         axios.defaults.withCredentials = true
         const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/chat/search-users`, {}, {"headers": {"Content-Type":"application/json"}})
         console.log(response.data)
         if(response.data.success){
+          setShowModal(true)        
           setAvailableUsers(response.data.users)
         } else {
           toast(response.data.message)
         }
+    }
+
+    const toggleModal = () => {
+      setShowModal(!showModal)
     }
 
     const createChatWithUser = async (receiverPhone) => {
@@ -68,10 +80,11 @@ const ChatHome = ({ session, socket }) => {
         const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/chat/get-one-to-one-chat/${receiverPhone}`)
         console.log("chat with user: ", response.data)
         if(response.data.success) {
-            getChats()
+          getChats()
         } else {
-            toast(response.data.message)
+          toast(response.data.message)
         }
+        toggleModal()
         setAvailableUsers([])
     }
 
@@ -82,6 +95,8 @@ const ChatHome = ({ session, socket }) => {
     chatToUpdateId,
     message // The new message to be set as the last message
   ) => {
+    console.log("chatToUpdateId: ", chatToUpdateId)
+    console.log("Message: ", message)
     // Search for the chat with the given ID in the chats array
     const chatToUpdate = chats.find((chat) => chat._id === chatToUpdateId);
 
@@ -99,6 +114,7 @@ const ChatHome = ({ session, socket }) => {
   };
 
   const getChats = async () => {
+    console.log("get chats")
     axios.defaults.withCredentials = true
     const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/chat/all-chats`, {headers: {"Content-Type":"application/json"}})
     console.log("get chats: ", response.data)
@@ -107,16 +123,6 @@ const ChatHome = ({ session, socket }) => {
     } else {  
       toast(response.data.message)
     }
-
-    // requestHandler(
-    //   async () => await getUserChats(),
-    //   setLoadingChats,
-    //   (res) => {
-    //     const { data } = res;
-    //     setChats(data || []);
-    //   },
-    //   alert
-    // );
   };
 
   const getMessages = async () => {
@@ -144,20 +150,6 @@ const ChatHome = ({ session, socket }) => {
     } else {  
       toast(response.data.message)
     }
-    // // Make an async request to fetch chat messages for the current chat
-    // requestHandler(
-    //   // Fetching messages for the current chat
-    //   async () => await getChatMessages(currentChat.current?._id || ""),
-    //   // Set the state to loading while fetching the messages
-    //   setLoadingMessages,
-    //   // After fetching, set the chat messages to the state if available
-    //   (res) => {
-    //     const { data } = res;
-    //     setMessages(data || []);
-    //   },
-    //   // Display any error alerts if they occur during the fetch
-    //   alert
-    // );
   };
 
   // Function to send a chat message
@@ -177,27 +169,6 @@ const ChatHome = ({ session, socket }) => {
     } else {
       toast(response.data.message)
     }
-    // Use the requestHandler to send the message and handle potential response or error
-    // await requestHandler(
-    //   // Try to send the chat message with the given message and attached files
-    //   async () =>
-    //     await sendMessage(
-    //       currentChat.current?._id || "", // Chat ID or empty string if not available
-    //       message, // Actual text message
-    //       attachedFiles // Any attached files
-    //     ),
-    //   null,
-    //   // On successful message sending, clear the message input and attached files, then update the UI
-    //   (res) => {
-    //     setMessage(""); // Clear the message input
-    //     setAttachedFiles([]); // Clear the list of attached files
-    //     setMessages((prev) => [res.data, ...prev]); // Update messages in the UI
-    //     updateChatLastMessage(currentChat.current?._id || "", res.data); // Update the last message in the chat
-    //   },
-
-    //   // If there's an error during the message sending process, raise an alert
-    //   alert
-    // );
   };
 
   const handleOnMessageChange = (e) => {
@@ -227,6 +198,7 @@ const ChatHome = ({ session, socket }) => {
     // Set a timeout to stop the typing indication after the timerLength has passed
     typingTimeoutRef.current = setTimeout(() => {
       // Emit a stop typing event to the server for the current chat
+      console.log("stop typing event call")
       socket.emit(STOP_TYPING_EVENT, currentChat?._id);
 
       // Reset the user's typing state
@@ -235,10 +207,12 @@ const ChatHome = ({ session, socket }) => {
   };
 
   const onConnect = () => {
+    console.log("socket connected...")
     setIsConnected(true);
   };
-
+  
   const onDisconnect = () => {
+    console.log("socket disconnected...")
     setIsConnected(false);
   };
 
@@ -246,17 +220,19 @@ const ChatHome = ({ session, socket }) => {
    * Handles the "typing" event on the socket.
    */
   const handleOnSocketTyping = (chatId) => {
+    console.log("Socket typing started...")
     // Check if the typing event is for the currently active chat.
     if (chatId !== currentChat?._id) return;
-
+    
     // Set the typing state to true for the current chat.
     setIsTyping(true);
   };
 
   /**
    * Handles the "stop typing" event on the socket.
-   */
-  const handleOnSocketStopTyping = (chatId) => {
+  */
+ const handleOnSocketStopTyping = (chatId) => {
+    console.log("Socket typing stopped...")
     // Check if the stop typing event is for the currently active chat.
     if (chatId !== currentChat?._id) return;
 
@@ -268,6 +244,10 @@ const ChatHome = ({ session, socket }) => {
    * Handles the event when a new message is received.
    */
   const onMessageReceived = (message) => {
+    console.log("message received...")
+    console.log("Message ID: ", message?.chat)
+    console.log("Chat ID: ", currentChat?._id)
+    console.log("isCurrentChat:", message?.chat !== currentChat?._id)
     // Check if the received message belongs to the currently active chat
     if (message?.chat !== currentChat?._id) {
       // If not, update the list of unread messages
@@ -282,6 +262,7 @@ const ChatHome = ({ session, socket }) => {
   };
 
   const onNewChat = (chat) => {
+    console.log("New chat arrived")
     setChats((prev) => [chat, ...prev]);
   };
 
@@ -302,19 +283,19 @@ const ChatHome = ({ session, socket }) => {
     // Fetch the chat list from the server.
     getChats();
 
-  // we will join the chat when user clicks on button
-  // Retrieve the current chat details from local storage.
-  const _currentChat = JSON.parse(localStorage.getItem("currentChat"))
+    // we will join the chat when user clicks on button
+    // Retrieve the current chat details from local storage.
+    const _currentChat = JSON.parse(localStorage.getItem("currentChat"))
 
-  // If there's a current chat saved in local storage:
-  if (_currentChat) {
-    // Set the current chat reference to the one from local storage.
-    setCurrentChat(_currentChat);
-    // If the socket connection exists, emit an event to join the specific chat using its ID.
-    socket?.emit(JOIN_CHAT_EVENT, _currentChat?._id);
-    // Fetch the messages for the current chat.
-    getMessages();
-  }
+    // If there's a current chat saved in local storage:
+    if (_currentChat) {
+      // Set the current chat reference to the one from local storage.
+      setCurrentChat(_currentChat);
+      // If the socket connection exists, emit an event to join the specific chat using its ID.
+      socket?.emit(JOIN_CHAT_EVENT, _currentChat?._id);
+      // Fetch the messages for the current chat.
+      getMessages();
+    }
 
     // An empty dependency array ensures this useEffect runs only once, similar to componentDidMount.
   }, []);
@@ -325,7 +306,7 @@ const ChatHome = ({ session, socket }) => {
   useEffect(() => {
     // If the socket isn't initialized, we don't set up listeners.
     if (!socket) return;
-
+    console.log("socket called: ", socket)
     // Set up event listeners for various socket events:
     // Listener for when the socket connects.
     socket.on(CONNECTED_EVENT, onConnect);
@@ -359,23 +340,57 @@ const ChatHome = ({ session, socket }) => {
 
     // Note:
     // The `chats` array is used in the `onMessageReceived` function.
-    // We need the latest state value of `chats`. If we don't pass `chats` in the dependency array,
-    // the `onMessageReceived` will consider the initial value of the `chats` array, which is empty.
+    // We need the latest state value of `chats`. 
+    // If we don't pass `chats` in the dependency array, the `onMessageReceived` will consider the initial value of the `chats` array, which is empty.
     // This will not cause infinite renders because the functions in the socket are getting mounted and not executed.
     // So, even if some socket callbacks are updating the `chats` state, it's not
     // updating on each `useEffect` call but on each socket call.
   }, [socket, chats]);
 
+  const fetchCurrentImage = async (imgURL) => {
+    try {
+      console.log("img: ", imgURL)
+      const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/auth/get-profile-image`, {url:imgURL} , {headers: {"Content-Type":"application/json"}})
+      console.log("fetching image: ", response.data)
+      return response.data
+    } catch (error) {
+      console.log(error)
+      return error
+    }
+  }
+
+  const fetchCurrentChatProfileImages = async () => {
+    const resp2 = await fetchCurrentImage(session.profileImage)
+    if(resp2.success){
+      setCurrentUserImage(resp2.url)
+    }
+  }
+    
   useEffect(() => {
     setCurrentParticipant(currentChat?.participants.find((participant) => participant._id != session._id))
     getMessages()
+    fetchCurrentChatProfileImages()
   }, [currentChat])
 
   const getParticipant = (chat) => {
     return chat?.participants.find((participant) => participant._id != session._id)
   }
 
-  if(!socket) {
+  const scrollToLastChat = () => {
+    const lastChildElement = ref.current?.lastElementChild;
+    console.log("Last Element Child: ", lastChildElement)
+    lastChildElement?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  useEffect(() => {
+    scrollToLastChat()
+  }, [messages])
+
+  useEffect(() => {
+    console.log("Unread messages: ", unreadMessages)
+  }, [unreadMessages])
+
+  if(!socket || session.isApproved == false) {
     return (
       <div style={{width:'100vw', height:'100vh', display:'flex', justifyContent:'center', alignItems:'center', color:'black' }}>
         <p> Only Approved Members can acccess chat </p>
@@ -383,52 +398,115 @@ const ChatHome = ({ session, socket }) => {
     )
   }
 
-  return (
-    <div style={{ margin:"20px 100px" }}>
 
-    <div className="flex">
-      <div style={{width:"30%"}}>
-        <div>
-          <button name="fine-member" className='plus-button' style={{ width: "100px", height:"50px" , background:"purple" }} onClick={findMember}> + </button>
-        </div>
-      
-        {
-          availableUsers?.map((user, index) => {
-            return (
-              <div style={{ color:'purple', padding:"20px", display:'flex', margin:'10px 0px', alignItems:'center' }}>
-                <p>{index + 1}. {user.firstName + " " + user.lastName}</p>
-                <button name="add" className='savebtn' style={{margin:"0px 10px"}} onClick={() => createChatWithUser(user.phone)}>Add</button>
+  return (
+    <div style={{ margin:"0px 100px", maxHeight:'100vh' }}>
+      {showModal && (
+        <div className="fixed inset-0 flex items-center justify-center z-50 overflow-x-hidden overflow-y-auto outline-none focus:outline-none">
+          <div className="relative w-auto my-6 mx-auto " style={{width:"30%"}}>
+            {/* Modal content */}
+            <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+              {/* Header */}
+              <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
+                <h3 className="text-3xl font-semibold text-black">Member's List</h3>
+                <button
+                  className="p-1 ml-auto bg-transparent border-0 text-black float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
+                  onClick={toggleModal}
+                >
+                  <span className="text-black h-6 w-6 text-2xl block outline-none focus:outline-none">
+                    ×
+                  </span>
+                </button>
               </div>
-            )
-          })
-        }
-        
-        {chats?.map((chat, index) => {
-          const participant = getParticipant(chat)
-          return (
-          <div className='chat-block' onClick={() => setCurrentChat(chat)}>
-            <p style={{fontWeight:"bold"}}>{participant.firstName}</p>
-            <p style={{fontSize:'10px'}}>{participant.email}</p>
+              {/* Body */}
+              <div className="relative p-6 flex-auto">
+                {availableUsers?.map((user, index) => (
+                  <div
+                    key={user.phone}
+                    className="mb-4 flex justify-between items-center"
+                  >
+                    <div>
+                      <p style={{color :'black'}}>
+                        {index + 1}. {user.firstName} {user.lastName}
+                      </p>
+                    </div>
+                    <div>
+                      <button
+                        name="add"
+                        className="bg-[#0F3C69] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                        onClick={() => createChatWithUser(user.phone)}
+                        >
+                        Add
+                      </button>
+                      </div>
+                  </div>
+                ))}
+              </div>
+              {/* Footer */}
+              <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
+                <button
+                  className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                  type="button"
+                  onClick={toggleModal}
+                >
+                  Close
+                </button>
+              </div>
+            </div>
           </div>
-          )
-        })}
+        </div>
+      )}
+
+    <div className={showModal ?  `opacity flex` : 'flex'}>
+      <div style={{width:"30%", height:'85vh', overflowY:"auto"}}>
+        <div style={{padding:'20px 0px',position : "absolute",bottom : '10px'}}>
+          <button name="fine-member" className='plus-button' style={{ width: "50px", height:"50px" , background:"#0F3C69", borderRadius:'5px', fontSize:'30px', fontWeight:'600' }} onClick={findMember}> + </button>
+        </div>
+
+        { chats.length == 0 ? 
+              <div style={{display:'flex', justifyContent:'center', alignItems:'center', color:'#0f3c69', height:'70vh'}}> Add Members you would like to chat with. </div>
+        :
+        chats?.map((chat, index) => {
+          const participant = getParticipant(chat)
+          const unreadChats = unreadMessages?.filter((n) => n.chat === chat._id).length
+          return (
+            <div key={index} className={chat._id == currentChat?._id ? 'current-chat chat-block' : 'chat-block'} onClick={() => setCurrentChat(chat)}>
+              <p style={{fontWeight:"bold",fontSize : '15px'}}>{participant.firstName + " " + participant.lastName}  {unreadChats ? <span style={{background:'#0f3c69', color:'white', padding:'6px 10px', borderRadius:'50%'}}>{unreadChats > 9 ? "9+" : unreadChats}</span> : null} </p>
+              <p style={{fontSize:'10px'}}>{participant.phone}</p>
+            </div> 
+          )}
+        )}
       </div>
 
-      <div style={{width:"70%"}}>
+      <div style={{width:"70%",padding : '0px 10px', height: '100vh'}}>
         {currentChat && currentChat?._id ? 
           <div style={{color:"black"}}>
-            <p style={{fontWeight:"bold"}}>{currentParticipant?.firstName}</p>
-            <p style={{fontSize:'10px'}}>{currentParticipant?.email}</p>
-            <div style={{display:'flex', width:'100%', color: 'black', flexDirection:'column', padding:"20px", height:'80vh', overflowY:"scroll"}}>
-            {messages?.map((msg) => {
-              return (
-                <>
-                  <p style={{color:"black", margin:"10px"}} className={msg.sender._id === session._id ? "text-left" : ""} >{msg.content}</p>
+            <div className="chat-header">
+              <p style={{fontWeight:"bold", fontSize: '20px'}}>{currentParticipant?.firstName + " " + currentParticipant?.lastName}</p>
+              <p style={{fontSize:'15px'}}>{currentParticipant?.phone}</p>
+            </div>
+            <div ref={ref} style={{display:'flex', width:'100%', color: 'black', flexDirection:'column', padding:"20px 20px", height:'70vh', overflowY:"auto"}}>
+            {messages?.map((msg, index) => {
+              if(msg.sender._id === session._id) {
+                return (
+                  <>
+                  <div key={index} style={{maxWidth : "50%",overflowWrap : 'break-word' , background : 'gray' ,margin : "10px 0px", padding : 7,alignSelf : 'end',borderRadius : '10px'}}>
+                    <p style={{color:"white", margin:"10px"}} >{msg.content}</p>
+                  </div>
                 </>
               )
+            } else {
+              return (
+                <>
+                <div key={index} style={{maxWidth : "50%" ,overflowWrap : 'break-word',lineHeight:'1.58', background : '#0F3C69' ,margin : "10px 0px", padding : 7,alignSelf : "start",borderRadius : '10px'}}>      
+                  <p style={{color:"white", margin:"10px"}} className={msg.sender._id === session._id ? "text-left" : ""} >{msg.content}</p>
+                </div>
+              </>
+            )
+            }
             })}
           </div>
-          <div style={{width:'100%', display:'flex', justifyContent:'flex-end',  padding:"20px"}}>
+          <div style={{width:'100%', display:'flex', justifyContent:'flex-end',  padding:"20px" }}>
               <input
                 placeholder="Message"
                 value={message}
@@ -441,7 +519,7 @@ const ChatHome = ({ session, socket }) => {
               />
           </div>
           </div>
-        : <p style={{color:"black"}}>No Chat Selected</p>}
+        : <div style={{display:'flex', justifyContent:'center', alignItems:'center', color:'#0f3c69', height:'70vh'}}> No Chat Selected. </div> }
       </div>
 
     </div>

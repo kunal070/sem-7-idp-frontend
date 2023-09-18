@@ -51,10 +51,12 @@ const MembershipStatus = ({ session }) => {
 
         axios.defaults.withCredentials = true
         const response = await axios.put(`${process.env.REACT_APP_BASE_URL}/membership/apply-for-membership`, {}, {headers:{"Content-Type":"application/json"}})
-        console.log(response.data)
+        console.log("Apply for membership: ", response.data)
+        if(response.data.success) {
+            fetchData()
+        }
         toast(response.data.message)
     }
-
 
     const fetchData = async () => {
         try {

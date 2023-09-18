@@ -37,7 +37,7 @@ const CompanyForm = ({ session }) => {
         try {
             setLoader(true)
             const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/membership/membership/${session.phone}`)
-            console.log(response.data)
+            console.log("preload data: ", response.data)
             if(response.data.success){
                 let temp = response.data.data
                 setFormData({
@@ -50,11 +50,10 @@ const CompanyForm = ({ session }) => {
                     companyBranch: temp.companyBranch,
                     companyFactory: temp.companyFactory
                 })
-            setLoader(false)
             } else {
                 setIsDataUpdated(true)
             }
-
+            setLoader(false)
         } catch (error) {
             console.log(error)
         }

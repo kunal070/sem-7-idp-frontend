@@ -5,6 +5,7 @@ import axios from 'axios'; // Import Axios
 import { toast } from 'react-toastify';
 
 import CircleLoader from './CircleLoader';
+import Loader from './Loader';
 
 
 
@@ -12,6 +13,7 @@ const ShowUser = () => {
     // actual data of deligences are stored in data state (array)
     const [data, setData] = useState([])
 
+  
     // total number of pages state
     const [totalPages, setTotalPages] = useState(0);
     
@@ -66,20 +68,42 @@ const ShowUser = () => {
     }
 
     const deleteUser = async (employeePhone) => {
-        axios.defaults.withCredentials = true
-
-            const response = await axios.delete(`${process.env.REACT_APP_BASE_URL}/admin/delete-user/${employeePhone}`)
-            console.log("DELETE USER: ", response.data)
-            toast(response.data.message)
-            if(response.data.success){
-                fetchData()
-            }
-    }
+      // Display a confirmation dialog to the user
+      const isConfirmed = window.confirm("Are you sure you want to delete this user?");
+  
+      if (!isConfirmed) {
+          return; // If the user cancels the operation, do nothing
+      }
+      setLoader(true)
+      axios.defaults.withCredentials = true;
+  
+      try {
+          const response = await axios.delete(`${process.env.REACT_APP_BASE_URL}/admin/delete-user/${employeePhone}`);
+          console.log("DELETE USER: ", response.data);
+          toast(response.data.message);
+          setLoader(false)
+          
+          if (response.data.success) {
+              fetchData();
+          }
+      } catch (error) {
+          // Handle any errors that occur during the delete operation
+          console.error("Error deleting user:", error);
+          // You can show an error message to the user here if needed.
+      }
+  }  
 
     useEffect(() => {
         fetchData();
     }, [])
-
+    if(loader){
+      return (
+      <div style={{width : '100%', height:'100%'}}>
+          <Loader/>
+      </div>
+      )
+    }
+    else{
     return (
         <>
         <div className="pt-4 flex items-center flex-col">
@@ -156,6 +180,7 @@ const ShowUser = () => {
         </div>
       </>
     )
+          }
 }
 
 export default ShowUser
