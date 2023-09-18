@@ -471,8 +471,13 @@ const ChatHome = ({ session, socket }) => {
           const unreadChats = unreadMessages?.filter((n) => n.chat === chat._id).length
           return (
             <div key={index} className={chat._id == currentChat?._id ? 'current-chat chat-block' : 'chat-block'} onClick={() => setCurrentChat(chat)}>
-              <p style={{fontWeight:"bold",fontSize : '15px'}}>{participant.firstName + " " + participant.lastName}  {unreadChats ? <span style={{background:'#0f3c69', color:'white', padding:'6px 10px', borderRadius:'50%'}}>{unreadChats > 9 ? "9+" : unreadChats}</span> : null} </p>
-              <p style={{fontSize:'10px'}}>{participant.phone}</p>
+              <div style={{margin:"0px 10px", borderRadius:"50%", width:'50px', height:"50px"}}>
+                <img src={participant.profileImage} alt="participant-profile" style={{borderRadius:'50%', height:'40px', width:'40px'}} className="imageAfter"/>
+              </div>
+              <div>
+                <p style={{fontWeight:"bold",fontSize : '15px'}}>{participant.firstName + " " + participant.lastName}  {unreadChats ? <span style={{background:'#0f3c69', color:'white', padding:'6px 10px', borderRadius:'50%'}}>{unreadChats > 9 ? "9+" : unreadChats}</span> : null} </p>
+                <p style={{fontSize:'10px'}}>{participant.phone}</p>
+              </div>
             </div> 
           )}
         )}
@@ -481,11 +486,16 @@ const ChatHome = ({ session, socket }) => {
       <div style={{width:"70%",padding : '0px 10px', height: '100vh'}}>
         {currentChat && currentChat?._id ? 
           <div style={{color:"black"}}>
-            <div className="chat-header">
-              <p style={{fontWeight:"bold", fontSize: '20px'}}>{currentParticipant?.firstName + " " + currentParticipant?.lastName}</p>
-              <p style={{fontSize:'15px'}}>{currentParticipant?.phone}</p>
+            <div className="chat-header flex">
+              <div style={{margin:"0px 10px", width: "50px", height:'50px', borderRadius:'50%'}}>
+                <img src={currentParticipant?.profileImage} style={{borderRadius:'50%', width:'50px', height:'50px'}} alt="participant-profile" />
+              </div>
+              <div>
+                <p style={{fontWeight:"bold", fontSize: '20px'}}>{currentParticipant?.firstName + " " + currentParticipant?.lastName}</p>
+                <p style={{fontSize:'15px'}}>{currentParticipant?.phone}</p>
+              </div>
             </div>
-            <div ref={ref} style={{display:'flex', width:'100%', color: 'black', flexDirection:'column', padding:"20px 20px", height:'70vh', overflowY:"auto"}}>
+            <div ref={ref} style={{display:'flex', width:'100%', color: 'black', flexDirection:'column', padding:"20px 20px", height:'65vh', overflowY:"auto"}}>
             {messages?.map((msg, index) => {
               if(msg.sender._id === session._id) {
                 return (
@@ -521,10 +531,8 @@ const ChatHome = ({ session, socket }) => {
           </div>
         : <div style={{display:'flex', justifyContent:'center', alignItems:'center', color:'#0f3c69', height:'70vh'}}> No Chat Selected. </div> }
       </div>
-
     </div>
     </div>
-
   )
 }
 
