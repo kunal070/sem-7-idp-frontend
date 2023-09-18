@@ -400,7 +400,7 @@ const ChatHome = ({ session, socket }) => {
 
 
   return (
-    <div style={{ margin:"0px 100px", maxHeight:'100vh' }}>
+    <div style={{ margin:"0 65px", maxHeight:'100vh' }}>
       {showModal && (
         <div className="fixed inset-0 flex items-center justify-center z-50 overflow-x-hidden overflow-y-auto outline-none focus:outline-none">
           <div className="relative w-auto my-6 mx-auto " style={{width:"30%"}}>
@@ -458,11 +458,10 @@ const ChatHome = ({ session, socket }) => {
       )}
 
     <div className={showModal ?  `opacity flex` : 'flex'}>
-      <div style={{width:"30%", height:'85vh', overflowY:"auto"}}>
-        <div style={{padding:'20px 0px',position : "absolute",bottom : '10px'}}>
-          <button name="fine-member" className='plus-button' style={{ width: "50px", height:"50px" , background:"#0F3C69", borderRadius:'5px', fontSize:'30px', fontWeight:'600' }} onClick={findMember}> + </button>
+      <div  style={{width:"30%", height:'85vh', overflowY:"auto", marginTop:'10px'}}>
+        <div style={{position : "absolute",bottom : '10px'}}>
+          <button name="fine-member" className='plus-button' style={{ width: "50px", height:"50px" , background:"#0F3C69", borderRadius:'100%', fontSize:'30px', fontWeight:'600' }} onClick={findMember}> + </button>
         </div>
-
         { chats.length == 0 ? 
               <div style={{display:'flex', justifyContent:'center', alignItems:'center', color:'#0f3c69', height:'70vh'}}> Add Members you would like to chat with. </div>
         :
@@ -470,27 +469,29 @@ const ChatHome = ({ session, socket }) => {
           const participant = getParticipant(chat)
           const unreadChats = unreadMessages?.filter((n) => n.chat === chat._id).length
           return (
+            <div>
             <div key={index} className={chat._id == currentChat?._id ? 'current-chat chat-block' : 'chat-block'} onClick={() => setCurrentChat(chat)}>
-              <p style={{fontWeight:"bold",fontSize : '15px'}}>{participant.firstName + " " + participant.lastName}  {unreadChats ? <span style={{background:'#0f3c69', color:'white', padding:'6px 10px', borderRadius:'50%'}}>{unreadChats > 9 ? "9+" : unreadChats}</span> : null} </p>
-              <p style={{fontSize:'10px'}}>{participant.phone}</p>
+              <p style={{fontWeight:"bold",fontSize : '12px', letterSpacing:'0.5px', textTransform:"uppercase"}}>{participant.firstName + " " + participant.lastName}  {unreadChats ? <span style={{background:'#0f3c69', color:'white', padding:'6px 10px', borderRadius:'50%'}}>{unreadChats > 9 ? "9+" : unreadChats}</span> : null} </p>
+              <p style={{fontSize:'10px', letterSpacing:'0.5px'}}>{participant.phone}</p>
             </div> 
+            </div>
           )}
         )}
       </div>
 
-      <div style={{width:"70%",padding : '0px 10px', height: '100vh'}}>
+      <div className='chatBorder'style={{width:"70%", height: '100vh'}}>
         {currentChat && currentChat?._id ? 
           <div style={{color:"black"}}>
             <div className="chat-header">
-              <p style={{fontWeight:"bold", fontSize: '20px'}}>{currentParticipant?.firstName + " " + currentParticipant?.lastName}</p>
-              <p style={{fontSize:'15px'}}>{currentParticipant?.phone}</p>
+              <p style={{fontWeight:"bold", fontSize: '12px', letterSpacing:'0.5px',textTransform:"uppercase"}}>{currentParticipant?.firstName + " " + currentParticipant?.lastName}</p>
+              <p style={{fontSize:'10px', letterSpacing:'0.5px'}}>{currentParticipant?.phone}</p>
             </div>
-            <div ref={ref} style={{display:'flex', width:'100%', color: 'black', flexDirection:'column', padding:"20px 20px", height:'70vh', overflowY:"auto"}}>
+            <div ref={ref} style={{display:'flex', width:'100%', color: 'black', flexDirection:'column', padding:"20px 20px", height:'65vh', overflowY:"auto"}}>
             {messages?.map((msg, index) => {
               if(msg.sender._id === session._id) {
                 return (
                   <>
-                  <div key={index} style={{maxWidth : "50%",overflowWrap : 'break-word' , background : 'gray' ,margin : "10px 0px", padding : 7,alignSelf : 'end',borderRadius : '10px'}}>
+                  <div key={index} style={{maxWidth : "50%",overflowWrap : 'break-word' , background : 'gray' ,margin : "2px 0px", alignSelf : 'end',borderRadius : '10px', fontSize:"13px", letterSpacing:"0.5px"}}>
                     <p style={{color:"white", margin:"10px"}} >{msg.content}</p>
                   </div>
                 </>
@@ -498,7 +499,7 @@ const ChatHome = ({ session, socket }) => {
             } else {
               return (
                 <>
-                <div key={index} style={{maxWidth : "50%" ,overflowWrap : 'break-word',lineHeight:'1.58', background : '#0F3C69' ,margin : "10px 0px", padding : 7,alignSelf : "start",borderRadius : '10px'}}>      
+                <div key={index} style={{maxWidth : "50%" ,overflowWrap : 'break-word',lineHeight:'1.58', background : '#0F3C69' ,margin : "2px 0px", alignSelf : "start",borderRadius : '10px', fontSize:"13px", letterSpacing:"0.5px"}}>      
                   <p style={{color:"white", margin:"10px"}} className={msg.sender._id === session._id ? "text-left" : ""} >{msg.content}</p>
                 </div>
               </>
@@ -506,7 +507,7 @@ const ChatHome = ({ session, socket }) => {
             }
             })}
           </div>
-          <div style={{width:'100%', display:'flex', justifyContent:'flex-end',  padding:"20px" }}>
+          <div style={{width:'100%', display:'flex', justifyContent:'flex-end', paddingTop:'100px' }}>
               <input
                 placeholder="Message"
                 value={message}
