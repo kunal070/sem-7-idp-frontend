@@ -516,7 +516,7 @@ const ChatHome = ({ session, socket }) => {
       </div>
 
       <div className='chatBorder chatBack'style={{width:"70%", height: '100vh'}}>
-        {currentChat && currentChat?._id ? 
+        {currentChat && currentChat?._id && 
           <div style={{color:"black"}}>
             <div className="chat-header flex">
             <div className='chatProfilePhoto'>
@@ -599,7 +599,7 @@ const ChatHome = ({ session, socket }) => {
        </div>
             
           </div>
-        : <div style={{display:'flex', justifyContent:'center', alignItems:'center', color:'#0f3c69', height:'70vh'}}> No Chat Selected. </div> }
+      }
       </div>
 
     </div>
