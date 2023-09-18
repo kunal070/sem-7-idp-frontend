@@ -22,7 +22,6 @@ import Header from "./components/Header";
 import CompanyLogin from "./components/CompanyLogin";
 import CompanyForm3 from "./components/CompanyForm3";
 import MembershipStatus from "./components/MembershipStatus";
-import Chat from "./components/Chat";
 import CreateUser from "./components/CreateUser";
 import MembershipTable from "./components/MembershipTable";
 import ChatHome from "./components/ChatHome";
