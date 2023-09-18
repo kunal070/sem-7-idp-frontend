@@ -71,11 +71,12 @@ const Home = ({session, logout}) => {
   return (
     <div className='main-container flex'>
       <div className='temp' style={{ display: 'flex', flexDirection: 'column'}}>
-      <div onClick={handleImageClick}>
+      <div onClick={handleImageClick} style={{height:"150px", width:"150px", marginLeft: "auto", marginRight: "auto",  display: "block"}}>
         {image ? (<img src={URL.createObjectURL(image)} alt="" className="imageAfter"/>) : (<img src="images/dp.jpg" alt="" className="imageBefore"/>) }
         <input type="file" ref={inputRef} onChange={handleImageChange} style={{display: "none"}}/>
-        <p className="notify">*click on profile photo to change it</p>
+        
       </div>
+      <p className="notify">*click on profile photo to change it</p>
 
         <div className='flex '>
           <p style={{color:'#0f3c69',paddingRight:'0.5rem', paddingTop: '1rem', paddingBottom: '0.5rem', paddingLeft: '1rem'}}><b>Name :</b> </p>
