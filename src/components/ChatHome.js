@@ -60,7 +60,7 @@ const ChatHome = ({ session, socket }) => {
     const [selfTyping, setSelfTyping] = useState(false); // To track if the current user is typing
   
     const [message, setMessage] = useState(""); // To store the currently typed message
-
+    const [attachment, setAttachment] = useState("")
 
     const findMember = async () => {
         axios.defaults.withCredentials = true
@@ -169,12 +169,14 @@ const ChatHome = ({ session, socket }) => {
     // Emit a STOP_TYPING_EVENT to inform other users/participants that typing has stopped
     socket.emit(STOP_TYPING_EVENT, currentChat?._id);
 
-    const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/chat/send-message/${currentChat?._id || ""}`, {content: message}, {"headers":{"Content-Type":"application/json"}})
+    const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/chat/send-message/${currentChat?._id || ""}`, {content: message, file: attachment}, {"headers":{"Content-Type":"multipart/form-data"}})
     console.log("send message: ", response.data)
     if(response.data.success) {
-      setMessage("")
-      setMessages((prev) => [...prev, response.data.message]);
-      updateChatLastMessage(currentChat?._id || "", response.data.message);
+      // if message sent is type of String message then do accordingly
+        setMessage("")
+        setAttachment("")
+        setMessages((prev) => [...prev, response.data.message]);
+        updateChatLastMessage(currentChat?._id || "", response.data.message);
     } else {
       toast(response.data.message)
     }
@@ -253,7 +255,7 @@ const ChatHome = ({ session, socket }) => {
    * Handles the event when a new message is received.
    */
   const onMessageReceived = (message) => {
-    console.log("message received...")
+    console.log("message received...: ", message)
     console.log("Message ID: ", message?.chat)
     console.log("Chat ID: ", currentChat?._id)
     console.log("isCurrentChat:", message?.chat !== currentChat?._id)
@@ -387,6 +389,7 @@ const ChatHome = ({ session, socket }) => {
 
   const scrollToLastChat = () => {
     const lastChildElement = ref.current?.lastElementChild;
+    console.log("LAST: ", lastChildElement)
     lastChildElement?.scrollIntoView({ behavior: 'smooth' });
   };
 
@@ -394,9 +397,16 @@ const ChatHome = ({ session, socket }) => {
     scrollToLastChat()
   }, [messages])
 
+  const onAttchmentChange = (event) => {
+    setAttachment(event.target?.files[0])
+  }
+
   useEffect(() => {
-    console.log("Unread messages: ", unreadMessages)
-  }, [unreadMessages])
+    if(attachment != ""){
+      sendChatMessage()
+    }
+  }, [attachment])
+
 
   if(!socket || session.isApproved == false) {
     return (
@@ -524,7 +534,8 @@ const ChatHome = ({ session, socket }) => {
                 return (
                   <>
                   <div key={index} style={{maxWidth : "50%",overflowWrap : 'break-word' , background : 'gray' ,margin : "2px 0px", alignSelf : 'end',borderRadius : '10px', fontSize:"13px", letterSpacing:"0.5px"}}>
-                    <p style={{color:"white", margin:"10px"}} >{msg.content}</p>
+                      {msg.content && <p style={{color:"white", margin:"10px"}} >{msg.content}</p>}
+                  {msg.attachment &&  (msg.attachment.type == "pdf" ? <iframe src={msg.attachment.url} width="100%" height="100%" /> : <img style={{ width:'300px', height:'300px' }} src={msg.attachment.url} />)}
                   </div>
                 </>
               )
@@ -532,7 +543,8 @@ const ChatHome = ({ session, socket }) => {
               return (
                 <>
                 <div key={index} style={{maxWidth : "50%" ,overflowWrap : 'break-word',lineHeight:'1.58', background : '#0F3C69' ,margin : "2px 0px", alignSelf : "start",borderRadius : '10px', fontSize:"13px", letterSpacing:"0.5px"}}>      
-                  <p style={{color:"white", margin:"10px"}} className={msg.sender._id === session._id ? "text-left" : ""} >{msg.content}</p>
+                  {msg.content && <p style={{color:"white", margin:"10px"}} className={msg.sender._id === session._id ? "text-left" : ""} >{msg?.content}</p>}
+                  {msg.attachment &&  (msg.attachment.type == "pdf" ? <iframe src={msg.attachment.url} width="100%" height="100%" /> : <img style={{ width:'300px', height:'300px' }} src={msg.attachment.url} />)}
                 </div>
               </>
             )
@@ -545,6 +557,7 @@ const ChatHome = ({ session, socket }) => {
             <div>
             <input
               placeholder="Message"
+              className='chat-input'
               value={message}
               onChange={handleOnMessageChange}
               onKeyDown={(e) => {
@@ -553,6 +566,10 @@ const ChatHome = ({ session, socket }) => {
                 }
               }}
               style={{ flex: 1, marginRight: '10px' }}
+              />
+              <input 
+                type="file"
+                onChange={onAttchmentChange}
               />
             </div>
             <div style={{width:'47px', height:"49px", backgroundColor:'blue', borderRadius:'3px '}}>
