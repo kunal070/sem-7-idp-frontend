@@ -485,9 +485,15 @@ const ChatHome = ({ session, socket }) => {
           const unreadChats = unreadMessages?.filter((n) => n.chat === chat._id).length
           return (
             <div>
-            <div key={index} className={chat._id == currentChat?._id ? 'current-chat chat-block' : 'chat-block'} onClick={() => setCurrentChat(chat)}>
+            <div key={index} className={chat._id == currentChat?._id ? 'current-chat chat-block flex' : 'chat-block flex'} onClick={() => setCurrentChat(chat)}>
+            <div style={{width:'50px', height:'40px' }}>
+            <img src={participant?.profileImage} style={{borderRadius:'50%', margin:'0 5px'}} />
+              
+            </div>
+            <div>
               <p style={{fontWeight:"bold",fontSize : '12px', letterSpacing:'0.5px', textTransform:"uppercase"}}>{participant.firstName + " " + participant.lastName}  {unreadChats ? <span style={{background:'#0f3c69', color:'white', padding:'6px 10px', borderRadius:'50%'}}>{unreadChats > 9 ? "9+" : unreadChats}</span> : null} </p>
               <p style={{fontSize:'10px', letterSpacing:'0.5px'}}>{participant.phone}</p>
+            </div>
             </div> 
             </div>
           )}
@@ -497,9 +503,14 @@ const ChatHome = ({ session, socket }) => {
       <div className='chatBorder'style={{width:"70%", height: '100vh'}}>
         {currentChat && currentChat?._id ? 
           <div style={{color:"black"}}>
-            <div className="chat-header">
+            <div className="chat-header flex">
+            <div style={{width:'50px', height:'70px' }}>
+              <img src={currentParticipant?.profileImage} style={{borderRadius:'50%', margin:'0 5px'}} />
+            </div>
+            <div>
               <p style={{fontWeight:"bold", fontSize: '12px', letterSpacing:'0.5px',textTransform:"uppercase"}}>{currentParticipant?.firstName + " " + currentParticipant?.lastName}</p>
               <p style={{fontSize:'10px', letterSpacing:'0.5px'}}>{currentParticipant?.phone}</p>
+            </div>
             </div>
 
             
