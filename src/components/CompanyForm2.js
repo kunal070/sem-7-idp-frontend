@@ -39,6 +39,7 @@ const CompanyForm = ({session}) => {
 
     const preLoadData = async () => {
         try {
+            setLoader(true)
             const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/membership/membership/${session.phone}`)
             // console.log(response.data)
             if(response.data.success){
@@ -54,7 +55,8 @@ const CompanyForm = ({session}) => {
                     file: temp.companyRegistrationProofAttachment.file
                 })
             }
-
+            
+            setLoader(false)
         } catch (error) {
             console.log(error)
         }

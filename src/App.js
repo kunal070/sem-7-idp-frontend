@@ -26,6 +26,7 @@ import CreateUser from "./components/CreateUser";
 import MembershipTable from "./components/MembershipTable";
 import ChatHome from "./components/ChatHome";
 import ShowUser from "./components/ShowUser";
+import Dashboard from "./components/Dashboard";
 
 
 const mapStateToProps = ({ session }) => ({
@@ -61,6 +62,7 @@ function App({ session }) {
           <Route path="/membership-status" element={<MembershipStatus/>} />
           <Route path="/membership-table" element={<MembershipTable/>}/>
           <Route path="/chat" element={<ChatHome socket={socket} />}/>
+          <Route path="/dashboard" element={<Dashboard/>}/>
       </Routes>
       </div>
       <ToastContainer />

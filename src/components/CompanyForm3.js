@@ -41,8 +41,9 @@ const CompanyForm3 = ({session}) => {
 
     const preLoadData = async () => {
         try {
+            setLoader(true)
             const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/membership/membership/${session.phone}`)
-
+            
             console.log(response.data)
 
             if(response.data.success){
@@ -57,8 +58,9 @@ const CompanyForm3 = ({session}) => {
                     companyTurnOverRange: temp.companyTurnOverRange,
                     file: temp.turnOverBalanceSheet
                 })
-
+                
             }
+            setLoader(false)
 
         } catch (error) {
             console.log(error)

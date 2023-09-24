@@ -30,7 +30,8 @@ const ChatHome = ({ session, socket }) => {
     const [currentParticipant, setCurrentParticipant] = useState({})
 
     const [ currentUserImage , setCurrentUserImage ] = useState("images/dp.jpg")
- 
+    
+    const[randomLoader,setRandomLoader] = useState(false)
 
     const [availableUsers ,setAvailableUsers] = useState([])
 
@@ -63,15 +64,18 @@ const ChatHome = ({ session, socket }) => {
 
 
     const findMember = async () => {
-        axios.defaults.withCredentials = true
-        const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/chat/search-users`, {}, {"headers": {"Content-Type":"application/json"}})
-        console.log(response.data)
-        if(response.data.success){
-          setShowModal(true)        
-          setAvailableUsers(response.data.users)
-        } else {
-          toast(response.data.message)
-        }
+      console.log("manav loader")
+      setCircleLoader(true)
+      axios.defaults.withCredentials = true
+      const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/chat/search-users`, {}, {"headers": {"Content-Type":"application/json"}})
+      console.log(response.data)
+      if(response.data.success){
+        setShowModal(true)        
+        setAvailableUsers(response.data.users)
+      } else {
+        toast(response.data.message)
+      }
+      setCircleLoader(false)
     }
 
     const toggleModal = () => {
@@ -79,16 +83,17 @@ const ChatHome = ({ session, socket }) => {
     }
 
     const createChatWithUser = async (receiverPhone) => {
-        axios.defaults.withCredentials = true
-        const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/chat/get-one-to-one-chat/${receiverPhone}`)
-        console.log("chat with user: ", response.data)
-        if(response.data.success) {
-          getChats()
-        } else {
-          toast(response.data.message)
-        }
-        toggleModal()
-        setAvailableUsers([])
+      console.log("manav loader")
+      axios.defaults.withCredentials = true
+      const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/chat/get-one-to-one-chat/${receiverPhone}`)
+      console.log("chat with user: ", response.data)
+      if(response.data.success) {
+        getChats()
+      } else {
+        toast(response.data.message)
+      }
+      toggleModal()
+      setAvailableUsers([])
     }
 
     /**
@@ -492,7 +497,6 @@ const ChatHome = ({ session, socket }) => {
           )}
         )}
       </div>
-
       <div style={{width:"70%",padding : '0px 10px', height: '100vh'}}>
         {currentChat && currentChat?._id ? 
           <div style={{color:"black"}}>
@@ -503,7 +507,7 @@ const ChatHome = ({ session, socket }) => {
 
             
             {
-              circleLoaderState ? <div style={{display:'flex', width:'100%', color: 'black', flexDirection:'column', padding:"20px 20px", height:'65vh', justifyContent:"center",allignItems : 'center'}}> <ChatLoader/> </div>: null
+              circleLoaderState ? <div style={{padddisplay:'flex', width:'100%', color: 'black', flexDirection:'column', padding:"20px 20px", height:'65vh', justifyContent:"center",allignItems : 'center'}}> <ChatLoader/> </div>: null
             }
          
             <div ref={ref} style={{display:'flex', width:'100%', color: 'black', flexDirection:'column', padding:"20px 20px", height:'65vh', overflowY:"auto"}}>

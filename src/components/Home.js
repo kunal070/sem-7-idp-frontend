@@ -45,10 +45,12 @@ const Home = ({session, logout}) => {
       if(response.data.success) {
         setShowImage(response.data.url)
       }
-      setLoader(false)
     } catch (error) {
       console.log(error)
     }
+    setTimeout(() => {
+      setLoader(false)
+    }, 1000);
   }
 
   useEffect(() => {
@@ -121,7 +123,6 @@ const Home = ({session, logout}) => {
       </div>
         }
 
-      <p className="notify">*click on profile photo to change it</p>
 
         <div className='flex '>
           <p style={{color:'#0f3c69',paddingRight:'0.5rem', paddingTop: '1rem', paddingBottom: '0.5rem', paddingLeft: '1rem'}}><b>Name :</b> </p>

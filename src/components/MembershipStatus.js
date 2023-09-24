@@ -90,11 +90,11 @@ const MembershipStatus = ({ session }) => {
             }
         }
     })
-
+    
     useEffect(() => {
         fetchData();
     }, [])
-
+    
     if(loader){
         return (
         <div style={{width : '100%', height:'100%'}}>
@@ -104,6 +104,9 @@ const MembershipStatus = ({ session }) => {
       }
       else{
     return (
+
+        // {(data?.membershipStatus == "approved" && data?.member?.phone == session.phone) ? <h1 style={{backgroundColor:"#0f3c69" , padding:"10px 20px", fontWeight:"bold", width:"70%", margin:"50px auto", textAlign:'center'}}>Your membership application is Approved</h1> : }
+        (data?.membershipStatus == "approved" && data?.member?.phone == session.phone) ? <h1 style={{backgroundColor:"#0f3c69" , padding:"10px 20px", fontWeight:"bold", width:"70%", margin:"50px auto", textAlign:'center'}}>Your membership application is already Approved</h1>:
         <div className='' style={{paddingLeft:"100px", height:'100vh', overflow:'scroll'}}>
             <div style={{ display: 'flex', flexDirection: 'row' ,paddingLeft:'10px', paddingRight:'10px'}}>
                 <div className="form-group width-50" >
