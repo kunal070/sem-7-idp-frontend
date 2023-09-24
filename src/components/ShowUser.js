@@ -96,14 +96,6 @@ const ShowUser = () => {
     useEffect(() => {
         fetchData();
     }, [])
-    if(loader){
-      return (
-      <div style={{width : '100%', height:'100%'}}>
-          <Loader/>
-      </div>
-      )
-    }
-    else{
     return (
         <>
         <div className="pt-4 flex items-center flex-col">
@@ -180,7 +172,7 @@ const ShowUser = () => {
         </div>
       </>
     )
-          }
+          
 }
 
 export default ShowUser
