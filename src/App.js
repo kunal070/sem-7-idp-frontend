@@ -13,7 +13,7 @@ import socketio from "socket.io-client";
 import './styles.css';
 
 // components import
-import Home from "./components/Home";
+import Profile from "./components/Profile";
 import Login from "./components/Login";
 import Navbar from "./components/Navbar";
 import CompanyForm from "./components/CompanyForm";
@@ -55,7 +55,7 @@ function App({ session }) {
       <Navbar/>
       <div className="backImage">
         <Routes>
-          <Route path="/profile" element={<Home/>} />
+          <Route path="/profile" element={<Profile/>} />
           <Route path="/membership-form" element={<CompanyForm/>} />
           <Route path="/company-info-2" element={<CompanyForm2/>} />
           <Route path="/company-info-3" element={<CompanyForm3/>} />
@@ -74,7 +74,7 @@ function App({ session }) {
         <Navbar/>
         <div className="backImage">
         <Routes>
-          <Route path="/profile" element={<Home/>} />
+          <Route path="/profile" element={<Profile/>} />
           <Route path="/create-user" element={<CreateUser/>} />
           <Route path="/show-users" element={<ShowUser/>} />
           <Route path="/pending-memberships" element={<MembershipTable type="pending" />} />
@@ -92,7 +92,7 @@ function App({ session }) {
         <Navbar/>
         <div className="backImage">
         <Routes>
-          <Route path="/profile" element={<Home/>} />
+          <Route path="/profile" element={<Profile/>} />
           <Route path="/pending-memberships" element={<MembershipTable type="pending" />} />
           <Route path="/completed-memberships" element={<MembershipTable type="completed" />} />
           <Route path="/membership-status" element={<MembershipStatus/>} />
