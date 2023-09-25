@@ -6,8 +6,8 @@ import CircleLoader from './CircleLoader';
 import ChatLoader from './ChatLoader'
 import Loader from './Loader';
 import { connect } from 'react-redux';
-
 import '../companyform.css'
+
 const mapStateToProps = ({ session }) => ({
   session
 })
@@ -280,6 +280,8 @@ const ChatHome = ({ session, socket }) => {
 
   // This function handles the event when a user leaves a chat.
   const onChatLeave = (chat) => {
+    console.log("LEAVE CHAT: ", chat)
+    console.log("LEAVE CHAT: ", currentChat)
     // Check if the chat the user is leaving is the current active chat.
     if (chat._id === currentChat?._id) {
       // If the user is in the group chat they're leaving, close the chat window.
@@ -316,6 +318,7 @@ const ChatHome = ({ session, socket }) => {
 
   // This useEffect handles the setting up and tearing down of socket event listeners.
   useEffect(() => {
+    console.log("CHATS: ", chats)
     // If the socket isn't initialized, we don't set up listeners.
     if (!socket) return;
     console.log("socket called: ", socket)
@@ -408,6 +411,22 @@ const ChatHome = ({ session, socket }) => {
     }
   }, [attachment])
 
+  const deleteChat = async (chat) => {
+    const confirmation = window.confirm("Are you sure, you want to delete the chat?")
+    if(confirmation){
+      axios.defaults.withCredentials = true
+      const response = await axios.delete(`${process.env.REACT_APP_BASE_URL}/chat/delete-one-to-one-chat/${chat._id}`)
+      console.log(response.data)
+      if(response.data.success) {
+        setChats((prev) => prev.filter((c) => c._id != chat._id))
+        if(currentChat?._id == chat._id){
+          setCurrentChat(null)
+        }
+        socket.emit(LEAVE_CHAT_EVENT, chat);
+      }
+    }
+  }
+
   const clickFileInput = () => {
     attachmentRef.current.click();
   }
@@ -457,7 +476,7 @@ const ChatHome = ({ session, socket }) => {
                   >
                     <div>
                       <p style={{color :'black',fontWeight:"bold", fontSize: '15px', letterSpacing:'0.5px',textTransform:"uppercase", color:'#0f3c69'}}>
-                        {index + 1}. {user.firstName} {user.lastName}
+                        {index + 1}. {user?.firstName} {user?.lastName}
                       </p>
                     </div>
                     <div>
@@ -500,16 +519,15 @@ const ChatHome = ({ session, socket }) => {
           const unreadChats = unreadMessages?.filter((n) => n.chat === chat._id).length
           return (
             <div>
-            <div key={index} className={chat._id == currentChat?._id ? 'current-chat chat-block flex' : 'chat-block flex'} onClick={() => setCurrentChat(chat)}>
-            <div className='chatProfilePhoto'>
-            <img src={participant?.profileImage} style={{borderRadius:'50%', margin:'0 5px'}} />
-              
-            </div>
-            <div>
-              <p style={{fontWeight:"bold",fontSize : '12px', letterSpacing:'0.5px', textTransform:"uppercase"}}>{participant.firstName + " " + participant.lastName}  {unreadChats ? <span style={{background:'#0f3c69', color:'white', padding:'6px 10px', borderRadius:'50%'}}>{unreadChats > 9 ? "9+" : unreadChats}</span> : null} </p>
-              <p style={{fontSize:'10px', letterSpacing:'0.5px'}}>{participant.phone}</p>
-            </div>
-            </div> 
+              <div key={index} className={chat._id == currentChat?._id ? 'current-chat chat-block flex' : 'chat-block flex'} onClick={() => setCurrentChat(chat)}>
+                <div className='chatProfilePhoto'>
+                  <img src={participant?.profileImage} style={{borderRadius:'50%', margin:'0 5px'}} />
+                </div>
+                <div>
+                  <p style={{fontWeight:"bold",fontSize : '12px', letterSpacing:'0.5px', textTransform:"uppercase"}}>{participant?.firstName + " " + participant?.lastName}  {unreadChats ? <span style={{background:'#0f3c69', color:'white', padding:'6px 10px', borderRadius:'50%'}}>{unreadChats > 9 ? "9+" : unreadChats}</span> : null} </p>
+                  <p style={{fontSize:'10px', letterSpacing:'0.5px'}}>{participant?.phone}</p>
+                </div>
+              </div>
             </div>
           )}
         )}
@@ -518,15 +536,20 @@ const ChatHome = ({ session, socket }) => {
       <div className='chatBorder chatBack'style={{width:"70%", height: '100vh'}}>
         {currentChat && currentChat?._id && 
           <div style={{color:"black"}}>
-            <div className="chat-header flex">
-            <div className='chatProfilePhoto'>
-              <img src={currentParticipant?.profileImage} style={{borderRadius:'50%'}} />
-            </div>
-            <div>
-              <p style={{fontWeight:"bold", fontSize: '12px', letterSpacing:'0.5px',textTransform:"uppercase"}}>{currentParticipant?.firstName + " " + currentParticipant?.lastName}</p>
-              <p style={{fontSize:'10px', letterSpacing:'0.5px'}}>{currentParticipant?.phone}</p>
-            </div>
-            </div>
+            <div className="chat-header flex justify-between">
+              <div className='flex items-center justify-center'>
+                <div className='chatProfilePhoto'>
+                  <img src={currentParticipant?.profileImage} style={{borderRadius:'50%'}} />
+                </div>
+                <div>
+                  <p style={{fontWeight:"bold", fontSize: '12px', letterSpacing:'0.5px',textTransform:"uppercase"}}>{currentParticipant?.firstName + " " + currentParticipant?.lastName}</p>
+                  <p style={{fontSize:'10px', letterSpacing:'0.5px'}}>{currentParticipant?.phone}</p>
+                </div>
+              </div>
+              <div style={{width:"50px", height:"50px", display:"flex", justifyContent:'center', alignItems:'center'}}>
+                <img src="/images/delete.svg" alt="alternative" className='delete-icon' onClick={() => deleteChat(currentChat)} />
+              </div>
+          </div>
 
             
             {
@@ -540,7 +563,7 @@ const ChatHome = ({ session, socket }) => {
                   <>
                   <div key={index} style={{maxWidth : "49%",overflowWrap : 'break-word' , background : 'gray' ,margin : "2px 0px", alignSelf : 'end',borderRadius : '10px', fontSize:"13px", letterSpacing:"0.5px"}}>
                       {msg.content && <p style={{color:"white", margin:"10px"}} >{msg.content}</p>}
-                  {msg.attachment &&  (msg.attachment.type == "pdf" ? <iframe src={msg.attachment.url} width="100%" height="100%" /> : <img style={{ width:'300px', height:'300px' }} src={msg.attachment.url} />)}
+                  {msg.attachment &&  (msg.attachment.type == "pdf" ? <iframe src={msg.attachment.url} width="100%" height="100%" /> : <div style={{ margin: "5px 0",boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px"}}> <img style={{ width:'300px', height:'300px', borderRadius:'5px' }} src={msg.attachment.url} /> </div> )}
                   </div>
                 </>
               )
@@ -549,7 +572,7 @@ const ChatHome = ({ session, socket }) => {
                 <>
                 <div key={index} style={{maxWidth : "49%" ,overflowWrap : 'break-word',lineHeight:'1.58', background : '#0F3C69' ,margin : "2px 0px", alignSelf : "start",borderRadius : '10px', fontSize:"13px", letterSpacing:"0.5px"}}>      
                   {msg.content && <p style={{color:"white", margin:"10px"}} className={msg.sender._id === session._id ? "text-left" : ""} >{msg?.content}</p>}
-                  {msg.attachment &&  (msg.attachment.type == "pdf" ? <iframe src={msg.attachment.url} width="100%" height="100%" /> : <img style={{ width:'300px', height:'300px' }} src={msg.attachment.url} />)}
+                  {msg.attachment &&  (msg.attachment.type == "pdf" ? <iframe src={msg.attachment.url} width="100%" height="100%" />  : <div style={{ margin: "5px 0",boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px"}}> <img style={{ width:'300px', height:'300px', borderRadius:'5px' }} src={msg.attachment.url} /> </div>)}
                 </div>
               </>
             )
@@ -558,11 +581,11 @@ const ChatHome = ({ session, socket }) => {
           </div>
         }
           <div className='inputMsg' style={{width:'105.8%', display:'flex', justifyContent:'space-evenly',  alignItems:'center'}}>
-            <div style={{width:'60px', height:"60px", marginBottom:'8px'}}>
+            <div style={{width:'60px', height:"60px", marginTop:'18px'}}>
               <img
                 src='/images/attach.svg'
                 alt='Send'
-                style={{ width: '65%', cursor: 'pointer', margin:"15px 5px 15px 15px"}}
+                style={{ width: '65%', cursor: 'pointer', margin:"5px 5px 15px 15px"}}
                 className='chat-pointer'
                 onClick={clickFileInput}
                 />

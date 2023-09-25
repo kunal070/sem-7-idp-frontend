@@ -69,7 +69,10 @@
 
 .width-10{
 width: 25%;
+}
 
+iframe {
+  overflow: hidden;
 }
 
 .logo-image{
@@ -161,6 +164,7 @@ input {
   cursor: pointer;
   border: 2px solid white;
   display: flex;
+  flex-direction: row;
 }
 
 .current-chat {
@@ -179,7 +183,17 @@ input {
   margin-top: 10px;
   border-radius: 10px;
   color:white;
-  
+}
+
+.delete-icon {
+  cursor: pointer;
+  width: 35px;
+  height: 35px;
+}
+
+.delete-icon:hover {
+  width: 25px;
+  height: 25px;
 }
 
 .imageBefore{
