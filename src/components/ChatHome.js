@@ -509,7 +509,7 @@ const ChatHome = ({ session, socket }) => {
       )}
 
     <div className={showModal ?  `opacity flex` : 'flex'}>
-      <div  style={{width:"30%", height:'85vh', overflowY:"auto", marginTop:'10px'}}>
+      <div  style={{width:"30%", height:'85vh', overflowY:"auto", marginTop:'8px'}}>
         <div style={{position : "absolute",bottom : '10px'}}>
           <button name="fine-member" className='plus-button' style={{ width: "50px", height:"50px" , background:"#0F3C69", borderRadius:'100%', fontSize:'30px', fontWeight:'600' }} onClick={findMember}> + </button>
         </div>
@@ -546,7 +546,7 @@ const ChatHome = ({ session, socket }) => {
                   <p style={{fontSize:'10px', letterSpacing:'0.5px'}}>{currentParticipant?.phone}</p>
                 </div>
               </div>
-              <div style={{width:"50px", height:"50px", display:"flex", justifyContent:'center', alignItems:'center'}}>
+              <div style={{width:"35px", height:"35px", display:"flex", justifyContent:'center', alignItems:'center'}}>
                 <img src="/images/delete.svg" alt="alternative" className='delete-icon' onClick={() => deleteChat(currentChat)} />
               </div>
           </div>
@@ -581,11 +581,11 @@ const ChatHome = ({ session, socket }) => {
           </div>
         }
           <div className='inputMsg' style={{width:'107.8%', display:'flex', justifyContent:'space-evenly',  alignItems:'center'}}>
-            <div style={{width:'60px', height:"60px", marginTop:'18px' }}>
+            <div style={{width:'60px', height:"60px", marginTop:'20px' }}>
               <img
                 src='/images/attach.svg'
                 alt='Send'
-                style={{ width: '65%', cursor: 'pointer', margin:"5px 5px 15px 15px"}}
+                style={{ width: '65%', cursor: 'pointer', margin:"2px 5px 15px 15px"}}
                 className='chat-pointer'
                 onClick={clickFileInput}
                 />
