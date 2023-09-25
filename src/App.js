@@ -26,6 +26,7 @@ import CreateUser from "./components/CreateUser";
 import MembershipTable from "./components/MembershipTable";
 import ChatHome from "./components/ChatHome";
 import ShowUser from "./components/ShowUser";
+import MagazineUpload from "./components/MagazineUpload";
 
 
 const mapStateToProps = ({ session }) => ({
@@ -76,9 +77,10 @@ function App({ session }) {
           <Route path="/create-user" element={<CreateUser/>} />
           <Route path="/show-users" element={<ShowUser/>} />
           <Route path="/pending-memberships" element={<MembershipTable type="pending" />} />
-          <Route path="/completed-memberships" element={<MembershipTable type="completed" />} />
+          <Route path="/approved-memberships" element={<MembershipTable type="completed" />} />
           <Route path="/all-memberships" element={<MembershipTable type="all" />} />
           <Route path="/membership-status" element={<MembershipStatus/>} />
+          <Route path="/magazine-upload" element={<MagazineUpload/>} />
         </Routes>
         </div>
         <ToastContainer />

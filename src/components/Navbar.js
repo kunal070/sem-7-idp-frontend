@@ -35,8 +35,8 @@ const Navbar = ({session, logout}) => {
     ["Home", "images/dashboard.svg"],
     ["Create User", "images/create-user.svg"],
     ["Show Users", "images/show-users.svg"],
-    ["Pending Memberships", "images/member.svg"],
-    ["Completed Memberships", "images/Magazine.svg"],  
+    ["Pending Memberships", "images/pending.svg"],
+    ["Approved Memberships", "images/Magazine.svg"],  
     ["All Memberships", "images/member.svg"],
     ["Log Out", "images/signout.svg"]
   ];
@@ -44,8 +44,8 @@ const Navbar = ({session, logout}) => {
   const approverLi = [
   ["Home", "images/dashboard.svg"],
   ["Profile", "images/profile.svg"],
-  ["Pending Memberships", "images/member.svg"],
-  ["Completed Memberships", "images/Magazine.svg"],
+  ["Pending Memberships", "images/pending.svg"],
+  ["Approved Memberships", "images/Magazine.svg"],
   ["Log Out", "images/signout.svg"]];
 
     const [loader, setLoader] = useState(false)
@@ -141,7 +141,7 @@ const Navbar = ({session, logout}) => {
               {item[0]}
             </li>
             {showTooltip === i && (
-              <div className="tooltip">
+              <div className="tooltip" style={{zIndex:99}}>
                 {item[0]}
               </div>
             )}

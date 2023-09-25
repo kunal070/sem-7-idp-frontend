@@ -232,7 +232,7 @@ const MembershipStatus = ({ session }) => {
 
             <div style={{display : 'flex', flexDirection : 'row'}}>
             <p className='text-black b'>Objective for Membership : </p>
-            <p className='text-black' style ={{marginLeft : '5px',paddingLeft : '6.1rem'}}> {data.companyERDAObjective}</p>
+            <p className='text-black' style ={{marginLeft : '5px',paddingLeft : '11.1rem'}}> {data.companyERDAObjective}</p>
             </div>
 
             <div style={{display : 'flex', flexDirection : 'row'}}>

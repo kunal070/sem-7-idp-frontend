@@ -61,7 +61,7 @@ const Profile = ({session, logout}) => {
   const uploadImage = async () => {
     console.log("UPLOADING IMAGE")
     if(image == "") return;
-      const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/auth/update-profile-image`, {image}, {headers: {"Content-Type":"multipart/form-data"}})
+      const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/auth/update-profile-image`, {file: image}, {headers: {"Content-Type":"multipart/form-data"}})
       console.log("UPLOAD IMAGE RESPONSE: ", response.data)
       toast(response.data.message)
       if(response.data.success){

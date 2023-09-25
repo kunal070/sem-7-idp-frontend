@@ -449,12 +449,12 @@ const ChatHome = ({ session, socket }) => {
                 </button>
               </div>
               {/* Body */}
-              <div className="relative p-6 flex-auto">
+              <div className="relative flex-auto">
                 {availableUsers?.map((user, index) => (
                   <div
                     key={user.phone}
-                    className="mb-4 flex justify-between items-center"
-                  >
+                    className="flex justify-between items-center hover:bg-[#A9A9A9] rounded-md"
+                    style={{padding:'1rem'}}>
                     <div>
                       <p style={{color :'black',fontWeight:"bold", fontSize: '15px', letterSpacing:'0.5px',textTransform:"uppercase", color:'#0f3c69'}}>
                         {index + 1}. {user.firstName} {user.lastName}
@@ -463,7 +463,7 @@ const ChatHome = ({ session, socket }) => {
                     <div>
                       <button
                         name="add"
-                        className="bg-[#0F3C69] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                        className="bg-[#0F3C69] text-white font-bold py-2 px-4 rounded"
                         onClick={() => createChatWithUser(user.phone)}
                         style={{textTransform:"uppercase"}}
                         >
@@ -530,7 +530,7 @@ const ChatHome = ({ session, socket }) => {
 
             
             {
-              circleLoaderState ? <div style={{paddingLeft:"100px" ,display:'flex', width:'95%', color: 'black', flexDirection:'column', height:'79vh', justifyContent:"center",allignItems : 'center', overflow:'hidden'}}> <ChatLoader/> </div>: 
+              circleLoaderState ? <div style={{paddingLeft:"100px" ,display:'flex', width:'95%', color: 'black', flexDirection:'column', height:'79vh', justifyContent:"center",allignItems : 'center'}}> <ChatLoader/> </div>: 
             
          
             <div ref={ref} style={{display:'flex', width:'107.5%', color: 'black', flexDirection:'column', padding:"20px 20px", height:'79vh', overflowY:"auto"}}>
@@ -557,12 +557,12 @@ const ChatHome = ({ session, socket }) => {
             })}
           </div>
         }
-          <div className='inputMsg' style={{width:'105.8%', display:'flex', justifyContent:'space-evenly',  alignItems:'center'}}>
-            <div style={{width:'60px', height:"60px", marginBottom:'8px'}}>
+          <div className='inputMsg' style={{width:'107.8%', display:'flex', justifyContent:'space-evenly',  alignItems:'center'}}>
+            <div style={{width:'60px', height:"60px", marginTop:'18px' }}>
               <img
                 src='/images/attach.svg'
                 alt='Send'
-                style={{ width: '65%', cursor: 'pointer', margin:"15px 5px 15px 15px"}}
+                style={{ width: '65%', cursor: 'pointer', margin:"5px 5px 15px 15px"}}
                 className='chat-pointer'
                 onClick={clickFileInput}
                 />
@@ -584,7 +584,7 @@ const ChatHome = ({ session, socket }) => {
                     sendChatMessage();
                   }
                 }}
-                style={{width:'800px',  marginLeft: '5px', alignItems:'center' }}
+                style={{width:'800px',  marginLeft: '5px', alignItems:'center'}}
                 />
             </div>
             <div style={{width:'60px', height:"60px", marginBottom:'8px'}}>
