@@ -9,6 +9,8 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Loader from "./Loader";
 
+import moment from 'moment';
+
 
 const mapStateToProps = ({ session }) => ({
     session
@@ -93,8 +95,10 @@ const CompanyForm = ({session}) => {
         let str = "";
         if (!formData.registrationYear.trim()) {
             str = 'Registration Date is required';
+        } else if (formData.registrationYear > moment().format("YYYY-MM-DD")) {
+            str = "Registration Date cannot be from future"
         }
-
+        
         if(str == ''){
             setErrors(err => {
                 const { registrationYear, ...rest } = err
@@ -368,7 +372,7 @@ const CompanyForm = ({session}) => {
                         <p className='label' style={{textAlign:'start'}}>Registration Date:</p>
                     </div>
                     <div className='width-50' style={{marginLeft:'0px'}}>
-                        <input type="date" name="registrationYear" value={formData.registrationYear} onChange={handleChange} required style={{ backgroundColor: '#eee',paddingLeft:33,paddingRight:35,marginLeft:5 }} />
+                        <input type="date" name="registrationYear" value={formData.registrationYear} max={moment().format("YYYY-MM-DD")} onChange={handleChange} required style={{ backgroundColor: '#eee',paddingLeft:33,paddingRight:35,marginLeft:5 }} />
                         {errors.registrationYear && <p className="error-message"style={{color: 'red', fontSize: '12px'}}>{errors.registrationYear}</p>}
                     </div>
                 </div>

@@ -27,7 +27,8 @@ import MembershipTable from "./components/MembershipTable";
 import ChatHome from "./components/ChatHome";
 import ShowUser from "./components/ShowUser";
 import MagazineUpload from "./components/MagazineUpload";
-
+import Magazines from "./components/Magazines";
+import Magazine from "./components/Magazine";
 
 const mapStateToProps = ({ session }) => ({
   session
@@ -74,13 +75,27 @@ function App({ session }) {
         <div className="backImage">
         <Routes>
           <Route path="/profile" element={<Profile/>} />
-          <Route path="/create-user" element={<CreateUser/>} />
+          <Route path="/create-employee" element={<CreateUser/>} />
           <Route path="/show-users" element={<ShowUser/>} />
           <Route path="/pending-memberships" element={<MembershipTable type="pending" />} />
           <Route path="/approved-memberships" element={<MembershipTable type="completed" />} />
           <Route path="/all-memberships" element={<MembershipTable type="all" />} />
           <Route path="/membership-status" element={<MembershipStatus/>} />
-          <Route path="/magazine-upload" element={<MagazineUpload/>} />
+        </Routes>
+        </div>
+        <ToastContainer />
+      </>
+    )
+  } else if(session.typeOfUser == "magazine-manager") {
+    return (
+      <>
+        <Navbar/>
+        <div className="backImage">
+        <Routes>
+          <Route path="/profile" element={<Profile/>} />
+          <Route path="/upload-magazine" element={<MagazineUpload/>} />
+          <Route path="/show-magazines" element={<Magazines/>} />
+          <Route path="/magazine" element={<Magazine/>} />
         </Routes>
         </div>
         <ToastContainer />

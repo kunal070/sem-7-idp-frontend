@@ -6,7 +6,9 @@ import axios from 'axios'; // Import Axios
 import { toast } from 'react-toastify'
 import { connect } from 'react-redux';
 import Loader from "./Loader";
+import { Link } from 'react-router-dom';
 
+import moment from 'moment'
 
 const mapStateToProps = ({ session }) => ({
     session
@@ -17,8 +19,6 @@ let initialSubmit = false
 const MagazineUpload = ({ session }) => {
     const navigate = useNavigate();
 
-    const [isDataUpdated, setIsDataUpdated] = useState(false)
-    
     const [loader, setLoader] = useState(false)
 
     const [formData, setFormData] = useState({
@@ -29,18 +29,25 @@ const MagazineUpload = ({ session }) => {
         magazinePrice: '',
         magazinePages: '',
         magazineStock: '',
-        magazinePdf: '',
+        file: '',
     });
 
     const [errors, setErrors] = useState({});
 
     const handleChange = (e) => {
-        setIsDataUpdated(true)
-        const { name, value } = e.target;
-        setFormData((prevData) => ({
-            ...prevData,
-            [name]: value,
-        }));
+        const { name, value, type } = e.target;
+        if (type === 'file') {
+            const file = e.target.files[0];
+            setFormData((prevData) => ({
+                ...prevData,
+                [name]: file,
+            }));
+        } else {
+            setFormData((prevData) => ({
+                ...prevData,
+                [name]: value,
+            }));
+        }
     };
 
     const validateMagazineName = () => {
@@ -71,8 +78,8 @@ const MagazineUpload = ({ session }) => {
         if (!formData.magazineAuthor.trim()) {
             str = 'Author Name is required';
         }
-        else if (formData.magazineAuthor.trim().length < 5) {
-            str = 'magazineAuthor must be at least 5 characters long';
+        else if (formData.magazineAuthor.trim().length < 2) {
+            str = 'magazineAuthor must be at least 2 characters long';
         }
 
         if(str == ''){
@@ -117,6 +124,9 @@ const MagazineUpload = ({ session }) => {
         if (!formData.magazineDate.trim()) {
             str = 'Magazine published date is required';
         }
+        if(formData.magazineDate < moment().format("YYYY-MM-DD")) {
+            str = "You cannot publish historical magazines"
+        }
 
         if(str == ''){
             setErrors(err => {
@@ -137,11 +147,9 @@ const MagazineUpload = ({ session }) => {
             str = 'Magazine price is required';
         }
 
-        if (name === 'magazinePrice' && parseFloat(value) < 0) {
+        if (parseFloat(formData.magazinePrice) < 0) {
             errors.magazinePrice = 'Magazine Price must be a positive number';
-          } else {
-            errors.magazinePrice = '';
-          }
+        }
 
         if(str == ''){
             setErrors(err => {
@@ -162,11 +170,9 @@ const MagazineUpload = ({ session }) => {
             str = 'No. of pages is required';
         }
 
-        if (name === 'magazinePages' && parseFloat(value) < 0) {
+        if (parseFloat(formData.magazinePages) < 0) {
             errors.magazinePages = 'No.of Pages must be a positive number';
-          } else {
-            errors.magazinePages = '';
-          }
+        }
 
         if(str == ''){
             setErrors(err => {
@@ -187,11 +193,9 @@ const MagazineUpload = ({ session }) => {
             str = 'No. of available magazines is required';
         }
 
-        if (name === 'magazineStock' && parseFloat(value) < 0) {
+        if (parseFloat(formData.magazineStock) < 0) {
             errors.magazineStock = 'No. of available magazines must be a positive number';
-          } else {
-            errors.magazineStock = '';
-          }
+        }
 
         if(str == ''){
             setErrors(err => {
@@ -208,25 +212,25 @@ const MagazineUpload = ({ session }) => {
 
     const validateMagazinePdf = () => {
         let str = "";
-        if (!formData.magazinePdf) {
+        if (!formData.file) {
             str = 'Please upload a PDF file';
           } else {
-            const fileExtension = formData.magazinePdf.name.split('.').pop().toLowerCase();
+            const fileExtension = formData.file.name.split('.').pop().toLowerCase();
             if (fileExtension !== 'pdf') {
-              str = 'Please upload a PDF file';
+              str = 'Please upload a PDF file ,afasf';
             }
           }
           
 
         if(str == ''){
             setErrors(err => {
-                const { magazinePdf, ...rest } = err
+                const { file, ...rest } = err
                 return rest;
             })
         } else {
             setErrors(err => ({
                 ...err,
-                magazinePdf:str
+                file:str
             }))
         }
 
@@ -279,25 +283,29 @@ const MagazineUpload = ({ session }) => {
         if(initialSubmit){
             validateMagazinePdf()
         }
-    }, [formData.magazinePdf])
+    }, [formData.file])
+
+    useEffect(() => {
+        setTimeout(() => {
+            initialSubmit = true
+        }, 0);
+    }, [])
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        console.log("FORM DATA: ", formData)
 
         validateMagazineName()
         validateMagazineAuthor()
         validateMagazineDescription()
         validateMagazineDate()
         validateMagazinePrice()
-        validateMagazinePages()        
+        validateMagazinePages()
         validateMagazineStock()
         validateMagazinePdf()
 
-        if(!isDataUpdated){
-            console.log('Navigating to /company-info-2');
-            navigate("/company-info-2")
-            return;
-        }
+        console.log("errors: ", errors)
     
         if (Object.keys(errors).length === 0 && formData.magazineAuthor != "") {
             setLoader(true)
@@ -305,13 +313,22 @@ const MagazineUpload = ({ session }) => {
             // withCredentials to send httpOnly cookie via request
             axios.defaults.withCredentials = true;
 
-            const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/membership/company-info-1`, {...formData}, {headers:{"Content-Type":"application/json"}})
+            const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/magazine/upload-magazine`, {...formData}, {headers:{"Content-Type":"multipart/form-data"}})
             console.log(response.data)
             setLoader(false)
           
             if(response.data.success){
                 toast(response.data.message)
-                navigate('/company-info-2');
+                setFormData({
+                    magazineName: '',
+                    magazineAuthor: '',
+                    magazineDescription: '',
+                    magazineDate: '',
+                    magazinePrice: '',
+                    magazinePages: '',
+                    magazineStock: '',
+                    file: '',
+                })
             } else {
                 toast(response.data.message)
             }
@@ -373,7 +390,7 @@ const MagazineUpload = ({ session }) => {
                         <p className='label' style={{textAlign:'start'}}>Publication Date:</p>
                     </div>
                     <div className='width-50' style={{marginLeft:'10px'}}>
-                        <input type="date" name="magazineDate" value={formData.magazineDate} onChange={handleChange} style={{backgroundColor:'#eee'}}/>
+                        <input type="date" name="magazineDate" value={formData.magazineDate} onChange={handleChange} min={moment().format("YYYY-MM-DD")} style={{backgroundColor:'#eee'}}/>
                         {errors.magazineDate && <p className="error-message"style={{color: 'red', fontSize: '12px'}}>{errors.magazineDate}</p>}
                     </div>
                 </div>
@@ -419,10 +436,10 @@ const MagazineUpload = ({ session }) => {
                         <p className='label'  style={{ marginRight: 20, textAlign:'start'}}>Upload The Magazine:</p>
                     </div>
                     <div className='flex' style={{marginLeft:'0px'}}>
-                        <input type="file" name="file" id='file-input' title={formData.magazinePdf} onChange={handleChange} accept=".pdf" required style={{ backgroundColor: '#eee' }} />
-                        {(formData != null && formData.magazinePdf?.type !== 'application/pdf' && formData.magazinePdf?.includes("https://idp-sem-7.s3.us-east-1.amazonaws.com")) && 
-                        <Link to={formData.magazinePdf} target="_blank" rel="noopener noreferrer"> <button type="button" className='savebtn' style={{ borderColor: '#0f3c69', backgroundColor: '#0f3c69', color: 'white', borderRadius: 5, height:'44px', margin:'auto',marginLeft:55,marginTop:8}} >View Document</button> </Link>}
-                        {errors.magazinePdf && <p className="error-message" style={{color: 'red', fontSize: '12px'}}>{errors.magazinePdf}</p>}
+                        <input type="file" name="file" id='file-input' title={formData.file} onChange={handleChange} accept=".pdf" required style={{ backgroundColor: '#eee' }} />
+                        {(formData != null && formData.file?.type !== 'application/pdf' && formData.file?.includes("https://idp-sem-7.s3.us-east-1.amazonaws.com")) && 
+                        <Link to={formData.file} target="_blank" rel="noopener noreferrer"> <button type="button" className='savebtn' style={{ borderColor: '#0f3c69', backgroundColor: '#0f3c69', color: 'white', borderRadius: 5, height:'44px', margin:'auto',marginLeft:55,marginTop:8}} >View Document</button> </Link>}
+                        {errors.file && <p className="error-message" style={{color: 'red', fontSize: '12px'}}>{errors.file}</p>}
                     </div>
                 </div>
             </div>
