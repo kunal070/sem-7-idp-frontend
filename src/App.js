@@ -27,6 +27,9 @@ import MembershipTable from "./components/MembershipTable";
 import ChatHome from "./components/ChatHome";
 import ShowUser from "./components/ShowUser";
 import Dashboard from "./components/Dashboard";
+import EmployeeDashboard from "./components/EmployeeDashboard";
+import MemberDashboard from "./components/MemberDashboard";
+import Booking from "./components/Booking";
 
 
 const mapStateToProps = ({ session }) => ({
@@ -62,15 +65,15 @@ function App({ session }) {
           <Route path="/membership-status" element={<MembershipStatus/>} />
           <Route path="/membership-table" element={<MembershipTable/>}/>
           <Route path="/chat" element={<ChatHome socket={socket} />}/>
-          <Route path="/dashboard" element={<Dashboard/>}/>
+          <Route path="/*" element={<MemberDashboard/>} />
       </Routes>
       </div>
       <ToastContainer />
       </>
       )
-  } else if(session.typeOfUser == "admin"){
-    return(
-      <>
+    } else if(session.typeOfUser == "admin"){
+      return(
+        <>
         <Navbar/>
         <div className="backImage">
         <Routes>
@@ -81,6 +84,8 @@ function App({ session }) {
           <Route path="/completed-memberships" element={<MembershipTable type="completed" />} />
           <Route path="/all-memberships" element={<MembershipTable type="all" />} />
           <Route path="/membership-status" element={<MembershipStatus/>} />
+          <Route path="/*" element={<Dashboard/>} />
+          <Route path="/book" element={<Booking/>} />
         </Routes>
         </div>
         <ToastContainer />
@@ -96,6 +101,8 @@ function App({ session }) {
           <Route path="/pending-memberships" element={<MembershipTable type="pending" />} />
           <Route path="/completed-memberships" element={<MembershipTable type="completed" />} />
           <Route path="/membership-status" element={<MembershipStatus/>} />
+          <Route path="/*" element={<EmployeeDashboard/>} />
+          <Route path="/book" element={<Booking/>} />
         </Routes>
         </div>
         <ToastContainer />

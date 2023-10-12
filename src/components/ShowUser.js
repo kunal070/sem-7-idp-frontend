@@ -96,6 +96,7 @@ const ShowUser = () => {
     useEffect(() => {
         fetchData();
     }, [])
+
     return (
         <>
         <div className="pt-4 flex items-center flex-col">
@@ -172,8 +173,7 @@ const ShowUser = () => {
         </div>
       </>
     )
-          
+            
 }
 
-export default ShowUser
-
+export default ShowUser 

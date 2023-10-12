@@ -1,13 +1,14 @@
 import React, {useState, useRef, useEffect} from 'react';
-import '../Dashboard.css';
 import Chart from 'chart.js/auto';
 import axios from 'axios'
 const ctx = document.getElementById('myChart');
 const ctx1 = document.getElementById('myChart1');
+const ctx2 = document.getElementById('myChart2');
 
 const Dashboard = () => {
   const chartRef = useRef(null);
   const chartRef1 = useRef(null);
+  const chartRef2 = useRef(null);
 
   const cardStyle = {
     width: '20%',
@@ -24,78 +25,192 @@ const Dashboard = () => {
 
    const data = {
     labels: ["Associative", "Oridinary"],
+    color: 'white',
     datasets: [{
-      label: ["Types of Membership"],
+      label: " ", 
       data: [20, 40],
-      backgroundColor: ['rgba(75, 192, 192, 0.2)', 'rgba(255, 99, 132, 0.2)'],
-      borderColor: ['rgba(75, 192, 192, 1)', 'rgba(255, 99, 132, 1)'],
-      borderWidth: 3,
-      barThickness: 55  ,
-      maxBarThickness: 100000,
-      minBarLength: 4,
+      color: 'white',
+      backgroundColor: ['white', 'white'],
+      borderColor: ['#0F3C69', '#0F3C69'],
+      borderRadius : '20%',
+      borderWidth: 1,
+      barThickness: 10 ,
+      maxBarThickness: 100,
+      minBarLength: 3,
+      borderSkipped: 'top'
+   }], 
+};
+   const data2 = {
+    labels: ["Private", "Public","Corporate","others"],
+    datasets: [{
+      label: [""],
+      data: [20, 40, 25,10],
+      color: 'white',
+      backgroundColor: ['white','white' ,'white','white'],
+      borderColor: ['#0F3C69', '#0F3C69', '#0F3C69', '#0F3C69'],
+      borderRadius : '20%',
+      borderWidth: 1,
+      barThickness: 10 ,
+      maxBarThickness: 100,
+      minBarLength: 3,
+      borderSkipped: 'top',
    }], 
 };
 
-   const data1 = {
-    labels: ["R & D", "Testing Evaluation", "Electrical"],
-    datasets: [{
-      label: "Service using",
-      data: [20, 40, 13],
-      backgroundColor: ['yellow', 'aqua', 'pink'],
-      hoverOffset: 6,
-      borderWidth: 4,
-   }], 
+const data1 = {
+  labels: ["R & D", "Testing Evaluation", "Electrical"],
+  color: 'white',
+  datasets: [{
+    data: [20, 40, 13],
+    backgroundColor: ['yellow', 'aqua', 'pink'],
+    hoverOffset: 5,
+    borderWidth: 3,
+    label: {
+      color: 'white',
+    },
+  }],
 };
+
 
 const options = {
   responsive: true,
-  maintainAspectRatio: false, 
+  maintainAspectRatio: false,
+  scales: {
+    x: {
+      grid: {
+        color: '#f8f9f5', // Set the x-axis gridlines color to white
+      },
+      beginAtZero: true,
+      title: {
+        font: {
+          weight: 'bold', // Set x-axis title font weight to bold
+        },
+      },
+      ticks: {
+        color: '#0f3c69',
+        font: {
+          weight: 'bold', // Set x-axis tick label font weight to bold
+        },
+      },
+    },
+    y: {
+      grid: {
+        color: '#f8f9f5', // Set the x-axis gridlines color to white
+      },
+      beginAtZero: true,
+      title: {
+        display: true,
+      },
+      ticks: {
+        color: 'white',
+        font: {
+          weight: 'bold', // Set y-axis tick label font weight to bold
+        },
+      },
+    },
+  },
+  plugins: {
+    legend: {
+      labels: {
+        color: 'white',
+        display: false, // Hide the legend box
+      },
+    },
+    title: {
+      display: false, // Hide the legend box
+    },
+    datalabels: {
+      display: false, // Hide the legend box
+      anchor: 'end',
+      align: 'top',
+      color: 'white',
+      font: {
+        weight: 'bold', // Set datalabels font weight to bold
+      },
+      formatter: function (value, context) {
+        return value;
+      },
+    },
+  },
+};
+
+const options2 = {
+  responsive: true,
+  maintainAspectRatio: false,
   scales: {
     x: {
       beginAtZero: true,
+      grid: {
+        color: 'white', // Set the x-axis gridlines color to white
+      },
       title: {
-        display : true,
-        text : 'Types of Membership'
+        color: 'white',
+        font: {
+          weight: 'bold', // Set x-axis title font weight to bold
+        },
+      },
+      ticks: {
+        color: '#0f3c69',
+        font: {
+          weight: 'bold', // Set x-axis tick label font weight to bold
+        },
       },
     },
     y: {
       beginAtZero: true,
+      grid: {
+        color: 'white', // Set the x-axis gridlines color to white
+      },
       title: {
-        display: true,
-        text: 'Number of Members', 
+        color: 'white',
+        font: {
+          weight: 'bold', // Set y-axis title font weight to bold
+        },
+      },
+      ticks: {
+        color: 'white',
+        font: {
+          weight: 'bold', // Set y-axis tick label font weight to bold
+        },
       },
     },
   },
   plugins: {
     title: {
-      display: true,
-      text: 'Associate Vs Oridanary', 
+      color: 'white',
+      font: {
+        weight: 'bold', // Set title font weight to bold
+      },
     },
     datalabels: {
       anchor: 'end',
       align: 'top',
-      formatter: function (value, context) {
-        return value; 
+      color: 'white',
+      font: {
+        weight: 'bold', // Set datalabels font weight to bold
       },
-    }
+      formatter: function (value, context) {
+        return value;
+      },
+    },
   },
 };
+
+
 const options1 = {
   plugins: {
-    legend: true,
-    outlabels: {
-      text: (context) => {
-        const dataValue = data1.datasets[0].data[context.dataIndex];
-        return `${context.label}: ${dataValue} (${((dataValue / data1.datasets[0].data.reduce((acc, val) => acc + val, 0)) * 100).toFixed(2)}%)`;
-      },
-      color: 'white', // Change this to the desired color
-      stretch: 35,
+    legend: {
+      labels: {
+        color: 'white', // Set legend label color to white
+      }
+    },
+    title: {
       font: {
-        resizable: true,
-        color: 'black', // You can also change this color
-        minSize: 12,
-        maxSize: 18,
+        weight: 'bold', // Set title font weight to bold
       },
+    },
+    outlabels: {
+  
     },
   },
 };
@@ -108,17 +223,26 @@ if (chartRef.current) {
     data: data,
     options: options,
   });
-
- 
 } 
 
 if (chartRef1.current) {
   const ctx1 = chartRef1.current.getContext('2d');
+  ctx1.font = 'bold 30px sans-serif';
   new Chart(ctx1, {
     type: 'doughnut', 
     data: data1,
     options: options1,
+  });
 
+ 
+} 
+
+if (chartRef2.current) {
+  const ctx2 = chartRef2.current.getContext('2d');
+  new Chart(ctx2, {
+    type: 'bar', 
+    data: data2,
+    options: options2,
   });
 
  
@@ -131,7 +255,8 @@ if (chartRef1.current) {
 
   return (
     <>
-    <div style={{ display: 'flex', flexWrap: 'wrap',marginLeft : '100px' }}>
+
+    {/* <div style={{ display: 'flex', flexWrap: 'wrap',marginLeft : '100px' }}>
         <article className="card" style={{ ...cardStyle, backgroundColor: '#fff7cc' }}>
         <div style={{ display: 'flex', justifyContent: 'center',fontSize : '22px',alignItems: 'center',fontWeight :'bold',marginRight:'5px' }}>Total Membership</div>
         <p style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' ,marginTop: '10px',fontSize : '62px',color :'#0F3C69'}}>
@@ -182,8 +307,133 @@ if (chartRef1.current) {
   <div style={{ marginLeft: '105px', width: '18%', paddingTop: '45px' }}>
     <canvas ref={chartRef1} id="myChart1" width={50} height={310}></canvas>
   </div>
-</div>
+</div> */}
 
+                
+                <div class="grid" style={{marginLeft : '53.5px',background:'#f5f7f8',maxHeight:'120vh',padding:'10px 65px 59px'}}>
+                    <div class="grid grid-cols-12 gap-6">
+                        <div class="grid grid-cols-12 col-span-12 gap-6 xxl:col-span-9">
+                            <div class="col-span-12 mt-8">
+                                <div class="flex items-center h-10 intro-y">
+                                <h2 class="mr-5 truncate text-[#0F3C69]" style={{fontWeight: 'bold',fontSize : '24px'}}>Dashboard</h2>
+                                </div>
+                                <div class="grid grid-cols-12 gap-6 mt-5">
+                                    <a class="transform  hover:scale-105 transition duration-300 shadow-xl rounded-lg col-span-12 sm:col-span-6 xl:col-span-3 intro-y bg-white"
+                                        href="#">
+                                        <div class="p-5">
+                                            <div class="flex justify-between">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-blue-400"
+                                                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                                                </svg>
+                                                <div
+                                                    class="bg-green-500 rounded-full h-6 px-2 flex justify-items-center text-white font-semibold text-sm">
+                                                    <span class="flex items-center">30%</span>
+                                                </div>
+                                            </div>
+                                            <div class="ml-2 w-full flex-1">
+                                                <div>
+                                                    <div class="mt-3 text-3xl font-bold leading-8">4.510</div>
+
+                                                    <div class="mt-1 text-base text-gray-600">Item Sales</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a class="transform  hover:scale-105 transition duration-300 shadow-xl rounded-lg col-span-12 sm:col-span-6 xl:col-span-3 intro-y bg-white"
+                                        href="#">
+                                        <div class="p-5">
+                                            <div class="flex justify-between">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-yellow-400"
+                                                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                                                </svg>
+                                                <div
+                                                    class="bg-red-500 rounded-full h-6 px-2 flex justify-items-center text-white font-semibold text-sm">
+                                                    <span class="flex items-center">30%</span>
+                                                </div>
+                                            </div>
+                                            <div class="ml-2 w-full flex-1">
+                                                <div>
+                                                    <div class="mt-3 text-3xl font-bold leading-8">4.510</div>
+
+                                                    <div class="mt-1 text-base text-gray-600">Item Sales</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a class="transform  hover:scale-105 transition duration-300 shadow-xl rounded-lg col-span-12 sm:col-span-6 xl:col-span-3 intro-y bg-white"
+                                        href="#">
+                                        <div class="p-5">
+                                            <div class="flex justify-between">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-pink-600"
+                                                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z" />
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z" />
+                                                </svg>
+                                                <div
+                                                    class="bg-yellow-500 rounded-full h-6 px-2 flex justify-items-center text-white font-semibold text-sm">
+                                                    <span class="flex items-center">30%</span>
+                                                </div>
+                                            </div>
+                                            <div class="ml-2 w-full flex-1">
+                                                <div>
+                                                    <div class="mt-3 text-3xl font-bold leading-8">4.510</div>
+                                                    <div class="mt-1 text-base text-gray-600">Item Sales</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <a class="transform  hover:scale-105 transition duration-300 shadow-xl rounded-lg col-span-12 sm:col-span-6 xl:col-span-3 intro-y bg-white"
+                                        href="#">
+                                        <div class="p-5">
+                                            <div class="flex justify-between">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-green-400"
+                                                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" />
+                                                </svg>
+                                                <div
+                                                    class="bg-blue-500 rounded-full h-6 px-2 flex justify-items-center text-white font-semibold text-sm">
+                                                    <span class="flex items-center">30%</span>
+                                                </div>
+                                            </div>
+                                            <div class="ml-2 w-full flex-1">
+                                                <div>
+                                                    <div class="mt-3 text-3xl font-bold leading-8">4.510</div>
+
+                                                    <div class="mt-1 text-base text-gray-600">Item Sales</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="w-96 h-80 transform  hover:scale-105 transition duration-300 shadow-xl rounded-lg bg-white" style={{marginTop : '50px',marginLeft : '20px'}}>
+                                <canvas style={{maxWidth : '500px',maxHeight:'260px',backgroundColor : '#369bf0',marginLeft : '20px',marginBottom:'100px'}} class="bg-gray-25 shadow-lg p-4 rounded-lg relative bg-clip-border mx-4 rounded-xl overflow-hidden text-white shadow-blue-500/40 shadow-lg -mt-6" ref={chartRef} id="myChart" ></canvas>
+                            </div>
+                            <div class="w-96 h-80 transform  hover:scale-105 transition duration-300 shadow-xl rounded-lg bg-white" style={{marginLeft : '350px',marginTop : '50px'}}>
+                                <canvas style={{maxWidth : '500px',maxHeight:'250px',backgroundColor : '#e43170',marginLeft : '20px',marginBottom:'100px'}} class ="bg-gray-25 shadow-lg p-4 rounded-lg relative bg-clip-border mx-4 rounded-xl overflow-hidden text-white shadow-blue-500/40 shadow-lg -mt-6" ref={chartRef1} id="myChart1" ></canvas>
+                            </div>
+                            <div class="w-96 h-80 transform  hover:scale-105 transition duration-300 shadow-xl rounded-lg bg-white" style={{marginLeft : '680px',marginTop : '50px'}}>
+                            <canvas style={{maxWidth : '500px',maxHeight:'260px',backgroundColor : '#5eb462',marginLeft : '20px',marginBottom:'100px'}} class="bg-gray-25 shadow-lg p-4 rounded-lg relative bg-clip-border mx-4 rounded-xl overflow-hidden text-white shadow-blue-500/40 shadow-lg -mt-6" ref={chartRef2} id="myChart2" ></canvas>
+
+                            </div>
+
+
+                            </div>
+                            </div>
+                            </div>
+                            
         </>
   );
   }
