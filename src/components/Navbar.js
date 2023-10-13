@@ -33,10 +33,10 @@ const Navbar = ({session, logout}) => {
   
   const adminLi = [
     ["Home", "images/dashboard.svg"],
-    ["Create User", "images/create-user.svg"],
+    ["Create Employee", "images/create-user.svg"],
     ["Show Users", "images/show-users.svg"],
-    ["Pending Memberships", "images/member.svg"],
-    ["Completed Memberships", "images/Magazine.svg"],  
+    ["Pending Memberships", "images/pending.svg"],
+    ["Approved Memberships", "images/Magazine.svg"],  
     ["All Memberships", "images/member.svg"],
     ["Log Out", "images/signout.svg"]
   ];
@@ -44,20 +44,29 @@ const Navbar = ({session, logout}) => {
   const approverLi = [
   ["Home", "images/dashboard.svg"],
   ["Profile", "images/profile.svg"],
-  ["Pending Memberships", "images/member.svg"],
-  ["Completed Memberships", "images/Magazine.svg"],
+  ["Pending Memberships", "images/pending.svg"],
+  ["Approved Memberships", "images/Magazine.svg"],
+  ["Log Out", "images/signout.svg"]];
+  
+  const magazineManagerLi = [
+  ["Home", "images/dashboard.svg"],
+  ["Profile", "images/profile.svg"],
+  ["Upload Magazine", "images/Magazine.svg"],
+  ["Show Magazines", "images/Magazine.svg"],
   ["Log Out", "images/signout.svg"]];
 
-    const [loader, setLoader] = useState(false)
-    
-    const [activeClass, setActiveClass] = useState("Home")
+  const [loader, setLoader] = useState(false)
+  
+  const [activeClass, setActiveClass] = useState("Home")
 
   useEffect(() => {
     if(session.typeOfUser === "approver"){
       setLi(approverLi)
     } else if(session.typeOfUser === "admin"){
       setLi(adminLi)
-    }else{
+    } else if (session.typeOfUser == "magazine-manager") {
+      setLi(magazineManagerLi)
+    } else {
       setLi(memberLi)
     }
   }, [])
@@ -141,7 +150,7 @@ const Navbar = ({session, logout}) => {
               {item[0]}
             </li>
             {showTooltip === i && (
-              <div className="tooltip">
+              <div className="tooltip" style={{zIndex:99}}>
                 {item[0]}
               </div>
             )}

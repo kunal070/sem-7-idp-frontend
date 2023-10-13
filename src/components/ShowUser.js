@@ -5,7 +5,6 @@ import axios from 'axios'; // Import Axios
 import { toast } from 'react-toastify';
 
 import CircleLoader from './CircleLoader';
-import Loader from './Loader';
 
 
 
@@ -81,26 +80,27 @@ const ShowUser = () => {
           const response = await axios.delete(`${process.env.REACT_APP_BASE_URL}/admin/delete-user/${employeePhone}`);
           console.log("DELETE USER: ", response.data);
           toast(response.data.message);
-          setLoader(false)
           
           if (response.data.success) {
-              fetchData();
+            fetchData();
           }
-      } catch (error) {
+        } catch (error) {
           // Handle any errors that occur during the delete operation
           console.error("Error deleting user:", error);
           // You can show an error message to the user here if needed.
-      }
+        }
+        setLoader(false)
   }  
 
     useEffect(() => {
         fetchData();
     }, [])
-
+    
+  
     return (
         <>
         <div className="pt-4 flex items-center flex-col">
-        <h2 className='py-4 font-bold text-3xl my-4' style={{color:"#0f3c69"}}>All Users</h2>
+        <h2 className='py-4 font-bold text-3xl my-4' style={{color:"#0f3c69"}}>Employee's Info</h2>
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
             <table className="w-full text-sm text-left text-black" style={{margin:'0 0'}}>
                 <thead className="text-xs uppercase" style={{backgroundColor: '#0f3c69', color:"white"}}>
@@ -108,7 +108,7 @@ const ShowUser = () => {
                       <th className='px-6 py-3'>SR No</th>
                       <th className='px-6 py-3'>User Name</th>
                       <th className='px-6 py-3'>User Phone</th>
-                      <th className='px-6 py-3'>User Email</th>
+                      {/* <th className='px-6 py-3'>User Email</th> */}
                       <th className='px-6 py-3'>Type Of User</th>
                       <th className='px-6 py-3'>Pending Applications</th>
                       <th className='px-6 py-3'>Actions</th>
@@ -127,11 +127,11 @@ const ShowUser = () => {
                         <td className='px-6 py-3'>{(currentPage-1)*5 + (index + 1)}</td>
                         <td className='px-6 py-3'>{user.name}</td>
                         <td className='px-6 py-3'>{user.phone}</td>
-                        <td className='px-6 py-3'>{user.email}</td>
+                        {/* <td className='px-6 py-3'>{user.email}</td> */}
                         <td className='px-6 py-3'>{user.typeOfUser}</td>
-                        <td className='px-6 py-3'>{user.totalMemberships - user.completedMemberships}</td>
+                        <td className='px-6 py-3 text-center'>{user.totalMemberships - user.completedMemberships}</td>
                         <td className='px-6 py-3'>
-                          <button className='mt-1 text-white bg-[#0F3C69] focus:ring-4 focus:outline-none focus:ring-teal-300 font-medium rounded-lg text-sm text-center px-5 py-2.5 mr-2 mb-2' type="button" onClick={() => deleteUser(user.phone)}><b>Delete</b></button>
+                          <button className='text-white bg-[#0F3C69] font-medium rounded-lg text-sm text-center px-5 py-2.5 mr-2 mb-2' type="button" onClick={() => deleteUser(user.phone)}><b>Delete</b></button>
                         </td>
                       </tr>
                     ))
@@ -173,7 +173,7 @@ const ShowUser = () => {
         </div>
       </>
     )
-            
+          
 }
 
 export default ShowUser 

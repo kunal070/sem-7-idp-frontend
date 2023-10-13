@@ -121,7 +121,7 @@ const MembershipTable = ({ type }) => {
                       <td className='px-6 py-3'>{item.member.memberId}</td>
                       <td className='px-6 py-3'>{item.membershipStatus}</td>
                       <td className='px-6 py-3'>
-                        <button className='mt-1 text-white bg-[#0F3C69] focus:ring-4 focus:outline-none focus:ring-teal-300 font-medium rounded-lg text-sm text-center px-5 py-2.5 mr-2 mb-2' type="button" onClick={() => openMembership(item.member.phone)}><b>Open</b></button>
+                        <button className='text-white bg-[#0F3C69] font-medium rounded-lg text-sm text-center px-5 py-2.5 mr-2 mb-2' type="button" onClick={() => openMembership(item.member.phone)}><b>Open</b></button>
                       </td>
                     </tr>
                   ))
