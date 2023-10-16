@@ -370,6 +370,7 @@ const CompanyForm3 = ({session}) => {
                     { ...other, companyProducts, companyERDARequiredServices },
                     { headers: { "Content-Type": "multipart/form-data" } }
                 );
+                console.log("response: ", response.data)
                 toast(response.data.message);
                 setLoader(false)
 

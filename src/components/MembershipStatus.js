@@ -87,6 +87,7 @@ const MembershipStatus = ({ session }) => {
             if(response.data.success){
                 action.resetForm()
             }
+            fetchData()
         }
     })
 
@@ -231,7 +232,7 @@ const MembershipStatus = ({ session }) => {
 
             <div style={{display : 'flex', flexDirection : 'row'}}>
             <p className='text-black b'>Objective for Membership : </p>
-            <p className='text-black' style ={{marginLeft : '5px',paddingLeft : '11.1rem'}}> {data.companyERDAObjective}</p>
+            <p className='text-black' style ={{marginLeft : '5px',paddingLeft : '6.1rem'}}> {data.companyERDAObjective}</p>
             </div>
 
             <div style={{display : 'flex', flexDirection : 'row'}}>
@@ -266,6 +267,14 @@ const MembershipStatus = ({ session }) => {
             <p className='text-black b'>Membership status : </p>
             <p className='text-black'style ={{marginLeft : '5px',paddingLeft : '9.68rem'}}>{data.membershipStatus}</p>
             </div>
+            <div style={{display : 'flex', flexDirection : 'row'}}>
+            <p className='text-black b'>Membership ID : </p>
+            <p className='text-black'style ={{marginLeft : '5px',paddingLeft : '11.7rem'}}>{data?.membershipId}</p>
+            </div>
+            <div style={{display : 'flex', flexDirection : 'row'}}>
+            <p className='text-black b'>Member ID : </p>
+            <p className='text-black'style ={{marginLeft : '5px',paddingLeft : '14rem'}}>{data?.member?.memberId}</p>
+            </div>
 
             <div style={{display : 'flex', flexDirection : 'row'}}>
             <p className='text-black b'>Payment Status : </p>
@@ -287,7 +296,7 @@ const MembershipStatus = ({ session }) => {
             {/* by submitting this from by a member, membership application will go under pending stage */}
             {((data?.membershipStatus == "draft" || data?.membershipStatus == "reverted") && data?.member?.phone == session.phone ) ? 
                 <div style = {{width : '70%', margin:'20px auto', display:'flex', flexDirection:'column'}}>
-                    <div style={{margin:"20px 0px"}}>
+                    <div style={{margin:"20px 0px", display:'flex'}}>
                         <input type="checkbox" id="Yes" name="Yes" value="Yes" checked={isChecked} onChange={handleCheckboxChange}/>
                         <label htmlFor="yes" style={{color: '#1300B3',marginLeft : 10}}>By submitting this application, I agree to abide by the terms and conditions set forth by the company and understand that my submission constitutes a legally binding affirmation of the statements made herein.</label><br/>
                     </div>

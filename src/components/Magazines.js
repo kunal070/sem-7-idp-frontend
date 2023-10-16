@@ -39,16 +39,18 @@ const Magazines = () => {
 
 
   return (
-    <div className='w-2/3 scroll-bar-none' style={{margin:"auto"}}>
+    <div className='' style={{margin:"auto"}}>
     <div id="carouselExampleInterval" className="carousel slide" data-bs-ride="carousel" style={{maxWidth : '100%', overflow:'hidden', margin : 'auto'}}>
             <div className="carousel-inner">
                 {data?.map((magazine, index) => {
                     return (
-                        <div className={index == 0 ? `carousel-item active`: `carousel-item`} style={{cursor:'pointer'}} data-bs-interval="4000" onClick={() => openMagazine(magazine)} >
-                            <Document loading={<div className='flex justify-center items-center' style={{width:'100%', height:'250px'}}> <CircleLoader/> </div>} file={magazine.file}> 
-                                <Page pageNumber={1} />
-                            </Document>
-                            <p className='text-center' style={{color:'#0f3c69'}}><b>{magazine.name}</b></p>
+                        <div className={index == 0 ? `carousel-item active`: `carousel-item`}  style={{cursor:'pointer'}} data-bs-interval="4000" onClick={() => openMagazine(magazine)} >
+                            {/* <div style={{cursor:'pointer', width:"300px", height:"300px", padding:'10px', backgroundColor:'blue'}}> */}
+                                <Document loading={<div className='flex justify-center items-center' style={{width:'100%', height:'100%'}}> <CircleLoader/> </div>} file={magazine.file}>
+                                    <Page pageNumber={1} />
+                                </Document>
+                            {/* </div> */}
+                            <p className='text-center' style={{color:'#0f3c69', zIndex:99}}><b>{magazine.name}</b></p>
                         </div>
                     )
                 })}
