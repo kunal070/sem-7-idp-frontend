@@ -200,7 +200,7 @@ function EmployeeDashboard() {
                             </div>
                                 <canvas style={{maxWidth : '740px',maxHeight:'330px',backgroundColor : '#369bf0',marginLeft : '1px',marginTop : '40px',padding : '15px 15px 15px 15px',borderColor : '2px solid black'}} class="bg-gray-25 shadow-lg rounded-lg rounded-xl overflow-hidden text-white shadow-blue-500/40 shadow-lg" ref={chartRef} id="myChart" ></canvas>
                                 <div style={{ width: '550px', height: '329px', marginLeft: '683px', marginTop: '41.1px', backgroundColor: 'white', borderRadius: '10px', color: 'black', overflow: 'auto', position: 'relative' }} class="bg-gray-25 shadow-lg rounded-lg rounded-xl text-white shadow-white-500/40 shadow-lg">
-                                <h2 style={{ textAlign: 'center', marginBottom: '20px', color: 'black', marginTop: '15px', position: 'sticky', top: '0', zIndex: '1', backgroundColor: 'white', borderBottom: '1px solid black',fontWeight : 'bold',color : '#0F3C69' }}>Membership's Status</h2>
+                                <h2 style={{ textAlign: 'center', marginBottom: '20px', color: 'black', marginTop: '15px', position: 'sticky', top: '0',  backgroundColor: 'white', borderBottom: '1px solid black',fontWeight : 'bold',color : '#0F3C69' }}>Membership's Status</h2>
                                 <div style={{ overflowX: 'auto', overflowY: 'scroll', maxHeight: 'calc(100% - 70px)',color : '#0F3C69' ,marginTop:'10px'}}>
                                <table style={{ marginLeft: '10px',marginRight : '10px', marginBottom : '15px',width: '96%', borderCollapse: 'collapse' }}>
                                   <thead>

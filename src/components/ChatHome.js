@@ -81,12 +81,16 @@ const ChatHome = ({ session, socket }) => {
     const [message, setMessage] = useState(""); // To store the currently typed message
     const [attachment, setAttachment] = useState("")
 
+    useEffect(() => {
+      localStorage.removeItem("currentChat")
+    }, [])
+
     const findMember = async () => {
         axios.defaults.withCredentials = true
         const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/chat/search-users`, {}, {"headers": {"Content-Type":"application/json"}})
         console.log(response.data)
         if(response.data.success){
-          setShowModal(true)        
+          setShowModal(true)
           setAvailableUsers(response.data.users)
         } else {
           toast(response.data.message)
