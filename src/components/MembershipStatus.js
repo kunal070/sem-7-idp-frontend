@@ -189,7 +189,7 @@ const MembershipStatus = ({ session }) => {
             <p className='text-black b'>Company Registration Document:</p>
             <p className='text-black'>
             <div style={{paddingLeft:20, paddingBottom:28.3}}>
-            <Link to={data.companyRegistrationProofAttachment?.file} target="_blank" rel="noopener noreferrer"> <button type="button" className='view' style={{ borderColor: '#0f3c69', backgroundColor: '#0f3c69', color: 'white'}} >View PDf</button> </Link>
+            <Link to={`${data.companyRegistrationProofAttachment?.file}#toolbar=0`} target="_blank" rel="noopener noreferrer"> <button type="button" className='view' style={{ borderColor: '#0f3c69', backgroundColor: '#0f3c69', color: 'white'}} >View PDf</button> </Link>
                 </div>
             </p>
             </div>
@@ -259,7 +259,7 @@ const MembershipStatus = ({ session }) => {
             <div style={{display : 'flex', flexDirection : 'row'}}>
             <p className='text-black b'>Turnover Sheet : </p>
             <div style={{paddingBottom:4,marginTop : 3,paddingLeft : '12.05rem'}}>
-            <Link to={data?.turnOverBalanceSheet} target="_blank" rel="noopener noreferrer"> <button type="button" className='view' style={{ borderColor: '#0f3c69', backgroundColor: '#0f3c69', color: 'white'}} >View PDf</button> </Link>
+            <Link to={`${data?.turnOverBalanceSheet}#toolbar=0`} target="_blank" rel="noopener noreferrer"> <button type="button" className='view' style={{ borderColor: '#0f3c69', backgroundColor: '#0f3c69', color: 'white'}} >View PDf</button> </Link>
             </div>
             </div>
 
