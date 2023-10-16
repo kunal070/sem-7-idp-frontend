@@ -39,7 +39,8 @@ const Magazines = () => {
 
 
   return (
-    <div className='' style={{margin:"auto"}}>
+    
+    <div className='' style={{margin:"auto" }}>
     <div id="carouselExampleInterval" className="carousel slide" data-bs-ride="carousel" style={{maxWidth : '100%', overflow:'hidden', margin : 'auto'}}>
             <div className="carousel-inner">
                 {data?.map((magazine, index) => {
@@ -50,7 +51,9 @@ const Magazines = () => {
                                     <Page pageNumber={1} />
                                 </Document>
                             {/* </div> */}
-                            <p className='text-center' style={{color:'#0f3c69', zIndex:99}}><b>{magazine.name}</b></p>
+                            <div style={{flexDirection:"row"}}>
+                            <p className='text-center' style={{color:'#0f3c69', zIndex:99, background:"white"}}><b>Magazine Name:  {magazine.name}</b></p>
+                            </div>
                         </div>
                     )
                 })}

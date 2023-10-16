@@ -308,8 +308,8 @@ input {
   display: none;  /* Safari and Chrome */
 }
 
-.react-pdf__Page__canvas {
+/* .react-pdf__Page__canvas {
   margin: 0 auto;
   width: 500px !important;
   height: 500px !important;
-}
+} */
