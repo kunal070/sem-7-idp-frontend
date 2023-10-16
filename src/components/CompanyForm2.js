@@ -40,6 +40,7 @@ const CompanyForm = ({session}) => {
     };
 
     const preLoadData = async () => {
+        setLoader(true)
         try {
             const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/membership/membership/${session.phone}`)
             // console.log(response.data)
@@ -60,6 +61,7 @@ const CompanyForm = ({session}) => {
         } catch (error) {
             console.log(error)
         }
+        setLoader(false)
     }
 
     useEffect(() => {

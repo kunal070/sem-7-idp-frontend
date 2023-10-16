@@ -453,36 +453,13 @@ const ChatHome = ({ session, socket }) => {
     if(file.type == "image") {
       setShowImage({showImage: true, url:file.url})
     } else if(file.type == "pdf") {
-      window.open(file.url)
+      window.open(file.url + "#toolbar=0")
     }
   }
   
   const closeImageShow = () => {
     setShowImage({})
   }
-  
-  // useEffect(() => {
-  //   window.addEventListener("blur", onWindowBlur);
-  // }, [])
-
-
-
-  // const onWindowBlur = () => {
-  //   if (iframeMouseOver) {
-  //     window.open(PDFUrl)
-  //   }
-  // };
-
-  // const handleOnMouseOver = (url) => {
-  //   setPDFUrl(url)
-  //   setIframeMouseOver(true)
-  // };
-  
-  // const handleOnMouseOut = () => {
-  //   setPDFUrl()
-  //   window.focus(); // Make sure to set focus back to page
-  //   setIframeMouseOver(false);
-  // };
 
   if(!socket || session.isApproved == false) {
     return (

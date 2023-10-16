@@ -93,11 +93,11 @@ function MemberDashboard() {
       <div class="grid" style={{marginLeft : '53.5px',background:'#f5f7f8',maxHeight:'120vh',padding:'10px 65px 59px',color:'black'}}>
                     <div class="grid grid-cols-12 gap-6">
                         <div class="grid grid-cols-12 col-span-12 gap-6 xxl:col-span-9">
-                            <div class="col-span-12 mt-8">
+                            <div class="col-span-12">
                                 <div class="flex items-center h-10 intro-y">
                                 <h2 class="mr-5 truncate text-[#0F3C69]" style={{fontWeight: 'bold',fontSize : '24px'}}>Dashboard</h2>
                                 </div>
-                                <div class="grid grid-cols-12 gap-6 mt-5">
+                                <div class="grid grid-cols-12 gap-6">
                                     <a class="transform  hover:scale-105 transition duration-300 shadow-xl rounded-lg col-span-12 sm:col-span-6 xl:col-span-3 intro-y bg-white"
                                         href="#">
                                         <div class="p-5">

@@ -42,6 +42,8 @@ function Booking({ session }) {
   const handleLabChange = (event) => {
     setLab(event.target.value);
     setCounter(1)
+    setDate('')
+    setTime('')
   };
 
 
@@ -54,6 +56,7 @@ function Booking({ session }) {
   const handleDateChange = (date) => {
     setDate(date);
     setCounter(2)
+    setTime('')
   };
 
   useEffect(() => {
@@ -92,10 +95,10 @@ function Booking({ session }) {
         setDate('')
         setTime('')
         fetchData()
+        messageRef.current.value = ""
       }
     } catch (error) {
       console.log("err: ", error)
-      toast(error.message)
     }
   }
 
@@ -173,6 +176,11 @@ function Booking({ session }) {
 
   return (
     <div className='flex justify-center items-center' style={{width:"80%", flexDirection:'column', margin:'auto'}}>
+      <div style={{marginLeft : '15px',marginTop:"35px", marginBottom:"15px", textTransform: "uppercase", color: "#0F3C69", fontSize:"25px"}}>
+        <div style={{ textAlign:"center", justifyContent:"center", width:'100%'}}>
+            <p style ={{marginLeft : '5px', textAlign:"center", justifyContent:"center", width:'60vw'}}><b> Laboratory Bookings </b></p>
+        </div>
+      </div>
       <div style={{ marginTop : '50px', color: 'black' }}>
       <ActivityCalendar
         theme={explicitTheme}
@@ -214,9 +222,13 @@ function Booking({ session }) {
            {calendarItems}
            <ReactTooltip id="react-tooltip" />
 
-      
+      <div style={{marginLeft : '15px',marginTop:"35px", marginBottom:"15px", textTransform: "uppercase", color: "#0F3C69", fontSize:"25px"}}>
+        <div style={{ textAlign:"center", justifyContent:"center", width:'100%'}}>
+            <p style ={{marginLeft : '5px', marginTop:"40px", textAlign:"center", justifyContent:"center", width:'60vw'}}><b> Book Laboratory </b></p>
+        </div>
+      </div>
       <div style={{display: 'flex', flexDirection: 'row'}}>
-      <div style={{ marginLeft: '0px', padding: '100px 50px 0px 0px',color :'black' }}>
+      <div style={{ marginLeft: '0px', padding: '5px 50px 0px 0px',color :'black' }}>
       <select
         name="companyType"
         value={lab}
@@ -246,12 +258,12 @@ function Booking({ session }) {
         
       {/* < div style={{padding : '10px 10px 0px 530px',color : 'black'}}>
         <DatePicker selected={startDate} onChange={handleDateChange} /> */}
-      <div style={{ padding: '95px 50px 0px 0px',color :'black' }}>
+      <div style={{ padding: '0px 50px 0px 0px',color :'black' }}>
       {counter > 0 ? (
         <DatePicker selected={date} placeholderText={'Please select a date'} monthsShown={2} excludeDates={disabledDates} minDate={moment().toDate()} maxDate={moment().add(30, 'days').toDate()} onChange={handleDateChange} />
       ) : <div style={{width:'220px'}}></div>}
       </div>
-      <div style={{ padding: '100px 0px 0px 0px',color :'black' }}>
+      <div style={{ padding: '5px 0px 0px 0px',color :'black' }}>
       {counter > 1 ? (<select
         name="companyType"
         value={time}
