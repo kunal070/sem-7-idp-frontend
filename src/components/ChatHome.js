@@ -7,6 +7,18 @@ import ChatLoader from './ChatLoader'
 import Loader from './Loader';
 import { connect } from 'react-redux';
 import '../companyform.css'
+import AttachmentImage from './AttachmentImage';
+
+// import PDFViewer from 'pdf-viewer-reactjs'
+// import { PDFViewer } from 'react-view-pdf';
+
+import { pdfjs, Document, Page, Outline } from 'react-pdf';
+
+pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+  'pdfjs-dist/build/pdf.worker.min.js',
+  import.meta.url,
+).toString();
+
 
 const mapStateToProps = ({ session }) => ({
   session
@@ -30,7 +42,13 @@ const ChatHome = ({ session, socket }) => {
     const [currentParticipant, setCurrentParticipant] = useState({})
 
     const [ currentUserImage , setCurrentUserImage ] = useState("images/dp.jpg")
+
+    // show attachment image in big screen
+    const [showImage, setShowImage] = useState({})
  
+    // onclick event on iframe
+    const [iframeMouseOver , setIframeMouseOver] = useState(false)
+    const [PDFUrl, setPDFUrl] = useState()
 
     const [availableUsers ,setAvailableUsers] = useState([])
 
@@ -256,10 +274,6 @@ const ChatHome = ({ session, socket }) => {
    * Handles the event when a new message is received.
    */
   const onMessageReceived = (message) => {
-    console.log("message received...: ", message)
-    console.log("Message ID: ", message?.chat)
-    console.log("Chat ID: ", currentChat?._id)
-    console.log("isCurrentChat:", message?.chat !== currentChat?._id)
     // Check if the received message belongs to the currently active chat
     if (message?.chat !== currentChat?._id) {
       // If not, update the list of unread messages
@@ -274,18 +288,19 @@ const ChatHome = ({ session, socket }) => {
   };
 
   const onNewChat = (chat) => {
-    console.log("New chat arrived")
+    console.log("New chat arrived: ", chat)
     setChats((prev) => [chat, ...prev]);
   };
 
   // This function handles the event when a user leaves a chat.
   const onChatLeave = (chat) => {
-    console.log("LEAVE CHAT: ", chat)
-    console.log("LEAVE CHAT: ", currentChat)
+    let currentCHT = JSON.parse(localStorage.getItem("currentChat"))
+
     // Check if the chat the user is leaving is the current active chat.
-    if (chat._id === currentChat?._id) {
+    if (chat._id === currentCHT?._id) {
       // If the user is in the group chat they're leaving, close the chat window.
       setCurrentChat(null);
+      localStorage.setItem("currentChat", null)
       // Remove the currentChat from local storage.
       // LocalStorage.remove("currentChat");
     }
@@ -300,7 +315,6 @@ const ChatHome = ({ session, socket }) => {
     // we will join the chat when user clicks on button
     // Retrieve the current chat details from local storage.
     const _currentChat = JSON.parse(localStorage.getItem("currentChat"))
-
     // If there's a current chat saved in local storage:
     if (_currentChat) {
       // Set the current chat reference to the one from local storage.
@@ -318,10 +332,9 @@ const ChatHome = ({ session, socket }) => {
 
   // This useEffect handles the setting up and tearing down of socket event listeners.
   useEffect(() => {
-    console.log("CHATS: ", chats)
     // If the socket isn't initialized, we don't set up listeners.
     if (!socket) return;
-    console.log("socket called: ", socket)
+
     // Set up event listeners for various socket events:
     // Listener for when the socket connects.
     socket.on(CONNECTED_EVENT, onConnect);
@@ -385,6 +398,7 @@ const ChatHome = ({ session, socket }) => {
     setCurrentParticipant(currentChat?.participants.find((participant) => participant._id != session._id))
     getMessages()
     fetchCurrentChatProfileImages()
+    localStorage.setItem("currentChat", JSON.stringify(currentChat))
   }, [currentChat])
 
   const getParticipant = (chat) => {
@@ -393,7 +407,6 @@ const ChatHome = ({ session, socket }) => {
 
   const scrollToLastChat = () => {
     const lastChildElement = ref.current?.lastElementChild;
-    console.log("LAST: ", lastChildElement)
     lastChildElement?.scrollIntoView({ behavior: 'smooth' });
   };
 
@@ -431,6 +444,41 @@ const ChatHome = ({ session, socket }) => {
     attachmentRef.current.click();
   }
 
+  const openAttachment = (file) => {
+    console.log("on click: ", file)
+    if(file.type == "image") {
+      setShowImage({showImage: true, url:file.url})
+    } else if(file.type == "pdf") {
+      window.open(file.url)
+    }
+  }
+  
+  const closeImageShow = () => {
+    setShowImage({})
+  }
+  
+  // useEffect(() => {
+  //   window.addEventListener("blur", onWindowBlur);
+  // }, [])
+
+
+
+  // const onWindowBlur = () => {
+  //   if (iframeMouseOver) {
+  //     window.open(PDFUrl)
+  //   }
+  // };
+
+  // const handleOnMouseOver = (url) => {
+  //   setPDFUrl(url)
+  //   setIframeMouseOver(true)
+  // };
+  
+  // const handleOnMouseOut = () => {
+  //   setPDFUrl()
+  //   window.focus(); // Make sure to set focus back to page
+  //   setIframeMouseOver(false);
+  // };
 
   if(!socket || session.isApproved == false) {
     return (
@@ -446,8 +494,7 @@ const ChatHome = ({ session, socket }) => {
         <Loader/>
     </div>
     )
-  }
-  else{
+  } else {
   return (
     <div style={{ padding:"0 65px", maxHeight:'100vh', overflow:'hidden', background:'white' }}>
       {showModal && (
@@ -508,8 +555,12 @@ const ChatHome = ({ session, socket }) => {
         </div>
       )}
 
+    { showImage.showImage ?
+      <AttachmentImage url={showImage.url} closeFunc={closeImageShow} /> : null
+    }
+
     <div className={showModal ?  `opacity flex` : 'flex'}>
-      <div  style={{width:"30%", height:'85vh', overflowY:"auto", marginTop:'8px'}}>
+      <div  style={{width:"30%", height:'85vh', marginTop:'10px'}}>
         <div style={{position : "absolute",bottom : '10px'}}>
           <button name="fine-member" className='plus-button' style={{ width: "50px", height:"50px" , background:"#0F3C69", borderRadius:'100%', fontSize:'30px', fontWeight:'600' }} onClick={findMember}> + </button>
         </div>
@@ -562,8 +613,21 @@ const ChatHome = ({ session, socket }) => {
                 return (
                   <>
                   <div key={index} style={{maxWidth : "49%",overflowWrap : 'break-word' , background : 'gray' ,margin : "2px 0px", alignSelf : 'end',borderRadius : '10px', fontSize:"13px", letterSpacing:"0.5px"}}>
-                      {msg.content && <p style={{color:"white", margin:"10px"}} >{msg.content}</p>}
-                  {msg.attachment &&  (msg.attachment.type == "pdf" ? <iframe src={msg.attachment.url} width="100%" height="100%" /> : <div style={{ margin: "5px 0",boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px"}}> <img style={{ width:'300px', height:'300px', borderRadius:'5px' }} src={msg.attachment.url} /> </div> )}
+                    {msg.content && <p style={{color:"white", margin:"10px"}} >{msg.content}</p>}
+                    {msg.attachment && 
+                      <div onClick={() => openAttachment(msg.attachment)} style={{cursor:'pointer', margin: "5px 0",boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",}}>
+                        {
+                          msg.attachment.type == "pdf" ? 
+                            <Document loading={<div className='flex justify-center items-center' style={{width:'300px', height:'300px'}}> <CircleLoader/> </div>} file={msg.attachment.url}> 
+                              <Page pageNumber={1} /> 
+                            </Document>
+                             : 
+                            <div style={{ margin: "5px 0",boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px", cursor:"zoom-in"}} onClick={()=> openAttachment(msg.attachment)}> 
+                              <img style={{ width:'300px', height:'300px', borderRadius:'5px' }} src={msg.attachment.url} /> 
+                            </div>
+                        }
+                      </div>
+                    }
                   </div>
                 </>
               )
@@ -572,7 +636,20 @@ const ChatHome = ({ session, socket }) => {
                 <>
                 <div key={index} style={{maxWidth : "49%" ,overflowWrap : 'break-word',lineHeight:'1.58', background : '#0F3C69' ,margin : "2px 0px", alignSelf : "start",borderRadius : '10px', fontSize:"13px", letterSpacing:"0.5px"}}>      
                   {msg.content && <p style={{color:"white", margin:"10px"}} className={msg.sender._id === session._id ? "text-left" : ""} >{msg?.content}</p>}
-                  {msg.attachment &&  (msg.attachment.type == "pdf" ? <iframe src={msg.attachment.url} width="100%" height="100%" />  : <div style={{ margin: "5px 0",boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px"}}> <img style={{ width:'300px', height:'300px', borderRadius:'5px' }} src={msg.attachment.url} /> </div>)}
+                  {msg.attachment && 
+                    <div onClick={() => openAttachment(msg.attachment)} style={{cursor:'pointer', margin: "5px 0",boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",}}>
+                      {
+                        msg.attachment.type == "pdf" ? 
+                          <Document loading={<CircleLoader/>} file={msg.attachment.url}> 
+                            <Page pageNumber={1} /> 
+                          </Document>
+                            : 
+                          <div style={{ margin: "5px 0",boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px", cursor:"zoom-in"}} onClick={()=> openAttachment(msg.attachment)}> 
+                            <img style={{ width:'300px', height:'300px', borderRadius:'5px' }} src={msg.attachment.url} /> 
+                          </div>
+                      }
+                    </div>
+                  }
                 </div>
               </>
             )
@@ -580,12 +657,12 @@ const ChatHome = ({ session, socket }) => {
             })}
           </div>
         }
-          <div className='inputMsg' style={{width:'107.8%', display:'flex', justifyContent:'space-evenly',  alignItems:'center'}}>
-            <div style={{width:'60px', height:"60px", marginTop:'20px' }}>
+          <div className='inputMsg' style={{width:'107.8%', display:'flex', justifyContent:'space-evenly',  alignItems:'center', padding: "10px 10px 0px 10px"}}>
+            <div style={{width:'10%', height:"60px"}} className='flex justify-center items-center'>
               <img
                 src='/images/attach.svg'
                 alt='Send'
-                style={{ width: '65%', cursor: 'pointer', margin:"2px 5px 15px 15px"}}
+                style={{ width: '40px', cursor: 'pointer'}}
                 className='chat-pointer'
                 onClick={clickFileInput}
                 />
@@ -596,7 +673,7 @@ const ChatHome = ({ session, socket }) => {
                   style={{display:'none'}}
                 />
               </div>
-            <div>
+            <div style={{width:'80%'}} className='flex justify-center items-center'>
               <input
                 className='chat-input'
                 placeholder="Type a message"
@@ -607,14 +684,14 @@ const ChatHome = ({ session, socket }) => {
                     sendChatMessage();
                   }
                 }}
-                style={{width:'800px',  marginLeft: '5px', alignItems:'center'}}
+                style={{width:'100%',  marginLeft: '5px', alignItems:'center'}}
                 />
             </div>
-            <div style={{width:'60px', height:"60px", marginBottom:'8px'}}>
+            <div style={{width:'10%', height:"60px"}} className='flex justify-center items-center'>
               <img
                 src='/images/sendMsg.svg'
                 alt='Send'
-                style={{ width: '65%', cursor: 'pointer', margin:"15px 15px 15px 5px"}}
+                style={{ width: '40px', cursor: 'pointer'}}
                 className='chat-pointer'
                 onClick={sendChatMessage}
                 />

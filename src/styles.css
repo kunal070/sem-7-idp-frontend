@@ -271,11 +271,45 @@ input {
   border-radius: 50px !important;
 }
 
+.attachment-image{
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 100;
+  background: rgb(15, 60, 105, 0.4);
+}
+
 .chatBack{
   /* width: 50%;
   height: 1000vh; */
   background-image: url('/public/images/chatback.png');
   background-repeat: no-repeat;
-  background-position: 300px center;
+  background-position: center;
   /* background-size: cover; */
+}
+
+.react-pdf__Page__canvas {
+    margin: 0 auto;
+    width: 300px !important;
+    height: 300px !important;
+}
+
+.textLayer {
+  display: none;
+}
+
+.annotationLayer {
+  display: none;
+}
+
+.scroll-bar-none::-webkit-scrollbar { 
+  display: none;  /* Safari and Chrome */
+}
+
+.react-pdf__Page__canvas {
+  margin: 0 auto;
+  width: 500px !important;
+  height: 500px !important;
 }

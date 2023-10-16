@@ -86,7 +86,7 @@ const CreateUser = () => {
     <div className="flex" style={{overflow:'scroll',height : '100vh',justifyContent:'center', alignItems:'center', paddingTop:"85px"}}>
     <center>
         <form onSubmit={handleSubmit} autoComplete='off' className="company-form" style={{color:'black', backgroundColor:'white'}} >
-        <h1 style={{margin:'10',marginLeft : 30, padding:20,fontSize : 22}} className='form-heading' >Add User</h1>
+        <h1 style={{margin:'10',marginLeft : 30, padding:20,fontSize : 22}} className='form-heading' >Create Employee</h1>
                 <div className="form-group flex width-50" >
                     <div className='width-10' style={{marginLeft:'50px'}}>
                         <p className='label' style={{textAlign:'start'}}>Name :</p>

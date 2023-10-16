@@ -27,7 +27,13 @@ import MembershipTable from "./components/MembershipTable";
 import ChatHome from "./components/ChatHome";
 import ShowUser from "./components/ShowUser";
 import MagazineUpload from "./components/MagazineUpload";
-
+import Magazines from "./components/Magazines";
+import Magazine from "./components/Magazine";
+import MemberDashboard from "./components/MemberDashboard";
+import Dashboard from "./components/Dashboard";
+import EmployeeDashboard from "./components/EmployeeDashboard";
+import Booking from "./components/Booking";
+import List from "./components/List";
 
 const mapStateToProps = ({ session }) => ({
   session
@@ -61,7 +67,10 @@ function App({ session }) {
           <Route path="/company-info-3" element={<CompanyForm3/>} />
           <Route path="/membership-status" element={<MembershipStatus/>} />
           <Route path="/membership-table" element={<MembershipTable/>}/>
+          <Route path="/magazine" element={<Magazine/>}/>
+          <Route path="/book" element={<Booking/>}/>
           <Route path="/chat" element={<ChatHome socket={socket} />}/>
+          <Route path="/*" element={<MemberDashboard />}/>
       </Routes>
       </div>
       <ToastContainer />
@@ -74,13 +83,28 @@ function App({ session }) {
         <div className="backImage">
         <Routes>
           <Route path="/profile" element={<Profile/>} />
-          <Route path="/create-user" element={<CreateUser/>} />
+          <Route path="/create-employee" element={<CreateUser/>} />
           <Route path="/show-users" element={<ShowUser/>} />
           <Route path="/pending-memberships" element={<MembershipTable type="pending" />} />
-          <Route path="/approved-memberships" element={<MembershipTable type="completed" />} />
+          <Route path="/completed-memberships" element={<MembershipTable type="completed" />} />
           <Route path="/all-memberships" element={<MembershipTable type="all" />} />
           <Route path="/membership-status" element={<MembershipStatus/>} />
-          <Route path="/magazine-upload" element={<MagazineUpload/>} />
+          <Route path="/*" element={<Dashboard/>} />
+        </Routes>
+        </div>
+        <ToastContainer />
+      </>
+    )
+  } else if(session.typeOfUser == "magazine-manager") {
+    return (
+      <>
+        <Navbar/>
+        <div className="backImage">
+        <Routes>
+          <Route path="/profile" element={<Profile/>} />
+          <Route path="/upload-magazine" element={<MagazineUpload/>} />
+          <Route path="/show-magazines" element={<Magazines/>} />
+          <Route path="/magazine" element={<Magazine/>} />
         </Routes>
         </div>
         <ToastContainer />
@@ -96,6 +120,7 @@ function App({ session }) {
           <Route path="/pending-memberships" element={<MembershipTable type="pending" />} />
           <Route path="/completed-memberships" element={<MembershipTable type="completed" />} />
           <Route path="/membership-status" element={<MembershipStatus/>} />
+          <Route path="/*" element={<EmployeeDashboard/>} />
         </Routes>
         </div>
         <ToastContainer />
@@ -106,6 +131,7 @@ function App({ session }) {
       <>
       <Routes>
         <Route path="/login" element={<CompanyLogin/>} />
+        <Route path="/list" element={<List/>} />
         <Route path="/*" element={<Login/>} />
       </Routes>
       <ToastContainer />

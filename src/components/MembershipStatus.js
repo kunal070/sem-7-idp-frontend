@@ -51,7 +51,6 @@ const MembershipStatus = ({ session }) => {
 
         axios.defaults.withCredentials = true
         const response = await axios.put(`${process.env.REACT_APP_BASE_URL}/membership/apply-for-membership`, {}, {headers:{"Content-Type":"application/json"}})
-        console.log("Apply for membership: ", response.data)
         if(response.data.success) {
             fetchData()
         }
@@ -88,6 +87,7 @@ const MembershipStatus = ({ session }) => {
             if(response.data.success){
                 action.resetForm()
             }
+            fetchData()
         }
     })
 
@@ -232,7 +232,7 @@ const MembershipStatus = ({ session }) => {
 
             <div style={{display : 'flex', flexDirection : 'row'}}>
             <p className='text-black b'>Objective for Membership : </p>
-            <p className='text-black' style ={{marginLeft : '5px',paddingLeft : '11.1rem'}}> {data.companyERDAObjective}</p>
+            <p className='text-black' style ={{marginLeft : '5px',paddingLeft : '6.1rem'}}> {data.companyERDAObjective}</p>
             </div>
 
             <div style={{display : 'flex', flexDirection : 'row'}}>
@@ -259,7 +259,7 @@ const MembershipStatus = ({ session }) => {
             <div style={{display : 'flex', flexDirection : 'row'}}>
             <p className='text-black b'>Turnover Sheet : </p>
             <div style={{paddingBottom:4,marginTop : 3,paddingLeft : '12.05rem'}}>
-            <Link to={data.companyRegistrationProofAttachment?.file} target="_blank" rel="noopener noreferrer"> <button type="button" className='view' style={{ borderColor: '#0f3c69', backgroundColor: '#0f3c69', color: 'white'}} >View PDf</button> </Link>
+            <Link to={data?.turnOverBalanceSheet} target="_blank" rel="noopener noreferrer"> <button type="button" className='view' style={{ borderColor: '#0f3c69', backgroundColor: '#0f3c69', color: 'white'}} >View PDf</button> </Link>
             </div>
             </div>
 
@@ -267,22 +267,36 @@ const MembershipStatus = ({ session }) => {
             <p className='text-black b'>Membership status : </p>
             <p className='text-black'style ={{marginLeft : '5px',paddingLeft : '9.68rem'}}>{data.membershipStatus}</p>
             </div>
+            <div style={{display : 'flex', flexDirection : 'row'}}>
+            <p className='text-black b'>Membership ID : </p>
+            <p className='text-black'style ={{marginLeft : '5px',paddingLeft : '11.7rem'}}>{data?.membershipId}</p>
+            </div>
+            <div style={{display : 'flex', flexDirection : 'row'}}>
+            <p className='text-black b'>Member ID : </p>
+            <p className='text-black'style ={{marginLeft : '5px',paddingLeft : '14rem'}}>{data?.member?.memberId}</p>
+            </div>
 
             <div style={{display : 'flex', flexDirection : 'row'}}>
             <p className='text-black b'>Payment Status : </p>
             <p className='text-black'style ={{marginLeft : '5px',paddingLeft : '11.5rem'}}>{data.paymentStatus  ? "Successfull" : "Pending"}</p> 
             </div>
-
-            
-            {/* <div style={{display:'flex', justifyContent:'center'}}>
-                {data.turnOverBalanceSheet && <embed src={data.turnOverBalanceSheet} width="1000px" height="1000px" />}
-            </div> */}
             </div>
+            
+            {/* if current user is a member of the membership application, then showcase message accordingly */}
+            {
+                (data?.member?.phone == session.phone) && <h1 style={{backgroundColor:"#0f3c69" , padding:"10px 20px", fontWeight:"bold", width:"70%", margin:"50px auto", textAlign:'center'}}>{data?.membershipStatus == "pending" ? "Your membership application is currently in the processing stage at ERDA." : data?.approver?.message}</h1>
+            }
+
+            {/* show reason for approved, rejected & reverted membership for all type of user */}
+            {
+                ((data?.member?.phone != session.phone) && data?.membershipStatus != "pending") ? <h1 style={{backgroundColor:"#0f3c69" , padding:"10px 20px", fontWeight:"bold", width:"70%", margin:"50px auto", textAlign:'center'}}>{data?.approver?.message}</h1> : null
+            }
 
             {/* show this when application is under draft stage or reverted stage && member with their membership logged in */}
+            {/* by submitting this from by a member, membership application will go under pending stage */}
             {((data?.membershipStatus == "draft" || data?.membershipStatus == "reverted") && data?.member?.phone == session.phone ) ? 
                 <div style = {{width : '70%', margin:'20px auto', display:'flex', flexDirection:'column'}}>
-                    <div style={{margin:"20px 0px"}}>
+                    <div style={{margin:"20px 0px", display:'flex'}}>
                         <input type="checkbox" id="Yes" name="Yes" value="Yes" checked={isChecked} onChange={handleCheckboxChange}/>
                         <label htmlFor="yes" style={{color: '#1300B3',marginLeft : 10}}>By submitting this application, I agree to abide by the terms and conditions set forth by the company and understand that my submission constitutes a legally binding affirmation of the statements made herein.</label><br/>
                     </div>
@@ -293,9 +307,10 @@ const MembershipStatus = ({ session }) => {
                 : null
             }
 
-            {(data?.membershipStatus == "pending" && data?.member?.phone == session.phone) ? <h1 style={{backgroundColor:"#0f3c69" , padding:"10px 20px", fontWeight:"bold", width:"70%", margin:"50px auto", textAlign:'center'}}>Your membership application is currently in the processing stage at ERDA.</h1> : null}
 
-            {/* approval form handling */}
+            {/* form for approver */}
+            {/* approver can only approve, reject or revert the form when form is in pending stage */}
+            {/* membership status will change from pending to approved, reverted or rejected accordingly */}
             {(session.phone == data?.approver?.phone && data?.membershipStatus == "pending") ? 
             <div>
                 <div style={{ display:'flex', flexDirection:"column", width:'70%', margin:"auto", color:'black' }}>

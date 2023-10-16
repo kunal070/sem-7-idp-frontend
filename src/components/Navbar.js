@@ -28,15 +28,16 @@ const Navbar = ({session, logout}) => {
     ["Profile", "images/profile.svg"],    
     ["Membership-Form", "images/addmem.svg"],
     ["Chat", "images/chat.svg"],
+    ["Book", "images/lab.svg"],
     ["Log Out", "images/signout.svg"]
   ];
   
   const adminLi = [
     ["Home", "images/dashboard.svg"],
-    ["Create User", "images/create-user.svg"],
+    ["Create Employee", "images/create-user.svg"],
     ["Show Users", "images/show-users.svg"],
     ["Pending Memberships", "images/pending.svg"],
-    ["Approved Memberships", "images/Magazine.svg"],  
+    ["Completed Memberships", "images/Magazine.svg"],  
     ["All Memberships", "images/member.svg"],
     ["Log Out", "images/signout.svg"]
   ];
@@ -45,19 +46,27 @@ const Navbar = ({session, logout}) => {
   ["Home", "images/dashboard.svg"],
   ["Profile", "images/profile.svg"],
   ["Pending Memberships", "images/pending.svg"],
-  ["Approved Memberships", "images/Magazine.svg"],
+  ["Completed Memberships", "images/Magazine.svg"],
+  ["Log Out", "images/signout.svg"]];
+  
+  const magazineManagerLi = [
+  ["Home", "images/dashboard.svg"],
+  ["Profile", "images/profile.svg"],
+  ["Upload Magazine", "images/Magazine.svg"],
   ["Log Out", "images/signout.svg"]];
 
-    const [loader, setLoader] = useState(false)
-    
-    const [activeClass, setActiveClass] = useState("Home")
+  const [loader, setLoader] = useState(false)
+  
+  const [activeClass, setActiveClass] = useState("Home")
 
   useEffect(() => {
     if(session.typeOfUser === "approver"){
       setLi(approverLi)
     } else if(session.typeOfUser === "admin"){
       setLi(adminLi)
-    }else{
+    } else if (session.typeOfUser == "magazine-manager") {
+      setLi(magazineManagerLi)
+    } else {
       setLi(memberLi)
     }
   }, [])
