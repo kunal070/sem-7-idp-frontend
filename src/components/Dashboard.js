@@ -310,15 +310,15 @@ if (chartRef2.current) {
 </div> */}
 
                 
-                <div class="grid" style={{marginLeft : '53.5px',background:'#f5f7f8',maxHeight:'120vh',padding:'10px 65px 59px'}}>
+                <div class="grid" style={{marginLeft : '53.5px',background:'#f5f7f8',maxHeight:'100vh',padding:'10px 65px 59px',color :'black'}}>
                     <div class="grid grid-cols-12 gap-6">
                         <div class="grid grid-cols-12 col-span-12 gap-6 xxl:col-span-9">
                             <div class="col-span-12 mt-8">
-                                <div class="flex items-center h-10 intro-y">
+                                <div class="flex items-center h-9 intro-y">
                                 <h2 class="mr-5 truncate text-[#0F3C69]" style={{fontWeight: 'bold',fontSize : '24px'}}>Dashboard</h2>
                                 </div>
-                                <div class="grid grid-cols-12 gap-6 mt-5">
-                                    <a class="transform  hover:scale-105 transition duration-300 shadow-xl rounded-lg col-span-12 sm:col-span-6 xl:col-span-3 intro-y bg-white"
+                                <div class="grid grid-cols-12 gap-6 mt-3 h-45">
+                                    <a class="transform hover:scale-105 transition duration-300 shadow-xl rounded-lg col-span-6 sm:col-span-6 xl:col-span-3 intro-y bg-white"
                                         href="#">
                                         <div class="p-5">
                                             <div class="flex justify-between">
@@ -335,9 +335,9 @@ if (chartRef2.current) {
                                             </div>
                                             <div class="ml-2 w-full flex-1">
                                                 <div>
-                                                    <div class="mt-3 text-3xl font-bold leading-8">4.510</div>
+                                                    <div class="mt-3 text-3xl font-bold leading-9">10</div>
 
-                                                    <div class="mt-1 text-base text-gray-600">Item Sales</div>
+                                                    <div class="mt-1 text-base text-gray-600">Total Membership</div>
                                                 </div>
                                             </div>
                                         </div>
@@ -359,9 +359,9 @@ if (chartRef2.current) {
                                             </div>
                                             <div class="ml-2 w-full flex-1">
                                                 <div>
-                                                    <div class="mt-3 text-3xl font-bold leading-8">4.510</div>
+                                                    <div class="mt-3 text-3xl font-bold leading-8">2</div>
 
-                                                    <div class="mt-1 text-base text-gray-600">Item Sales</div>
+                                                    <div class="mt-1 text-base text-gray-600">Pending Membership</div>
                                                 </div>
                                             </div>
                                         </div>
@@ -386,8 +386,8 @@ if (chartRef2.current) {
                                             </div>
                                             <div class="ml-2 w-full flex-1">
                                                 <div>
-                                                    <div class="mt-3 text-3xl font-bold leading-8">4.510</div>
-                                                    <div class="mt-1 text-base text-gray-600">Item Sales</div>
+                                                    <div class="mt-3 text-3xl font-bold leading-8">8</div>
+                                                    <div class="mt-1 text-base text-gray-600">Approved Membership</div>
                                                 </div>
                                             </div>
                                         </div>
@@ -409,9 +409,9 @@ if (chartRef2.current) {
                                             </div>
                                             <div class="ml-2 w-full flex-1">
                                                 <div>
-                                                    <div class="mt-3 text-3xl font-bold leading-8">4.510</div>
+                                                    <div class="mt-3 text-3xl font-bold leading-8">3</div>
 
-                                                    <div class="mt-1 text-base text-gray-600">Item Sales</div>
+                                                    <div class="mt-1 text-base text-gray-600">Employee Count</div>
                                                 </div>
                                             </div>
                                         </div>

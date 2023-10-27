@@ -1,7 +1,7 @@
 import React, {useState, useRef, useEffect} from 'react';
 import Chart from 'chart.js/auto';
 import Carousel from './Carousel'; // Adjust the path as needed
-
+import Magazines from './Magazines'
 
 const ctx = document.getElementById('myChart');
 
@@ -205,7 +205,8 @@ function MemberDashboard() {
                       </div>
                     
                       <div className="App" style={{padding : '10px 10px 10px 10px',marginTop : '70px'}}>
-                        <Carousel />
+                        {/* <Carousel /> */}
+                        <Magazines />
                       </div>                      
                     </div>
                     

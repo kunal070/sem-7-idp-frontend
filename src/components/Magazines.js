@@ -48,7 +48,7 @@ const Magazines = () => {
                             <Document loading={<div className='flex justify-center items-center' style={{width:'100%', height:'250px'}}> <CircleLoader/> </div>} file={magazine.file}> 
                                 <Page pageNumber={1} />
                             </Document>
-                            <p className='text-center' style={{color:'#0f3c69'}}><b>{magazine.name}</b></p>
+                            <p className='text-center' style={{color:'#0f3c69'}}><b>{magazine.name} : {magazine.file}</b></p>
                         </div>
                     )
                 })}

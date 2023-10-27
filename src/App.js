@@ -68,6 +68,7 @@ function App({ session }) {
           <Route path="/membership-status" element={<MembershipStatus/>} />
           <Route path="/membership-table" element={<MembershipTable/>}/>
           <Route path="/chat" element={<ChatHome socket={socket} />}/>
+          <Route path="/magazine" element={<Magazine/>} />
           <Route path="/*" element={<MemberDashboard/>} />
       </Routes>
       </div>
@@ -87,8 +88,8 @@ function App({ session }) {
           <Route path="/approved-memberships" element={<MembershipTable type="completed" />} />
           <Route path="/all-memberships" element={<MembershipTable type="all" />} />
           <Route path="/membership-status" element={<MembershipStatus/>} />
-          <Route path="/*" element={<Dashboard/>} />
           <Route path="/book" element={<Booking/>} />
+          <Route path="/*" element={<Dashboard/>} />
         </Routes>
         </div>
         <ToastContainer />
