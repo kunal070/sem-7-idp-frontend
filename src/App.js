@@ -28,17 +28,14 @@ import ChatHome from "./components/ChatHome";
 import ShowUser from "./components/ShowUser";
 import Dashboard from "./components/Dashboard";
 import EmployeeDashboard from "./components/EmployeeDashboard";
-import MemberDashboard from "./components/MemberDashboard";
 import Booking from "./components/Booking";
 
 import MagazineUpload from "./components/MagazineUpload";
 import Magazines from "./components/Magazines";
 import Magazine from "./components/Magazine";
 import MemberDashboard from "./components/MemberDashboard";
-import Dashboard from "./components/Dashboard";
-import EmployeeDashboard from "./components/EmployeeDashboard";
-import Booking from "./components/Booking";
 import List from "./components/List";
+import MagazineDashboard from "./components/MagazineDashboard";
 
 const mapStateToProps = ({ session }) => ({
   session
@@ -110,6 +107,7 @@ function App({ session }) {
           <Route path="/upload-magazine" element={<MagazineUpload/>} />
           <Route path="/show-magazines" element={<Magazines/>} />
           <Route path="/magazine" element={<Magazine/>} />
+          <Route path="/*" element={<MagazineDashboard/>} />
         </Routes>
         </div>
         <ToastContainer />

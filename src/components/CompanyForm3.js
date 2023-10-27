@@ -44,12 +44,6 @@ const CompanyForm3 = ({session}) => {
         try {
             setLoader(true)
             const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/membership/membership/${session.phone}`)
-<<<<<<< HEAD
-            
-            console.log(response.data)
-
-=======
->>>>>>> 14acd126845eb133c5b2151eabbfbd0dfdaaedb7
             if(response.data.success){
                 let temp = response.data.data
                 setFormData({
