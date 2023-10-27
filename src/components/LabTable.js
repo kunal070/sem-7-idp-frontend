@@ -47,9 +47,10 @@ function LabTable() {
          setLoader(true)
          axios.defaults.withCredentials = true
 
-         const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/admin/show-users?page=${currentPage}&limit=${limit}`)
+         const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/lab/lab-bookings?page=${currentPage}&limit=${limit}`)
+         console.log("res: ", response.data)
          if(response.data.success){
-             setData(response.data.data.employee)
+             setData(response.data.data.lab)
              setTotalPages(response.data.data.totalPages)
          } else {
              toast(response.data.message)
@@ -61,31 +62,7 @@ function LabTable() {
      }
  }
 
- const deleteUser = async (employeePhone) => {
-   // Display a confirmation dialog to the user
-   const isConfirmed = window.confirm("Are you sure you want to delete this user?");
-
-   if (!isConfirmed) {
-       return; // If the user cancels the operation, do nothing
-   }
-   setLoader(true)
-   axios.defaults.withCredentials = true;
-
-   try {
-       const response = await axios.delete(`${process.env.REACT_APP_BASE_URL}/admin/delete-user/${employeePhone}`);
-       toast(response.data.message);
-       
-       if (response.data.success) {
-         fetchData();
-       }
-     } catch (error) {
-       // Handle any errors that occur during the delete operation
-       console.error("Error deleting user:", error);
-       // You can show an error message to the user here if needed.
-     }
-     setLoader(false)
-}  
-
+ 
  useEffect(() => {
      fetchData();
  }, [])
@@ -94,18 +71,18 @@ function LabTable() {
  return (
      <>
      <div className="pt-4 flex items-center flex-col">
-     <h2 className='py-4 font-bold text-3xl my-4' style={{color:"#0f3c69"}}>Employee's Info</h2>
+     <h2 className='py-4 font-bold text-3xl my-4' style={{color:"#0f3c69"}}>Lab Bookings</h2>
      <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
          <table className="w-full text-sm text-left text-black" style={{margin:'0 0'}}>
              <thead className="text-xs uppercase" style={{backgroundColor: '#0f3c69', color:"white"}}>
                  <tr>
                    <th className='px-6 py-3'>SR No</th>
-                   <th className='px-6 py-3'>User Name</th>
-                   <th className='px-6 py-3'>User Phone</th>
+                   <th className='px-6 py-3'>Lab Name</th>
+                   <th className='px-6 py-3'>Date</th>
                    {/* <th className='px-6 py-3'>User Email</th> */}
-                   <th className='px-6 py-3'>Type Of User</th>
-                   <th className='px-6 py-3'>Pending Applications</th>
-                   <th className='px-6 py-3'>Actions</th>
+                   <th className='px-6 py-3'>Time</th>
+                   <th className='px-6 py-3'>Member Phone</th>
+                   {/* <th className='px-6 py-3'>Actions</th> */}
                  </tr>
              </thead>
              <tbody>
@@ -116,17 +93,17 @@ function LabTable() {
                          <CircleLoader/>
                        </td>
                      </tr> :
-                   data?.map((user, index) => (
-                   <tr key={user._id} className='font-semibold bg-[#e5e5e5] hover:bg-[#A9A9A9]'>
+                   data?.map((booking, index) => (
+                   <tr key={booking._id} className='font-semibold bg-[#e5e5e5] hover:bg-[#A9A9A9]'>
                      <td className='px-6 py-3'>{(currentPage-1)*5 + (index + 1)}</td>
-                     <td className='px-6 py-3'>{user.name}</td>
-                     <td className='px-6 py-3'>{user.phone}</td>
+                     <td className='px-6 py-3'>{booking.name}</td>
+                     <td className='px-6 py-3'>{booking.date}</td>
                      {/* <td className='px-6 py-3'>{user.email}</td> */}
-                     <td className='px-6 py-3'>{user.typeOfUser}</td>
-                     <td className='px-6 py-3 text-center'>{user.totalMemberships - user.completedMemberships}</td>
-                     <td className='px-6 py-3'>
+                     <td className='px-6 py-3'>{booking.time}</td>
+                     <td className='px-6 py-3 text-center'>{booking.memberPhone}</td>
+                     {/* <td className='px-6 py-3'>
                        <button className='text-white bg-[#0F3C69] font-medium rounded-lg text-sm text-center px-5 py-2.5 mr-2 mb-2' type="button" onClick={() => deleteUser(user.phone)}><b>Delete</b></button>
-                     </td>
+                     </td> */}
                    </tr>
                  ))
                  }

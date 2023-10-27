@@ -11,8 +11,9 @@ function MagazineDashboard() {
 
     const fetchData = async () => {
       axios.defaults.withCredentials = true
-      const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/employee/dashboard`, { headers: {"Content-Type":"application/json"}})
-      if(response.data.sucess) {
+      const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/member/magazine-manager-dashboard`, { headers: {"Content-Type":"application/json"}})
+      console.log("resp: ", response.data)
+      if(response.data.success) {
         setData(response.data.data)
       } else {
         toast(response.data.message)
@@ -31,20 +32,12 @@ function MagazineDashboard() {
           datasets: [
             {
               label: "Total",
-              data: [20, 40, 30, 45, 30, 20, 10],
+              data: [2, 4, 0, 1, 3, 2, 0],
               backgroundColor: '#0F3C69',
               borderColor: 'white',
               borderWidth: 2,
               pointRadius: 5,
-            },
-            {
-              label: "Approved",
-              data: [10, 20, 30, 40, 10, 20, 5],
-              backgroundColor: '#F4B393',
-              borderColor: 'white',
-              borderWidth: 2,
-              pointRadius: 5,
-            },
+            }
           ],
         };
         
@@ -52,9 +45,7 @@ function MagazineDashboard() {
           responsive: true,
           plugins: {
             legend: {
-              labels: {
-                color: 'white', // Set legend label color to white
-              },
+              display: false,
             },
           },
           scales: {
@@ -134,7 +125,7 @@ function MagazineDashboard() {
                                               </div>
                                               <div class="ml-2 w-full flex-1">
                                                   <div>
-                                                  <div class="mt-3 text-3xl font-bold leading-8">{dataa.employee?.totalMemberships || "--"}</div>
+                                                  <div class="mt-3 text-3xl font-bold leading-8">{dataa.totalMagazines || "--"}</div>
                                                       <div class="mt-1 text-base text-gray-600">Total Magazine Count</div>
                                                   </div>
                                               </div>
@@ -158,7 +149,7 @@ function MagazineDashboard() {
                                               <div class="ml-2 w-full flex-1">
                                                   <div>
   
-                                                      <div class="mt-3 text-3xl font-bold leading-8">{dataa.employee?.completedMemberships || "--"}</div>
+                                                      <div class="mt-3 text-3xl font-bold leading-8">{dataa.previousMagazines || "--"}</div>
                                                       <div class="mt-1 text-base text-gray-600">Previous Magazine Count</div>
                                                   </div>
                                               </div>
@@ -184,7 +175,7 @@ function MagazineDashboard() {
                                               </div>
                                               <div class="ml-2 w-full flex-1">
                                                   <div>
-                                                  <div class="mt-3 text-3xl font-bold leading-8">{dataa.employee?.totalMemberships - dataa.employee?.completedMemberships || "--"}</div>
+                                                  <div class="mt-3 text-3xl font-bold leading-8">{dataa.upcomingMagazines || "--"}</div>
                                                       <div class="mt-1 text-base text-gray-600">Scheduled Magazine Count</div>
                                                   </div>
                                               </div>
@@ -207,7 +198,7 @@ function MagazineDashboard() {
                                               </div>
                                               <div class="ml-2 w-full flex-1">
                                                   <div>
-                                                  <div class="mt-3 text-xl font-bold leading-8">Magazine Manager</div>
+                                                  <div class="mt-3 text-xl font-bold leading-8">MAGAZINE MANAGER</div>
                                                       <div class="mt-1 text-base text-gray-600">Type Of Employee</div>
                                                   </div>
                                               </div>
@@ -217,21 +208,21 @@ function MagazineDashboard() {
                               </div>
                                   <canvas style={{maxWidth : '740px',maxHeight:'330px',backgroundColor : '#369bf0',marginLeft : '1px',marginTop : '40px',padding : '15px 15px 15px 15px',borderColor : '2px solid black'}} class="bg-gray-25 shadow-lg rounded-lg rounded-xl overflow-hidden text-white shadow-blue-500/40 shadow-lg" ref={chartRef} id="myChart" ></canvas>
                                   <div style={{ width: '550px', height: '329px', marginLeft: '683px', marginTop: '41.1px', backgroundColor: 'white', borderRadius: '10px', color: 'black', overflow: 'auto', position: 'relative' }} class="bg-gray-25 shadow-lg rounded-lg rounded-xl text-white shadow-white-500/40 shadow-lg">
-                                  <h2 style={{ textAlign: 'center', marginBottom: '20px', color: 'black', marginTop: '15px', position: 'sticky', top: '0',  backgroundColor: 'white', borderBottom: '1px solid black',fontWeight : 'bold',color : '#0F3C69' }}>Membership's Status</h2>
+                                  <h2 style={{ textAlign: 'center', marginBottom: '20px', color: 'black', marginTop: '15px', position: 'sticky', top: '0',  backgroundColor: 'white', borderBottom: '1px solid black',fontWeight : 'bold',color : '#0F3C69' }}>All Magazines</h2>
                                   <div style={{ overflowX: 'auto', overflowY: 'scroll', maxHeight: 'calc(100% - 70px)',color : '#0F3C69' ,marginTop:'10px'}}>
                                  <table style={{ marginLeft: '10px',marginRight : '10px', marginBottom : '15px',width: '96%', borderCollapse: 'collapse' }}>
                                     <thead>
                                       <tr>
                                         <th style={{ borderBottom: '1px solid black', borderRight: '1px solid black', textAlign: 'center', padding: '4px' }}>Sr No.</th>
-                                        <th style={{ borderBottom: '1px solid black', textAlign: 'center', padding: '4px'}}>Company Name</th>
+                                        <th style={{ borderBottom: '1px solid black', textAlign: 'center', padding: '4px'}}>Magazine Name</th>
                                       </tr>
                                     </thead>
                                     <tbody>
-                                        {dataa.membership?.map((m, index) => {
+                                        {dataa.magazines?.map((m, index) => {
                                           return (
                                             <tr>
-                                              <td className={m.membershipStatus == "approved" ? "green" : m.membershipStatus == "rejected" ? "redd" : "yellow"} style={{ borderBottom: '1px solid black', borderRight: '1px solid black', textAlign: 'center', padding: '4px' }}>{index + 1}</td>
-                                              <td className={m.membershipStatus == "approved" ? "green" : m.membershipStatus == "rejected" ? "redd" : "yellow"} style={{ borderBottom: '1px solid black', textAlign: 'center', padding: '4px' }}>{m.companyName}</td>
+                                              <td style={{ borderBottom: '1px solid black', borderRight: '1px solid black', textAlign: 'center', padding: '4px' }}>{index + 1}</td>
+                                              <td style={{ borderBottom: '1px solid black', textAlign: 'center', padding: '4px' }}>{m.name}</td>
                                             </tr>
                                           )
                                         }) 

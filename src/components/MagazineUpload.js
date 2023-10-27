@@ -384,7 +384,7 @@ const MagazineUpload = ({ session }) => {
                         <p className='label' style={{textAlign:'start'}}>Publication Date:</p>
                     </div>
                     <div className='width-50' style={{marginLeft:'10px'}}>
-                        <input type="date" name="magazineDate" value={formData.magazineDate} onChange={handleChange} min={moment().format("YYYY-MM-DD")} style={{backgroundColor:'#eee'}}/>
+                        <input type="date" name="magazineDate" value={formData.magazineDate} onChange={handleChange} min={moment().format("YYYY-MM-DD")} max={moment().add(30, 'days').toDate()} style={{backgroundColor:'#eee'}}/>
                         {errors.magazineDate && <p className="error-message"style={{color: 'red', fontSize: '12px'}}>{errors.magazineDate}</p>}
                     </div>
                 </div>
