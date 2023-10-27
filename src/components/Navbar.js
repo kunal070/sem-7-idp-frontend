@@ -39,6 +39,7 @@ const Navbar = ({session, logout}) => {
     ["Pending Memberships", "images/pending.svg"],
     ["Completed Memberships", "images/Magazine.svg"],  
     ["All Memberships", "images/member.svg"],
+    ["Lab Booking", "images/lab.svg"],
     ["Log Out", "images/signout.svg"]
   ];
 
@@ -53,6 +54,7 @@ const Navbar = ({session, logout}) => {
   ["Home", "images/dashboard.svg"],
   ["Profile", "images/profile.svg"],
   ["Upload Magazine", "images/Magazine.svg"],
+  ["Lab Booking", "images/lab.svg"],
   ["Log Out", "images/signout.svg"]];
 
   const [loader, setLoader] = useState(false)
