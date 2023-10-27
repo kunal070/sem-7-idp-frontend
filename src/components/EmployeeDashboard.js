@@ -134,7 +134,7 @@ function EmployeeDashboard() {
                                             </div>
                                             <div class="ml-2 w-full flex-1">
                                                 <div>
-                                                <div class="mt-3 text-3xl font-bold leading-8">{dataa.employee?.totalMemberships || "--"}</div>
+                                                <div class="mt-3 text-3xl font-bold leading-8">{dataa.employee?.completedMemberships || "--"}</div>
                                                     <div class="mt-1 text-base text-gray-600">Total Memberships</div>
                                                 </div>
                                             </div>
@@ -158,7 +158,7 @@ function EmployeeDashboard() {
                                             <div class="ml-2 w-full flex-1">
                                                 <div>
 
-                                                    <div class="mt-3 text-3xl font-bold leading-8">{dataa.employee?.completedMemberships || "--"}</div>
+                                                    <div class="mt-3 text-3xl font-bold leading-8">{dataa.employee?.totalMemberships || "--"}</div>
                                                     <div class="mt-1 text-base text-gray-600">Completed Memberships</div>
                                                 </div>
                                             </div>
@@ -184,7 +184,7 @@ function EmployeeDashboard() {
                                             </div>
                                             <div class="ml-2 w-full flex-1">
                                                 <div>
-                                                <div class="mt-3 text-3xl font-bold leading-8">{dataa.employee?.totalMemberships - dataa.employee?.completedMemberships || "--"}</div>
+                                                <div class="mt-3 text-3xl font-bold leading-8">{dataa.employee?.completedMemberships - dataa.employee?.totalMemberships || "--"}</div>
                                                     <div class="mt-1 text-base text-gray-600">Pending memberships</div>
                                                 </div>
                                             </div>
@@ -245,7 +245,6 @@ function EmployeeDashboard() {
                       </div>
                     </div>
                   </div>
-
     </>
   )
 }
