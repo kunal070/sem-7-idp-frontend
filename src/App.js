@@ -26,14 +26,17 @@ import CreateUser from "./components/CreateUser";
 import MembershipTable from "./components/MembershipTable";
 import ChatHome from "./components/ChatHome";
 import ShowUser from "./components/ShowUser";
+import Dashboard from "./components/Dashboard";
+import EmployeeDashboard from "./components/EmployeeDashboard";
+import Booking from "./components/Booking";
+
 import MagazineUpload from "./components/MagazineUpload";
 import Magazines from "./components/Magazines";
 import Magazine from "./components/Magazine";
 import MemberDashboard from "./components/MemberDashboard";
-import Dashboard from "./components/Dashboard";
-import EmployeeDashboard from "./components/EmployeeDashboard";
-import Booking from "./components/Booking";
 import List from "./components/List";
+import MagazineDashboard from "./components/MagazineDashboard";
+import LabTable from "./components/LabTable";
 
 const mapStateToProps = ({ session }) => ({
   session
@@ -76,9 +79,9 @@ function App({ session }) {
       <ToastContainer />
       </>
       )
-  } else if(session.typeOfUser == "admin"){
-    return(
-      <>
+    } else if(session.typeOfUser == "admin"){
+      return(
+        <>
         <Navbar/>
         <div className="backImage">
         <Routes>
@@ -89,6 +92,7 @@ function App({ session }) {
           <Route path="/completed-memberships" element={<MembershipTable type="completed" />} />
           <Route path="/all-memberships" element={<MembershipTable type="all" />} />
           <Route path="/membership-status" element={<MembershipStatus/>} />
+          <Route path="/lab-booking" element={<LabTable/>} />
           <Route path="/*" element={<Dashboard/>} />
         </Routes>
         </div>
@@ -105,6 +109,8 @@ function App({ session }) {
           <Route path="/upload-magazine" element={<MagazineUpload/>} />
           <Route path="/show-magazines" element={<Magazines/>} />
           <Route path="/magazine" element={<Magazine/>} />
+          <Route path="/lab-booking" element={<LabTable/>} />
+          <Route path="/*" element={<MagazineDashboard/>} />
         </Routes>
         </div>
         <ToastContainer />

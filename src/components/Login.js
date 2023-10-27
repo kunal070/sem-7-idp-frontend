@@ -280,7 +280,9 @@ function Login({ login, session }) {
 
   if(loader){
     return (
+      <div style={{width:"100vw", height:"100vh", display:'flex', zIndex:99 ,justifyContent:'center', alignItems:'center',backgroundColor:'white',position:'fixed' }}>
       <Loader/>
+      </div>
     )
   } else {
    return(

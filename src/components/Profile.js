@@ -44,10 +44,12 @@ const Profile = ({session, logout}) => {
       if(response.data.success) {
         setShowImage(response.data.url)
       }
-      setLoader(false)
     } catch (error) {
       toast(error.message)
     }
+    setTimeout(() => {
+      setLoader(false)
+    }, 1000);
   }
 
   useEffect(() => {
