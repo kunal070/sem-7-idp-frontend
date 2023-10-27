@@ -20,7 +20,6 @@ const Magazines = () => {
     const fetchData = async () => {
         axios.defaults.withCredentials = true
         const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/magazine/get-magazines`)
-        console.log(response.data)
         if(response.data.success) {
             setData(response.data.data)
         }

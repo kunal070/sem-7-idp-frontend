@@ -8,32 +8,21 @@ const List = () => {
     const inputRef = useRef(null)
 
     const sendToLeft = () => {
-        console.log("new Data: ", right)
         let newData = right.filter((item) => item.key === true).map((item) => {
             item.key = false
             return item
         })
-        console.log("new Data: ", right)
         setRight(right.filter((item) => item.key === false))
         setLeft([...left, ...newData])
     }
 
     const changeCheckbox = (side, index) => {
-        console.log(side, index)
         if(side == "left") {
             setLeft(prevState =>  prevState.map((item, i) => (i == index ? {...item, key : !item.key} : item)))
         } else {
             setRight(prevState =>  prevState.map((item, i) => (i == index ? {...item, key : !item.key} : item)))
         }
     }
-
-    useEffect(() => {
-        console.log("left: ", left)
-    }, [left])
-
-    useEffect(() => {
-        console.log("right: ", right)
-    }, [right])
 
     return (
         <div style={{color:'black', padding:'200px', display:'flex'}}>

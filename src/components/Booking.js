@@ -71,7 +71,11 @@ function Booking({ session }) {
   }
 
   const generateTooltipText = (item) => {
-    return `Count: ${item.count} on ${item.date}`;
+    let str = item.name?.map((lab,index) => 
+      `Booking for Lab: ${lab} at ${item.time[index]}\n`
+    )
+    // `Count: ${item.count} on ${item.date}`
+    return str;
   }
 
   const handleBookLab = async () => {
@@ -87,7 +91,6 @@ function Booking({ session }) {
       }
 
       const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/lab/book-lab`, {name:lab, date, time, message:messageRef.current.value}, {headers: {"Content-Type":"application/json"}})
-      console.log(response.data)
       toast(response.data.message)
       if(response.data.success) {
         setCounter(0)
@@ -98,26 +101,24 @@ function Booking({ session }) {
         messageRef.current.value = ""
       }
     } catch (error) {
-      console.log("err: ", error)
+      toast("Internal Server Error")
     }
   }
 
   const checkDateAvailiability = async () => {
     try {
       const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/lab/check-date-availiability`, {name:lab, date:new Date()}, {headers: {"Content-Type":"application/json"}})
-      console.log("Date: ", response.data)
       if(response.data.success) {
         setDisabledDates(response.data.dates)
       }
     } catch (error) {
-      console.log(error)
+      toast("Internal Server Error")
     }
   }
   
   const checkTimeAvailiability = async () => {
     try {
       const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/lab/check-time-availiability`, {name:lab, date}, {headers: {"Content-Type":"application/json"}})
-      console.log(response.data)
       if(response.data.success) {
         if(response.data.bookings.filter((book) => book.time == "8-10").length > 0){ 
           setDisable1(true)
@@ -130,7 +131,7 @@ function Booking({ session }) {
         }
       }
     } catch (error) {
-      console.log(error)
+      toast("Internal Server Error")
     }
   }
 
@@ -138,12 +139,11 @@ function Booking({ session }) {
     setLoader(true)
     try {
       const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/lab/member-bookings`, {headers: {"Content-Type":"application/json"}})
-      console.log(response.data)
       if(response.data.success) {
         setData(response.data.data)
       }
     } catch (error) {
-      console.log("error: ", error)
+      toast("Internal Server Error")
     }
     setLoader(false)
   }
@@ -213,7 +213,9 @@ function Booking({ session }) {
           renderBlock={(block, activity) =>
             React.cloneElement(block, {
               'data-tooltip-id': 'react-tooltip',
-              'data-tooltip-html': `${activity.count} Bookings on ${activity.date}`,
+              'data-tooltip-html': activity.name?.reduce((acc, lab, index, str) => {
+                return acc + `Lab: ${lab}, Time: ${activity.time[index]} <br>`;
+              }, '')
             })
           }
           loading={loader}

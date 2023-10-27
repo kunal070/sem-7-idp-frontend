@@ -293,9 +293,6 @@ const MagazineUpload = ({ session }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        console.log("FORM DATA: ", formData)
-
         validateMagazineName()
         validateMagazineAuthor()
         validateMagazineDescription()
@@ -304,8 +301,6 @@ const MagazineUpload = ({ session }) => {
         validateMagazinePages()
         validateMagazineStock()
         validateMagazinePdf()
-
-        console.log("errors: ", errors)
     
         if (Object.keys(errors).length === 0 && formData.magazineAuthor != "") {
             setLoader(true)
@@ -314,7 +309,6 @@ const MagazineUpload = ({ session }) => {
             axios.defaults.withCredentials = true;
 
             const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/magazine/upload-magazine`, {...formData}, {headers:{"Content-Type":"multipart/form-data"}})
-            console.log(response.data)
             setLoader(false)
           
             if(response.data.success){

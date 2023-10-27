@@ -43,7 +43,6 @@ const CompanyForm = ({session}) => {
         setLoader(true)
         try {
             const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/membership/membership/${session.phone}`)
-            // console.log(response.data)
             if(response.data.success){
                 let temp = response.data.data
                 let date = new Date(temp.companyRegistrationYear).toISOString().split('T', 1)[0]
@@ -59,7 +58,7 @@ const CompanyForm = ({session}) => {
             }
 
         } catch (error) {
-            console.log(error)
+            toast(error.message)
         }
         setLoader(false)
     }
@@ -313,7 +312,6 @@ const CompanyForm = ({session}) => {
             const response = await axios.put(`${process.env.REACT_APP_BASE_URL}/membership/company-info-2`, {...formData}, {headers:{"Content-Type":"multipart/form-data"}})
             setLoader(false)
 
-            console.log(response.data)
             if(response.data.success){
                 toast(response.data.message)
                 navigate('/company-info-3');
@@ -323,11 +321,6 @@ const CompanyForm = ({session}) => {
         }
     };
     const [loader, setLoader] = useState(false)
-
-
-    useEffect(()=> {
-        console.log(formData.file)
-    }, [formData])
 
     if(loader){
         return (
@@ -358,7 +351,7 @@ const CompanyForm = ({session}) => {
                         <option value="">Select Company Type</option>
                         <option value="private">Private</option>
                         <option value="public">Public</option>
-                        <option value="corporate">Corporate</option>
+                        <option value="cooperative">co operative</option>
                         <option value="others">Others</option>
                     </select>
                     {errors.companyType && (

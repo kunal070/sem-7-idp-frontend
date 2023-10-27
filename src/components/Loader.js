@@ -8,17 +8,4 @@ const Loader = () => {
   )
 }
 
-// import { BoltLoader } from "react-awesome-loaders";
-// const Loader = () => {
-//   return (
-//     <>
-//       <BoltLoader
-//         className={"loaderbolt"}
-//         boltColor={"#of3069"}
-//         backgroundBlurColor={"#E0E7FF"}
-//       />
-//     </>
-//   );
-// };
-
 export default Loader

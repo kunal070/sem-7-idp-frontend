@@ -43,9 +43,6 @@ const CompanyForm3 = ({session}) => {
         setLoader(true)
         try {
             const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/membership/membership/${session.phone}`)
-
-            console.log(response.data)
-
             if(response.data.success){
                 let temp = response.data.data
                 setFormData({
@@ -62,7 +59,7 @@ const CompanyForm3 = ({session}) => {
             }
 
         } catch (error) {
-            console.log(error)
+            toast(error.message)
         }
         setLoader(false)
     }
@@ -372,7 +369,6 @@ const CompanyForm3 = ({session}) => {
                     { ...other, companyProducts, companyERDARequiredServices },
                     { headers: { "Content-Type": "multipart/form-data" } }
                 );
-                console.log("response: ", response.data)
                 toast(response.data.message);
                 setLoader(false)
 

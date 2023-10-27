@@ -31,12 +31,9 @@ const CreateUser = () => {
         initialValues,
         validationSchema:createEmployeeValidationSchema,
         onSubmit : async (values, action) => {
-            console.log({values})
             setLoader(true)
             axios.defaults.withCredentials = true
-
             const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/admin/create-user`, {...values }, {headers:{"Content-Type":"application/json"}})
-            console.log(response.data)
             setLoader(false)
             toast(response.data.message)
             if(response.data.success){
@@ -49,7 +46,6 @@ const CreateUser = () => {
         try {
     
           const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/auth/check-email/${values.email}`);
-        //   console.log(response.data)
           setEmailExists(response.data.exists);
         } catch (error) {
           console.error('Error checking email:', error);
@@ -59,7 +55,6 @@ const CreateUser = () => {
       const checkNumberAvailability = async () => {
         try {
           const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/auth/check-phone/${values.phone}`);
-        //   console.log(response.data)
           setNumberExists(response.data.exists);
         } catch (error) {
           console.error('Error checking phone:', error);

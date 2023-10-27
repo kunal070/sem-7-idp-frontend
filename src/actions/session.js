@@ -27,6 +27,6 @@ export const logOutUser = () => async dispatch => {
     if (response.data.success) {
         return dispatch(logoutCurrentUser());
     } else {
-        console.log("logout error");
+        toast("Logout Error")
     }
 };

@@ -57,7 +57,6 @@ function Login({ login, session }) {
     try {
 
       const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/auth/check-email/${email}`);
-      console.log(response.data)
       setEmailExists(response.data.exists);
     } catch (error) {
       console.error('Error checking email:', error);
@@ -67,7 +66,6 @@ function Login({ login, session }) {
   const checkNumberAvailability = async () => {
     try {
       const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/auth/check-phone/${number}`);
-      console.log(response.data)
       setNumberExists(response.data.exists);
     } catch (error) {
       console.error('Error checking phone:', error);
@@ -86,7 +84,6 @@ function Login({ login, session }) {
     const isValid = Object.keys(errors).length === 0;
     if(isValid && number != ""){
       const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/member/create-member`, { firstName, lastName, email, phone: number, otp }, { headers: {"Content-Type":"application/json"}})
-      console.log(response.data)
       if(response.data.success){
         toast(response.data.message)
         toggle(!signIn)
@@ -126,7 +123,6 @@ function Login({ login, session }) {
     setLoader(true)
     try {
       const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/auth/send-otp`, {phone}, { headers: {"Content-Type":"application/json"}})
-      console.log(response.data)
       if(response.data.success){
         setShowOTP(true)
         toast(response.data.message)
@@ -134,7 +130,7 @@ function Login({ login, session }) {
         toast(response.data.message, { position:'top-center' })
       }
     } catch (error) {
-      console.log(error)
+      toast(error.message)
     }
     setLoader(false)
   }
@@ -148,7 +144,6 @@ function Login({ login, session }) {
         return;
       }
       const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/member/send-email`, { email, firstName, lastName }, { headers: {"Content-Type":"application/json"}})
-      console.log(response.data)
       if(response.data.success){
         setSignUpOTP(true)
         toast(response.data.message)
@@ -156,7 +151,7 @@ function Login({ login, session }) {
         toast(response.data.message, { position:'top-center' })
       }
     } catch (error) {
-      console.log(error)
+      toast(error.message)
     }
     setLoader(false)
   }

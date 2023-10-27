@@ -3,16 +3,16 @@ import { toast } from 'react-toastify'
 import { Link } from 'react-router-dom';
 
 import { connect } from 'react-redux'
-
 import axios from 'axios'
 import Loader from "./Loader";
-
+import { useNavigate } from 'react-router-dom';
 
 // used for get id of the deligence
 import { useLocation } from 'react-router-dom';
 
 import { useFormik } from 'formik'
 import { membershipApprovalValidationSchema } from '../validation/employee.validation';
+import { Helmet } from 'react-helmet';
 
 import '../MembershipStatus.css'; // Import your CSS file for component-specific styles
 
@@ -29,11 +29,13 @@ const initialValues = {
 
 const MembershipStatus = ({ session }) => {
 
-     // fetch membership phone number from the request
-     const location = useLocation();
+    // fetch membership phone number from the request
+    const location = useLocation();
     
-     // membership phone number
-     const membershipPhoneNumber = location.state?.phone;
+    // membership phone number
+    const membershipPhoneNumber = location.state?.phone;
+    
+    const navigate = useNavigate();
 
     const [data, setData] = useState({})
     const [isChecked, setIsChecked] = useState(false);
@@ -62,7 +64,6 @@ const MembershipStatus = ({ session }) => {
             setLoader(true)
             axios.defaults.withCredentials = true
             const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/membership/membership/${membershipPhoneNumber}`)
-            console.log(response.data)
             setLoader(false)
             if(response.data.success){
                 setData(response.data.data)
@@ -70,7 +71,6 @@ const MembershipStatus = ({ session }) => {
                 toast(response.data.message)
             }
         } catch (error){
-            console.log(error)
             toast("Internal Server Error while fetching data")
         }
     }
@@ -80,9 +80,7 @@ const MembershipStatus = ({ session }) => {
         validationSchema:membershipApprovalValidationSchema,
 
         onSubmit: async (values, action) => {
-            console.log(values)
             const response = await axios.put(`${process.env.REACT_APP_BASE_URL}/employee/approve-membership`, {...values, memberPhone: membershipPhoneNumber}, {headers: {"Content-Type":"application/json"}})
-            console.log(response.data)
             toast(response.data.message)
             if(response.data.success){
                 action.resetForm()
@@ -90,6 +88,31 @@ const MembershipStatus = ({ session }) => {
             fetchData()
         }
     })
+
+    useEffect(() => {
+        setTimeout(() => {
+            if (document.querySelector('script[data-payment_button_id="pl_MtBAHj7kGFAneK"]')) {
+                return; // The script already exists, no need to add it again
+            }
+            if(data.paymentStatus == false && data.membershipStatus == "approved" && data?.member?.phone == session.phone) {
+                const script = document.createElement('script');
+                script.src = "https://checkout.razorpay.com/v1/payment-button.js";
+                script.async = true;
+                script.dataset.payment_button_id = "pl_MtBAHj7kGFAneK";
+                
+                // Create a form element
+                const form = document.createElement('form');
+                form.appendChild(script);
+                
+                const pmtTarget = document.getElementById("payment")
+                // Append the form element to the document body
+                if(pmtTarget){
+                    pmtTarget.appendChild(form);
+                }
+            }
+        }, 1500);
+    }, [data]);
+      
 
     useEffect(() => {
         fetchData();
@@ -148,10 +171,6 @@ const MembershipStatus = ({ session }) => {
             <p className='text-black'style ={{marginLeft : '5px',paddingLeft : '3.6rem'}}> {data.companyFactory}</p>
             </div>
 
-            {/* <p>.</p> */}
-            {/* <p className='text-black'>Membership form Status: {data.membershipFormStatus}</p>
-            <p className='text-black'>Payment Status: {data.paymentStatus ? "TRUE" : "FALSE"}</p> */}
-            {/* <p>.</p>                 */}
             </div>
             </div>
 
@@ -193,10 +212,6 @@ const MembershipStatus = ({ session }) => {
                 </div>
             </p>
             </div>
-            
-            {/* <div style={{display:'flex', justifyContent:'center'}}>
-                {data.companyRegistrationProofAttachment && <embed src={data.companyRegistrationProofAttachment.file} width="1000px" height="1000px" />}
-            </div> */}
             </div>
             </div>
             </div>
@@ -221,9 +236,6 @@ const MembershipStatus = ({ session }) => {
                                 <p className='text-black b'>Units Manufacturing : </p>
                                 <p className='text-black'style ={{marginLeft : '5px',paddingLeft : '9.0rem'}}>  {product.productUnit}</p>
                                 </div>
-                                {/* <p className='text-black'>Capacity: {product.produtCapacity}</p> */}
-                                {/* <p className='text-black'>Name: {product.productName}</p>
-                                <p className='text-black'>Unit: {product.productUnit}</p> */}
                             </div>
                         )
                     })
@@ -276,15 +288,20 @@ const MembershipStatus = ({ session }) => {
             <p className='text-black'style ={{marginLeft : '5px',paddingLeft : '14rem'}}>{data?.member?.memberId}</p>
             </div>
 
-            <div style={{display : 'flex', flexDirection : 'row'}}>
-            <p className='text-black b'>Payment Status : </p>
-            <p className='text-black'style ={{marginLeft : '5px',paddingLeft : '11.5rem'}}>{data.paymentStatus  ? "Successfull" : "Pending"}</p> 
+            <div id="payment" style={{display : 'flex', flexDirection : 'row'}}>
+            <p className='text-black b' style={{marginRight:"180px"}}>Payment Status : </p>
+            {data.paymentStatus === true ? <p className='text-black'  style ={{marginLeft : '5px',paddingLeft : '11.5rem'}}> Successful </p> : null }
             </div>
+
             </div>
             
             {/* if current user is a member of the membership application, then showcase message accordingly */}
             {
-                (data?.member?.phone == session.phone) && <h1 style={{backgroundColor:"#0f3c69" , padding:"10px 20px", fontWeight:"bold", width:"70%", margin:"50px auto", textAlign:'center'}}>{data?.membershipStatus == "pending" ? "Your membership application is currently in the processing stage at ERDA." : data?.approver?.message}</h1>
+                ((data?.member?.phone == session.phone) && data.membershipStatus == "pending") && <h1 style={{backgroundColor:"#0f3c69" , padding:"10px 20px", fontWeight:"bold", width:"70%", margin:"50px auto", textAlign:'center'}}>{data?.membershipStatus == "pending" ? "Your membership application is currently in the processing stage at ERDA." : data?.approver?.message}</h1>
+            }
+
+            {
+                (data?.member?.phone == session.phone && data.membershipStatus == "approved") && <h1 style={{backgroundColor:"#0f3c69" , padding:"10px 20px", fontWeight:"bold", width:"70%", margin:"50px auto", textAlign:'center'}}>Your membership application at ERDA approved Successfully.</h1>
             }
 
             {/* show reason for approved, rejected & reverted membership for all type of user */}
@@ -306,6 +323,8 @@ const MembershipStatus = ({ session }) => {
                 </div> 
                 : null
             }
+
+            
 
 
             {/* form for approver */}

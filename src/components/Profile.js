@@ -41,13 +41,12 @@ const Profile = ({session, logout}) => {
     try {
       setLoader(true)
       const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/auth/get-profile-image`, {url:session.profileImage} , {headers: {"Content-Type":"application/json"}})
-      console.log("fetching image: ", response.data)
       if(response.data.success) {
         setShowImage(response.data.url)
       }
       setLoader(false)
     } catch (error) {
-      console.log(error)
+      toast(error.message)
     }
   }
 
@@ -59,10 +58,8 @@ const Profile = ({session, logout}) => {
 
 
   const uploadImage = async () => {
-    console.log("UPLOADING IMAGE")
     if(image == "") return;
       const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/auth/update-profile-image`, {file: image}, {headers: {"Content-Type":"multipart/form-data"}})
-      console.log("UPLOAD IMAGE RESPONSE: ", response.data)
       toast(response.data.message)
       if(response.data.success){
         setImage("")
@@ -76,39 +73,6 @@ const Profile = ({session, logout}) => {
   const handleImageChange = async (event) =>{
     setImage(event.target?.files[0]);
     setShowImage(URL.createObjectURL(event.target?.files[0]))
-    // const file = event.target.files[0];
-    // const imgname = event. target. files [0].name;
-    // const reader = new FileReader();
-    // reader.readAsDataURL(file);
-    // reader.onloadend = () => {
-    //   const img = new Image();
-    //   img.src = reader.result;
-    //   img.onload = () => {
-    //     const canvas = document.createElement ("canvas");
-    //     const maxSize = Math.max(img.width, img.height);
-    //     canvas.width = maxSize;
-    //     canvas.height= maxSize;
-    //     const ctx = canvas.getContext ("2d");
-    //     ctx.drawImage ( 
-    //       img, 
-    //       (maxSize - img.width) / 2,
-    //       (maxSize - img.height) / 2
-    //     );
-    //     canvas.toBlob( 
-    //       (blob) => {
-    //         const file = new File([blob], imgname, {
-    //            type:"image/png",
-    //            lastModified: Date.now(),
-    //         });
-
-    //         console.log(file);
-    //         setImage(event.target.files[0]);
-    //       },
-    //       "image/jpeg",
-    //       0.8
-    //     );
-    //   };
-    // };
   };
 
   return (
