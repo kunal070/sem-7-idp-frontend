@@ -81,19 +81,19 @@ const ChatHome = ({ session, socket }) => {
     const [message, setMessage] = useState(""); // To store the currently typed message
     const [attachment, setAttachment] = useState("")
 
+    useEffect(() => {
+      localStorage.removeItem("currentChat")
+    }, [])
+
     const findMember = async () => {
-      console.log("manav loader")
-      setCircleLoader(true)
-      axios.defaults.withCredentials = true
-      const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/chat/search-users`, {}, {"headers": {"Content-Type":"application/json"}})
-      console.log(response.data)
-      if(response.data.success){
-        setShowModal(true)        
-        setAvailableUsers(response.data.users)
-      } else {
-        toast(response.data.message)
-      }
-      setCircleLoader(false)
+        axios.defaults.withCredentials = true
+        const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/chat/search-users`, {}, {"headers": {"Content-Type":"application/json"}})
+        if(response.data.success){
+          setShowModal(true)
+          setAvailableUsers(response.data.users)
+        } else {
+          toast(response.data.message)
+        }
     }
 
     const toggleModal = () => {
@@ -101,17 +101,15 @@ const ChatHome = ({ session, socket }) => {
     }
 
     const createChatWithUser = async (receiverPhone) => {
-      console.log("manav loader")
-      axios.defaults.withCredentials = true
-      const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/chat/get-one-to-one-chat/${receiverPhone}`)
-      console.log("chat with user: ", response.data)
-      if(response.data.success) {
-        getChats()
-      } else {
-        toast(response.data.message)
-      }
-      toggleModal()
-      setAvailableUsers([])
+        axios.defaults.withCredentials = true
+        const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/chat/get-one-to-one-chat/${receiverPhone}`)
+        if(response.data.success) {
+          getChats()
+        } else {
+          toast(response.data.message)
+        }
+        toggleModal()
+        setAvailableUsers([])
     }
 
     /**
@@ -121,8 +119,6 @@ const ChatHome = ({ session, socket }) => {
     chatToUpdateId,
     message // The new message to be set as the last message
   ) => {
-    console.log("chatToUpdateId: ", chatToUpdateId)
-    console.log("Message: ", message)
     // Search for the chat with the given ID in the chats array
     const chatToUpdate = chats.find((chat) => chat._id === chatToUpdateId);
 
@@ -141,10 +137,8 @@ const ChatHome = ({ session, socket }) => {
 
   const getChats = async () => {
     setLoader(true)
-    console.log("get chats")
     axios.defaults.withCredentials = true
     const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/chat/all-chats`, {headers: {"Content-Type":"application/json"}})
-    console.log("get chats: ", response.data)
     setLoader(false)
     if(response.data.success) {
       setChats(response.data.chats || [])
@@ -175,7 +169,6 @@ const ChatHome = ({ session, socket }) => {
       
       axios.defaults.withCredentials = true
       const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/chat/get-chat-messages/${currentChat?._id || ""}`, {headers: {"Content-Type":"application/json"}})
-      console.log("get Messages: ", response.data)
       if(response.data.success) {
         setMessages(response.data.messages || [])
       } else {  
@@ -193,7 +186,6 @@ const ChatHome = ({ session, socket }) => {
     socket.emit(STOP_TYPING_EVENT, currentChat?._id);
 
     const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/chat/send-message/${currentChat?._id || ""}`, {content: message, file: attachment}, {"headers":{"Content-Type":"multipart/form-data"}})
-    console.log("send message: ", response.data)
     if(response.data.success) {
       // if message sent is type of String message then do accordingly
         setMessage("")
@@ -232,7 +224,6 @@ const ChatHome = ({ session, socket }) => {
     // Set a timeout to stop the typing indication after the timerLength has passed
     typingTimeoutRef.current = setTimeout(() => {
       // Emit a stop typing event to the server for the current chat
-      console.log("stop typing event call")
       socket.emit(STOP_TYPING_EVENT, currentChat?._id);
 
       // Reset the user's typing state
@@ -241,12 +232,10 @@ const ChatHome = ({ session, socket }) => {
   };
 
   const onConnect = () => {
-    console.log("socket connected...")
     setIsConnected(true);
   };
   
   const onDisconnect = () => {
-    console.log("socket disconnected...")
     setIsConnected(false);
   };
 
@@ -254,7 +243,6 @@ const ChatHome = ({ session, socket }) => {
    * Handles the "typing" event on the socket.
    */
   const handleOnSocketTyping = (chatId) => {
-    console.log("Socket typing started...")
     // Check if the typing event is for the currently active chat.
     if (chatId !== currentChat?._id) return;
     
@@ -266,7 +254,6 @@ const ChatHome = ({ session, socket }) => {
    * Handles the "stop typing" event on the socket.
   */
  const handleOnSocketStopTyping = (chatId) => {
-    console.log("Socket typing stopped...")
     // Check if the stop typing event is for the currently active chat.
     if (chatId !== currentChat?._id) return;
 
@@ -292,7 +279,6 @@ const ChatHome = ({ session, socket }) => {
   };
 
   const onNewChat = (chat) => {
-    console.log("New chat arrived: ", chat)
     setChats((prev) => [chat, ...prev]);
   };
 
@@ -381,12 +367,9 @@ const ChatHome = ({ session, socket }) => {
 
   const fetchCurrentImage = async (imgURL) => {
     try {
-      console.log("img: ", imgURL)
       const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/auth/get-profile-image`, {url:imgURL} , {headers: {"Content-Type":"application/json"}})
-      console.log("fetching image: ", response.data)
       return response.data
     } catch (error) {
-      console.log(error)
       return error
     }
   }
@@ -433,7 +416,6 @@ const ChatHome = ({ session, socket }) => {
     if(confirmation){
       axios.defaults.withCredentials = true
       const response = await axios.delete(`${process.env.REACT_APP_BASE_URL}/chat/delete-one-to-one-chat/${chat._id}`)
-      console.log(response.data)
       if(response.data.success) {
         setChats((prev) => prev.filter((c) => c._id != chat._id))
         if(currentChat?._id == chat._id){
@@ -449,40 +431,16 @@ const ChatHome = ({ session, socket }) => {
   }
 
   const openAttachment = (file) => {
-    console.log("on click: ", file)
     if(file.type == "image") {
       setShowImage({showImage: true, url:file.url})
     } else if(file.type == "pdf") {
-      window.open(file.url)
+      window.open(file.url + "#toolbar=0")
     }
   }
   
   const closeImageShow = () => {
     setShowImage({})
   }
-  
-  // useEffect(() => {
-  //   window.addEventListener("blur", onWindowBlur);
-  // }, [])
-
-
-
-  // const onWindowBlur = () => {
-  //   if (iframeMouseOver) {
-  //     window.open(PDFUrl)
-  //   }
-  // };
-
-  // const handleOnMouseOver = (url) => {
-  //   setPDFUrl(url)
-  //   setIframeMouseOver(true)
-  // };
-  
-  // const handleOnMouseOut = () => {
-  //   setPDFUrl()
-  //   window.focus(); // Make sure to set focus back to page
-  //   setIframeMouseOver(false);
-  // };
 
   if(!socket || session.isApproved == false) {
     return (
@@ -601,7 +559,7 @@ const ChatHome = ({ session, socket }) => {
                   <p style={{fontSize:'10px', letterSpacing:'0.5px'}}>{currentParticipant?.phone}</p>
                 </div>
               </div>
-              <div style={{width:"50px", height:"50px", display:"flex", justifyContent:'center', alignItems:'center'}}>
+              <div style={{width:"35px", height:"35px", display:"flex", justifyContent:'center', alignItems:'center'}}>
                 <img src="/images/delete.svg" alt="alternative" className='delete-icon' onClick={() => deleteChat(currentChat)} />
               </div>
           </div>

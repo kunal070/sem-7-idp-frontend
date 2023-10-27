@@ -20,7 +20,6 @@ const Magazines = () => {
     const fetchData = async () => {
         axios.defaults.withCredentials = true
         const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/magazine/get-magazines`)
-        console.log(response.data)
         if(response.data.success) {
             setData(response.data.data)
         }
@@ -39,16 +38,21 @@ const Magazines = () => {
 
 
   return (
-    <div className='w-2/3 scroll-bar-none' style={{margin:"auto"}}>
+    
+    <div className='' style={{margin:"auto" }}>
     <div id="carouselExampleInterval" className="carousel slide" data-bs-ride="carousel" style={{maxWidth : '100%', overflow:'hidden', margin : 'auto'}}>
             <div className="carousel-inner">
                 {data?.map((magazine, index) => {
                     return (
-                        <div className={index == 0 ? `carousel-item active`: `carousel-item`} style={{cursor:'pointer'}} data-bs-interval="4000" onClick={() => openMagazine(magazine)} >
-                            <Document loading={<div className='flex justify-center items-center' style={{width:'100%', height:'250px'}}> <CircleLoader/> </div>} file={magazine.file}> 
-                                <Page pageNumber={1} />
-                            </Document>
-                            <p className='text-center' style={{color:'#0f3c69'}}><b>{magazine.name} : {magazine.file}</b></p>
+                        <div className={index == 0 ? `carousel-item active`: `carousel-item`}  style={{cursor:'pointer',borderRight:'4px solid #0f3c69'}} data-bs-interval="4000" onClick={() => openMagazine(magazine)} >
+                            {/* <div style={{cursor:'pointer', width:"300px", height:"300px", padding:'10px', backgroundColor:'blue'}}> */}
+                                <Document loading={<div className='flex justify-center items-center' style={{width:'100%', height:'100%'}}> <div style={{width:'300px', height:'300px', display:'flex', justifyContent:'center', alignItems:'center'}} > <CircleLoader/> </div> </div>} file={magazine.file}>
+                                    <Page pageNumber={1} />
+                                </Document>
+                            {/* </div> */}
+                            <div style={{flexDirection:"row"}}>
+                            <p className='text-center' style={{color:'#0f3c69', zIndex:99, background:"white"}}><b>Magazine Name:  {magazine.name}</b></p>
+                            </div>
                         </div>
                     )
                 })}

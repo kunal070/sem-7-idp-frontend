@@ -37,7 +37,6 @@ const CompanyForm = ({ session }) => {
         try {
             setLoader(true)
             const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/membership/membership/${session.phone}`)
-            console.log("preload data: ", response.data)
             if(response.data.success){
                 let temp = response.data.data
                 setFormData({
@@ -55,7 +54,7 @@ const CompanyForm = ({ session }) => {
             }
             setLoader(false)
         } catch (error) {
-            console.log(error)
+            toast(error.message)
         }
     }
 
@@ -256,7 +255,6 @@ const CompanyForm = ({ session }) => {
         validateCompanyEmail()
 
         if(!isDataUpdated){
-            console.log('Navigating to /company-info-2');
             navigate("/company-info-2")
             return;
         }
@@ -268,7 +266,6 @@ const CompanyForm = ({ session }) => {
             axios.defaults.withCredentials = true;
 
             const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/membership/company-info-1`, {...formData}, {headers:{"Content-Type":"application/json"}})
-            console.log(response.data)
             setLoader(false)
           
             if(response.data.success){

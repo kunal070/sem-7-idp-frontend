@@ -1,18 +1,37 @@
 import React, {useState, useRef, useEffect} from 'react';
 import Chart from 'chart.js/auto';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
 const ctx = document.getElementById('myChart');
 
 function EmployeeDashboard() {
-    const chartRef = useRef(null);
 
-    useEffect(() => {
+  const [ dataa, setData ] = useState([])
+
+  const fetchData = async () => {
+    axios.defaults.withCredentials = true
+    const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/employee/dashboard`, { headers: {"Content-Type":"application/json"}})
+    if(response.data.sucess) {
+      setData(response.data.data)
+    } else {
+      toast(response.data.message)
+    }
+  }
+
+  useEffect(() => {
+    fetchData();
+  }, [])
+
+  const chartRef = useRef(null);
+
+    // useEffect(() => {
       const data = {
         labels: ["M", "T", "W", "TH", "F", "Sat", "Sun"],
         datasets: [
           {
-            label: "Overall",
-            data: [20, 40, 30, 35, 30, 20, 10],
+            label: "Total",
+            data: [20, 40, 30, 45, 30, 20, 10],
             backgroundColor: '#0F3C69',
             borderColor: 'white',
             borderWidth: 2,
@@ -20,7 +39,7 @@ function EmployeeDashboard() {
           },
           {
             label: "Approved",
-            data: [10, 20, 30, 40, 10, 20, 30],
+            data: [10, 20, 30, 40, 10, 20, 5],
             backgroundColor: '#F4B393',
             borderColor: 'white',
             borderWidth: 2,
@@ -85,19 +104,19 @@ function EmployeeDashboard() {
         });
       }
       
-    })
+    // })
 
   return (
     <>
     <div>
-      <div class="grid" style={{marginLeft : '53.5px',background:'#f5f7f8',maxHeight:'120vh',padding:'10px 65px 59px'}}>
+      <div class="grid" style={{marginLeft : '53.5px',background:'#f5f7f8',height:'100vh',padding:'10px 65px 59px', color:'black'}}>
                     <div class="grid grid-cols-12 gap-6">
                         <div class="grid grid-cols-12 col-span-12 gap-6 xxl:col-span-9">
-                            <div class="col-span-12 mt-8">
+                            <div class="col-span-12">
                                 <div class="flex items-center h-10 intro-y">
                                 <h2 class="mr-5 truncate text-[#0F3C69]" style={{fontWeight: 'bold',fontSize : '24px'}}>Dashboard</h2>
                                 </div>
-                                <div class="grid grid-cols-12 gap-6 mt-5">
+                                <div class="grid grid-cols-12 gap-6">
                                     <a class="transform  hover:scale-105 transition duration-300 shadow-xl rounded-lg col-span-12 sm:col-span-6 xl:col-span-3 intro-y bg-white"
                                         href="#">
                                         <div class="p-5">
@@ -108,16 +127,15 @@ function EmployeeDashboard() {
                                                         stroke-width="2"
                                                         d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                                                 </svg>
-                                                <div
+                                                {/* <div
                                                     class="bg-green-500 rounded-full h-6 px-2 flex justify-items-center text-white font-semibold text-sm">
                                                     <span class="flex items-center">30%</span>
-                                                </div>
+                                                </div> */}
                                             </div>
                                             <div class="ml-2 w-full flex-1">
                                                 <div>
-                                                    <div class="mt-3 text-3xl font-bold leading-8">4.510</div>
-
-                                                    <div class="mt-1 text-base text-gray-600">Item Sales</div>
+                                                <div class="mt-3 text-3xl font-bold leading-8">{dataa.employee?.totalMemberships || "--"}</div>
+                                                    <div class="mt-1 text-base text-gray-600">Total Memberships</div>
                                                 </div>
                                             </div>
                                         </div>
@@ -132,16 +150,16 @@ function EmployeeDashboard() {
                                                         stroke-width="2"
                                                         d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                                                 </svg>
-                                                <div
+                                                {/* <div
                                                     class="bg-red-500 rounded-full h-6 px-2 flex justify-items-center text-white font-semibold text-sm">
                                                     <span class="flex items-center">30%</span>
-                                                </div>
+                                                </div> */}
                                             </div>
                                             <div class="ml-2 w-full flex-1">
                                                 <div>
-                                                    <div class="mt-3 text-3xl font-bold leading-8">4.510</div>
 
-                                                    <div class="mt-1 text-base text-gray-600">Item Sales</div>
+                                                    <div class="mt-3 text-3xl font-bold leading-8">{dataa.employee?.completedMemberships || "--"}</div>
+                                                    <div class="mt-1 text-base text-gray-600">Completed Memberships</div>
                                                 </div>
                                             </div>
                                         </div>
@@ -159,15 +177,15 @@ function EmployeeDashboard() {
                                                         stroke-width="2"
                                                         d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z" />
                                                 </svg>
-                                                <div
+                                                {/* <div
                                                     class="bg-yellow-500 rounded-full h-6 px-2 flex justify-items-center text-white font-semibold text-sm">
                                                     <span class="flex items-center">30%</span>
-                                                </div>
+                                                </div> */}
                                             </div>
                                             <div class="ml-2 w-full flex-1">
                                                 <div>
-                                                    <div class="mt-3 text-3xl font-bold leading-8">4.510</div>
-                                                    <div class="mt-1 text-base text-gray-600">Item Sales</div>
+                                                <div class="mt-3 text-3xl font-bold leading-8">{dataa.employee?.totalMemberships - dataa.employee?.completedMemberships || "--"}</div>
+                                                    <div class="mt-1 text-base text-gray-600">Pending memberships</div>
                                                 </div>
                                             </div>
                                         </div>
@@ -182,16 +200,15 @@ function EmployeeDashboard() {
                                                         stroke-width="2"
                                                         d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" />
                                                 </svg>
-                                                <div
+                                                {/* <div
                                                     class="bg-blue-500 rounded-full h-6 px-2 flex justify-items-center text-white font-semibold text-sm">
                                                     <span class="flex items-center">30%</span>
-                                                </div>
+                                                </div> */}
                                             </div>
                                             <div class="ml-2 w-full flex-1">
                                                 <div>
-                                                    <div class="mt-3 text-3xl font-bold leading-8">4.510</div>
-
-                                                    <div class="mt-1 text-base text-gray-600">Item Sales</div>
+                                                    <div class="mt-3 text-xl font-bold leading-8">{dataa.employee?.typeOfUser.toUpperCase()}</div>
+                                                    <div class="mt-1 text-base text-gray-600">Type Of Employee</div>
                                                 </div>
                                             </div>
                                         </div>
@@ -200,56 +217,25 @@ function EmployeeDashboard() {
                             </div>
                                 <canvas style={{maxWidth : '740px',maxHeight:'330px',backgroundColor : '#369bf0',marginLeft : '1px',marginTop : '40px',padding : '15px 15px 15px 15px',borderColor : '2px solid black'}} class="bg-gray-25 shadow-lg rounded-lg rounded-xl overflow-hidden text-white shadow-blue-500/40 shadow-lg" ref={chartRef} id="myChart" ></canvas>
                                 <div style={{ width: '550px', height: '329px', marginLeft: '683px', marginTop: '41.1px', backgroundColor: 'white', borderRadius: '10px', color: 'black', overflow: 'auto', position: 'relative' }} class="bg-gray-25 shadow-lg rounded-lg rounded-xl text-white shadow-white-500/40 shadow-lg">
-                                <h2 style={{ textAlign: 'center', marginBottom: '20px', color: 'black', marginTop: '15px', position: 'sticky', top: '0', zIndex: '1', backgroundColor: 'white', borderBottom: '1px solid black',fontWeight : 'bold',color : '#0F3C69' }}>Membership's Status</h2>
+                                <h2 style={{ textAlign: 'center', marginBottom: '20px', color: 'black', marginTop: '15px', position: 'sticky', top: '0',  backgroundColor: 'white', borderBottom: '1px solid black',fontWeight : 'bold',color : '#0F3C69' }}>Membership's Status</h2>
                                 <div style={{ overflowX: 'auto', overflowY: 'scroll', maxHeight: 'calc(100% - 70px)',color : '#0F3C69' ,marginTop:'10px'}}>
                                <table style={{ marginLeft: '10px',marginRight : '10px', marginBottom : '15px',width: '96%', borderCollapse: 'collapse' }}>
                                   <thead>
                                     <tr>
                                       <th style={{ borderBottom: '1px solid black', borderRight: '1px solid black', textAlign: 'center', padding: '4px' }}>Sr No.</th>
-                                      <th style={{ borderBottom: '1px solid black', textAlign: 'center', padding: '4px' }}>Company Name</th>
+                                      <th style={{ borderBottom: '1px solid black', textAlign: 'center', padding: '4px'}}>Company Name</th>
                                     </tr>
                                   </thead>
                                   <tbody>
-                                    <tr>
-                                      <td style={{ borderBottom: '1px solid black', borderRight: '1px solid black', textAlign: 'center', padding: '4px' }}>1</td>
-                                      <td style={{ borderBottom: '1px solid black', textAlign: 'center', padding: '4px',fontWeight : 500}}>Company A</td>
-                                    </tr>
-                                    <tr>
-                                      <td style={{ borderBottom: '1px solid black', borderRight: '1px solid black', textAlign: 'center', padding: '4px',color : 'green' }}>2</td>
-                                      <td style={{ borderBottom: '1px solid black', textAlign: 'center', padding: '4px' ,color : 'green'}}>Company B</td>
-                                    </tr>
-                                    <tr>
-                                      <td style={{ borderBottom: '1px solid black', borderRight: '1px solid black', textAlign: 'center', padding: '4px',color : 'red'}}>3</td>
-                                      <td style={{ borderBottom: '1px solid black', textAlign: 'center', padding: '4px',color : 'red' }}>Company C</td>
-                                    </tr>
-                                    <tr>
-                                      <td style={{ borderBottom: '1px solid black', borderRight: '1px solid black', textAlign: 'center', padding: '4px' }}>4</td>
-                                      <td style={{ borderBottom: '1px solid black', textAlign: 'center', padding: '4px' }}>Company D</td>
-                                    </tr>
-                                    <tr>
-                                      <td style={{ borderBottom: '1px solid black', borderRight: '1px solid black', textAlign: 'center', padding: '4px' }}>5</td>
-                                      <td style={{ borderBottom: '1px solid black', textAlign: 'center', padding: '4px' }}>Company E</td>
-                                    </tr>
-                                    <tr>
-                                      <td style={{ borderBottom: '1px solid black', borderRight: '1px solid black', textAlign: 'center', padding: '4px' }}>5</td>
-                                      <td style={{ borderBottom: '1px solid black', textAlign: 'center', padding: '4px' }}>Company f</td>
-                                    </tr>
-                                    <tr>
-                                      <td style={{ borderBottom: '1px solid black', borderRight: '1px solid black', textAlign: 'center', padding: '4px' }}>5</td>
-                                      <td style={{ borderBottom: '1px solid black', textAlign: 'center', padding: '4px' }}>Company g</td>
-                                    </tr>
-                                    <tr>
-                                      <td style={{ borderBottom: '1px solid black', borderRight: '1px solid black', textAlign: 'center', padding: '4px' }}>5</td>
-                                      <td style={{ borderBottom: '1px solid black', textAlign: 'center', padding: '4px' }}>Company h</td>
-                                    </tr>
-                                    <tr>
-                                      <td style={{ borderBottom: '1px solid black', borderRight: '1px solid black', textAlign: 'center', padding: '4px' }}>5</td>
-                                      <td style={{ borderBottom: '1px solid black', textAlign: 'center', padding: '4px' }}>Company i</td>
-                                    </tr>
-                                    <tr>
-                                      <td style={{ borderBottom: '1px solid black', borderRight: '1px solid black', textAlign: 'center', padding: '4px' }}>5</td>
-                                      <td style={{ borderBottom: '1px solid black', textAlign: 'center', padding: '4px' }}>Company h</td>
-                                    </tr>
+                                      {dataa.membership?.map((m, index) => {
+                                        return (
+                                          <tr>
+                                            <td className={m.membershipStatus == "approved" ? "green" : m.membershipStatus == "rejected" ? "redd" : "yellow"} style={{ borderBottom: '1px solid black', borderRight: '1px solid black', textAlign: 'center', padding: '4px' }}>{index + 1}</td>
+                                            <td className={m.membershipStatus == "approved" ? "green" : m.membershipStatus == "rejected" ? "redd" : "yellow"} style={{ borderBottom: '1px solid black', textAlign: 'center', padding: '4px' }}>{m.companyName}</td>
+                                          </tr>
+                                        )
+                                      }) 
+                                      }
                                   </tbody>
                                 </table>
                               </div>

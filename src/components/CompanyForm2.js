@@ -40,10 +40,10 @@ const CompanyForm = ({session}) => {
     };
 
     const preLoadData = async () => {
+        setLoader(true)
         try {
             setLoader(true)
             const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/membership/membership/${session.phone}`)
-            // console.log(response.data)
             if(response.data.success){
                 let temp = response.data.data
                 let date = new Date(temp.companyRegistrationYear).toISOString().split('T', 1)[0]
@@ -60,8 +60,9 @@ const CompanyForm = ({session}) => {
             
             setLoader(false)
         } catch (error) {
-            console.log(error)
+            toast(error.message)
         }
+        setLoader(false)
     }
 
     useEffect(() => {
@@ -313,7 +314,6 @@ const CompanyForm = ({session}) => {
             const response = await axios.put(`${process.env.REACT_APP_BASE_URL}/membership/company-info-2`, {...formData}, {headers:{"Content-Type":"multipart/form-data"}})
             setLoader(false)
 
-            console.log(response.data)
             if(response.data.success){
                 toast(response.data.message)
                 navigate('/company-info-3');
@@ -323,11 +323,6 @@ const CompanyForm = ({session}) => {
         }
     };
     const [loader, setLoader] = useState(false)
-
-
-    useEffect(()=> {
-        console.log(formData.file)
-    }, [formData])
 
     if(loader){
         return (
@@ -358,7 +353,7 @@ const CompanyForm = ({session}) => {
                         <option value="">Select Company Type</option>
                         <option value="private">Private</option>
                         <option value="public">Public</option>
-                        <option value="corporate">Corporate</option>
+                        <option value="cooperative">co operative</option>
                         <option value="others">Others</option>
                     </select>
                     {errors.companyType && (
@@ -443,7 +438,7 @@ const CompanyForm = ({session}) => {
                     <div className='flex' style={{marginLeft:'0px'}}>
                         <input type="file" name="file" id='file-input' title={formData.file} onChange={handleChange} accept=".pdf" required style={{ backgroundColor: '#eee' }} />
                         {(formData != null && formData.file?.type !== 'application/pdf' && formData.file?.includes("https://idp-sem-7.s3.us-east-1.amazonaws.com")) && 
-                        <Link to={formData.file} target="_blank" rel="noopener noreferrer"> <button type="button" className='savebtn' style={{ borderColor: '#0f3c69', backgroundColor: '#0f3c69', color: 'white', borderRadius: 5, height:'44px', margin:'auto',marginLeft:55,marginTop:8}} >View Document</button> </Link> }
+                        <Link to={`${formData.file}#toolbar=0`}  target="_blank" rel="noopener noreferrer"> <button type="button" className='savebtn' style={{ borderColor: '#0f3c69', backgroundColor: '#0f3c69', color: 'white', borderRadius: 5, height:'44px', margin:'auto',marginLeft:55,marginTop:8}} >View Document</button> </Link> }
                         {errors.file && <p className="error-message" style={{color: 'red', fontSize: '12px'}}>{errors.file}</p>}
                     </div>
                 </div>

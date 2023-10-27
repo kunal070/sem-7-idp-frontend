@@ -51,7 +51,6 @@ const ShowUser = () => {
             axios.defaults.withCredentials = true
 
             const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/admin/show-users?page=${currentPage}&limit=${limit}`)
-            console.log("USERS: ", response.data)
             if(response.data.success){
                 setData(response.data.data.employee)
                 setTotalPages(response.data.data.totalPages)
@@ -61,7 +60,6 @@ const ShowUser = () => {
             setLoader(false)
 
         } catch (error){
-            console.log(error)
             toast("Internal Server Error while fetching data")
         }
     }
@@ -78,7 +76,6 @@ const ShowUser = () => {
   
       try {
           const response = await axios.delete(`${process.env.REACT_APP_BASE_URL}/admin/delete-user/${employeePhone}`);
-          console.log("DELETE USER: ", response.data);
           toast(response.data.message);
           
           if (response.data.success) {

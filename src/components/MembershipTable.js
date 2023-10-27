@@ -60,8 +60,6 @@ const MembershipTable = ({ type }) => {
     // we will call diffrent api depending on type of user and user
     const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/membership/get-memberships?page=${currentPage}&limit=${limit}&type=${type}`);
 
-    console.log("memberships: ", response.data)
-
     // successful api call response
     if(response.data.success){
       setData(response.data.data.memberships)

@@ -307,3 +307,21 @@ input {
 .scroll-bar-none::-webkit-scrollbar { 
   display: none;  /* Safari and Chrome */
 }
+
+/* .react-pdf__Page__canvas {
+  margin: 0 auto;
+  width: 500px !important;
+  height: 500px !important;
+} */
+
+.redd {
+  color: red;
+}
+
+.green {
+  color: green;
+}
+
+.yellow {
+  color: rgb(115, 115, 2);
+}

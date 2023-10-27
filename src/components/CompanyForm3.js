@@ -40,12 +40,16 @@ const CompanyForm3 = ({session}) => {
     };
 
     const preLoadData = async () => {
+        setLoader(true)
         try {
             setLoader(true)
             const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/membership/membership/${session.phone}`)
+<<<<<<< HEAD
             
             console.log(response.data)
 
+=======
+>>>>>>> 14acd126845eb133c5b2151eabbfbd0dfdaaedb7
             if(response.data.success){
                 let temp = response.data.data
                 setFormData({
@@ -63,8 +67,9 @@ const CompanyForm3 = ({session}) => {
             setLoader(false)
 
         } catch (error) {
-            console.log(error)
+            toast(error.message)
         }
+        setLoader(false)
     }
 
     useEffect(() => {
@@ -513,7 +518,7 @@ const CompanyForm3 = ({session}) => {
                     <div className='' style={{marginLeft:'10px'}}>
                         <input type="file" name="file" onChange={handleChange} accept=".pdf" required style={{ backgroundColor: '#eee' }} />
                         {(formData != null && formData.file?.type !== 'application/pdf' && formData.file?.includes("https://idp-sem-7.s3.us-east-1.amazonaws.com")) && 
-                        <Link to={formData.file} target="_blank" rel="noopener noreferrer"> <button type="button" className='savebtn' style={{ borderColor: '#0f3c69', backgroundColor: '#0f3c69', color: 'white', borderRadius: 5, height:'44px', margin:'auto',marginLeft:55,marginTop:8}} >View Document</button> </Link> }
+                        <Link to={`${formData.file}#toolbar=0`} target="_blank" rel="noopener noreferrer"> <button type="button" className='savebtn' style={{ borderColor: '#0f3c69', backgroundColor: '#0f3c69', color: 'white', borderRadius: 5, height:'44px', margin:'auto',marginLeft:55,marginTop:8}} >View Document</button> </Link> }
                         {errors.file && <span className="error"style={{color: 'red', fontSize: '12px'}}>{errors.file}</span>}
                     </div>
                 </div>

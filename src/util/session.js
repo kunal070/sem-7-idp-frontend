@@ -3,7 +3,6 @@ import axios from "axios"
 export const login = async (user) => {
   try {
     const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/auth/login`, {...user}, {headers: {"Content-Type":"application/json"}})
-    console.log(response.data)
     return response;
   } catch (error){
     return { data: {success:false, message: error.message} }
@@ -13,7 +12,6 @@ export const login = async (user) => {
 export const logout = async () => {
   try {
     const resp = await axios.get(`${process.env.REACT_APP_BASE_URL}/auth/logout`)
-    console.log(resp)
     return resp;
   } catch (error){
     return { success:false, message:error.message }

@@ -1,6 +1,8 @@
 import React, {useState, useRef, useEffect} from 'react';
 import Chart from 'chart.js/auto';
 import axios from 'axios'
+import {toast} from 'react-toastify'
+
 const ctx = document.getElementById('myChart');
 const ctx1 = document.getElementById('myChart1');
 const ctx2 = document.getElementById('myChart2');
@@ -9,6 +11,28 @@ const Dashboard = () => {
   const chartRef = useRef(null);
   const chartRef1 = useRef(null);
   const chartRef2 = useRef(null);
+
+  const [dataa, setData] = useState([])
+
+  const fetchData = async () => {
+    try {
+
+      axios.defaults.withCredentials = true
+      const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/admin/dashboard`, {headers: {"Content-Type":"application/json"}})
+      if(response.data.success) {
+        setData(response.data.data)
+      } else {
+        toast(response.data.message)
+      }
+    } catch (error) {
+      toast(error.message)
+    }
+  }
+
+  useEffect(() => {
+    fetchData()
+  }, [])
+
 
   const cardStyle = {
     width: '20%',
@@ -21,55 +45,55 @@ const Dashboard = () => {
   };
 
 
-  useEffect(() => {
-
-   const data = {
-    labels: ["Associative", "Oridinary"],
-    color: 'white',
-    datasets: [{
-      label: " ", 
-      data: [20, 40],
+  // useEffect(() => {
+      const data = {
+        labels: ["Associate", "Oridinary"],
       color: 'white',
-      backgroundColor: ['white', 'white'],
-      borderColor: ['#0F3C69', '#0F3C69'],
-      borderRadius : '20%',
-      borderWidth: 1,
-      barThickness: 10 ,
-      maxBarThickness: 100,
-      minBarLength: 3,
-      borderSkipped: 'top'
-   }], 
-};
-   const data2 = {
-    labels: ["Private", "Public","Corporate","others"],
-    datasets: [{
-      label: [""],
-      data: [20, 40, 25,10],
+      datasets: [{
+        label: " ",
+        data: dataa.typeOfMembershipData,
+        color: 'white',
+        backgroundColor: ['white', 'white'],
+        borderColor: ['#0F3C69', '#0F3C69'],
+        borderRadius : '20%',
+        borderWidth: 1,
+        barThickness: 10 ,
+        maxBarThickness: 100,
+        minBarLength: 3,
+        borderSkipped: 'top'
+      }], 
+    };
+    
+    const data2 = {
+      labels: ["Private", "Public","Co-operative","others"],
+      datasets: [{
+        label: [""],
+        data: dataa.companyTypeData,
+        color: 'white',
+        backgroundColor: ['white','white' ,'white','white'],
+        borderColor: ['#0F3C69', '#0F3C69', '#0F3C69', '#0F3C69'],
+        borderRadius : '20%',
+        borderWidth: 1,
+        barThickness: 10 ,
+        maxBarThickness: 100,
+        minBarLength: 3,
+        borderSkipped: 'top',
+      }], 
+    };
+    
+    const data1 = {
+      labels: ["power electronic", "advance material", "cable", "high voltage", "magnetic material", "calibration"],
       color: 'white',
-      backgroundColor: ['white','white' ,'white','white'],
-      borderColor: ['#0F3C69', '#0F3C69', '#0F3C69', '#0F3C69'],
-      borderRadius : '20%',
-      borderWidth: 1,
-      barThickness: 10 ,
-      maxBarThickness: 100,
-      minBarLength: 3,
-      borderSkipped: 'top',
-   }], 
-};
-
-const data1 = {
-  labels: ["R & D", "Testing Evaluation", "Electrical"],
-  color: 'white',
-  datasets: [{
-    data: [20, 40, 13],
-    backgroundColor: ['yellow', 'aqua', 'pink'],
-    hoverOffset: 5,
-    borderWidth: 3,
-    label: {
-      color: 'white',
-    },
-  }],
-};
+      datasets: [{
+        data: dataa.labData,
+        backgroundColor: ['yellow', 'aqua', 'pink', 'blue', 'green', 'purple'],
+        hoverOffset: 5,
+        borderWidth: 3,
+        label: {
+          color: 'white',
+        },
+      }],
+    };
 
 
 const options = {
@@ -111,10 +135,14 @@ const options = {
   },
   plugins: {
     legend: {
-      labels: {
-        color: 'white',
-        display: false, // Hide the legend box
-      },
+      display: false
+    },
+    tooltips: {
+      callbacks: {
+        label: function(tooltipItem) {
+          return tooltipItem.yLabel;
+        }
+      }
     },
     title: {
       display: false, // Hide the legend box
@@ -176,11 +204,8 @@ const options2 = {
     },
   },
   plugins: {
-    title: {
-      color: 'white',
-      font: {
-        weight: 'bold', // Set title font weight to bold
-      },
+    legend: {
+      display: false
     },
     datalabels: {
       anchor: 'end',
@@ -248,7 +273,7 @@ if (chartRef2.current) {
  
 } 
 
-}, []);
+// }, []);
 
 
 
@@ -328,14 +353,14 @@ if (chartRef2.current) {
                                                         stroke-width="2"
                                                         d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                                                 </svg>
-                                                <div
+                                                {/* <div
                                                     class="bg-green-500 rounded-full h-6 px-2 flex justify-items-center text-white font-semibold text-sm">
                                                     <span class="flex items-center">30%</span>
-                                                </div>
+                                                </div> */}
                                             </div>
                                             <div class="ml-2 w-full flex-1">
                                                 <div>
-                                                    <div class="mt-3 text-3xl font-bold leading-9">10</div>
+                                                    <div class="mt-3 text-3xl font-bold leading-9">{dataa?.totalMembershipsCount || 0}</div>
 
                                                     <div class="mt-1 text-base text-gray-600">Total Membership</div>
                                                 </div>
@@ -352,14 +377,14 @@ if (chartRef2.current) {
                                                         stroke-width="2"
                                                         d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                                                 </svg>
-                                                <div
+                                                {/* <div
                                                     class="bg-red-500 rounded-full h-6 px-2 flex justify-items-center text-white font-semibold text-sm">
                                                     <span class="flex items-center">30%</span>
-                                                </div>
+                                                </div> */}
                                             </div>
                                             <div class="ml-2 w-full flex-1">
                                                 <div>
-                                                    <div class="mt-3 text-3xl font-bold leading-8">2</div>
+                                                    <div class="mt-3 text-3xl font-bold leading-8">{dataa?.pendingMembershipsCount || 0}</div>
 
                                                     <div class="mt-1 text-base text-gray-600">Pending Membership</div>
                                                 </div>
@@ -379,14 +404,14 @@ if (chartRef2.current) {
                                                         stroke-width="2"
                                                         d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z" />
                                                 </svg>
-                                                <div
+                                                {/* <div
                                                     class="bg-yellow-500 rounded-full h-6 px-2 flex justify-items-center text-white font-semibold text-sm">
                                                     <span class="flex items-center">30%</span>
-                                                </div>
+                                                </div> */}
                                             </div>
                                             <div class="ml-2 w-full flex-1">
                                                 <div>
-                                                    <div class="mt-3 text-3xl font-bold leading-8">8</div>
+                                                    <div class="mt-3 text-3xl font-bold leading-8">{dataa?.approvedMembershipsCount || 0}</div>
                                                     <div class="mt-1 text-base text-gray-600">Approved Membership</div>
                                                 </div>
                                             </div>
@@ -402,14 +427,14 @@ if (chartRef2.current) {
                                                         stroke-width="2"
                                                         d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" />
                                                 </svg>
-                                                <div
+                                                {/* <div
                                                     class="bg-blue-500 rounded-full h-6 px-2 flex justify-items-center text-white font-semibold text-sm">
                                                     <span class="flex items-center">30%</span>
-                                                </div>
+                                                </div> */}
                                             </div>
                                             <div class="ml-2 w-full flex-1">
                                                 <div>
-                                                    <div class="mt-3 text-3xl font-bold leading-8">3</div>
+                                                    <div class="mt-3 text-3xl font-bold leading-8">{dataa?.employeeCount || 0}</div>
 
                                                     <div class="mt-1 text-base text-gray-600">Employee Count</div>
                                                 </div>
