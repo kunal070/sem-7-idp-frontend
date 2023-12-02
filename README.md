@@ -1,4 +1,4 @@
-Megh Technologies Due Diligence Frontend
+Megh Technologies Membership management system Frontend
 
 To run application on your machine
 1. clone this repository in frontend folder and https://github.com/manavshah47/megh-technologies-backend in backend folder.
